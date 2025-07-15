@@ -1,0 +1,6 @@
+id_budget,nom_budget,montant,date_creation,date_modification
+1,Mensuel,2500,2024-01-01,2024-01-01 10:00:00
+2,Vacances,1500,2024-03-15,2024-03-15 09:30:00
+3,Alimentaire,600,2024-04-01,2024-04-01 11:00:00
+4,Loisirs,400,2024-05-10,2024-05-10 14:00:00
+5,Épargne,1000,2024-06-01,2024-06-01 08:00:00
