@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router(); 
 
-// const boardController = require('../controllers/board_controller');
-// router.get('/get-board',boardController.getBoard);
-// router.post('/add-board',boardController.addBoard);
-// router.delete('/delete-board/:id_board',boardController.deleteBoard);
-// router.put('/update-board',boardController.updateBoard);
+const budgetController = require('../controllers/budget_controller');
+router.get('/get-budget',budgetController.getBudget);
+// router.post('/add-budget',budgetController.addBudget);
+// router.delete('/delete-budget/:id_budget',budgetController.deleteBudget);
+// router.put('/update-budget',budgetController.updateBudget);
 
 
 module.exports = router;

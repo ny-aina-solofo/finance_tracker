@@ -27,9 +27,6 @@ const db = {} ;
 db.Sequelize = Sequelize ; 
 db.sequelize = sequelize ; 
 
-// db.board = require('./board.model')(sequelize,Sequelize);
-// db.column = require('./column.model')(sequelize,Sequelize);
-// db.task = require('./task.model')(sequelize,Sequelize);
-// db.subtask = require('./subtask.model')(sequelize,Sequelize);
+db.budget = require('./budget.model')(sequelize,Sequelize);
 
 module.exports = db ; 

@@ -1,0 +1,58 @@
+const db = require('../models/models');
+const Budget = db.budget;
+// const Depense = db.depense;
+// const Revenu = db.revenu;
+
+const getBudget = async (req,res,next) => {
+    try {
+        const result = await Budget.findAll({});
+        if (result.length > 0) {
+            res.status(200).send(result);
+        } else {
+            res.status(200).send([]);
+        }
+    } catch (error) {
+        console.error("Error fetching budget data:", error);
+        res.status(500).send({ message: "Error retrieving budget data.", error: error.message });
+        next(error); // Optionally pass the error to the next middleware
+    }
+}
+
+const addBudget = async (req,res,next) =>{
+    const budget_name = req.body.budget_name;
+    await Budget.create({budget_name : budget_name});
+    res.status(200).send({success:true});
+}
+const deleteBudget = async (req,res,next) =>{
+    const id_budget = req.params.id_budget;
+    // console.log(id_budget);
+    // const selectColumn = await Column.findAll({where : {id_budget : id_budget}});
+    // if (selectColumn.length > 0) {
+    //     for (const column of selectColumn) {
+    //         const id_column = column.id_column;
+    //         // console.log("id_column:", id_column);
+    //         await Task.destroy({ where: { id_column: id_column } });
+    //     }
+    //     await Column.destroy({ where: { id_budget: id_budget } });
+    //     await Budget.destroy({ where: { id_budget: id_budget } });
+    // }
+    res.status(200).send({success:true});
+}
+const updateBudget = async (req,res,next) =>{
+    const id_budget = req.body.id_budget;
+    const newBudgetName = req.body.budget_name;
+    // console.log(id_budget,newBudgetName);
+    await Budget.update(
+        { budget_name : newBudgetName },
+        {
+        where : {id_budget : id_budget}
+    }); 
+    res.status(200).send({success:true});
+}
+
+module.exports = {
+    getBudget,
+    // addBudget,
+    // deleteBudget,
+    // updateBudget
+}; 
