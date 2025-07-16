@@ -1,34 +1,35 @@
 @import "tailwindcss";
 
+@layer components {
+	.text-preset-1 {
+	  @apply text-[32px] leading-[120%]  font-bold;
+	}
+	.text-preset-2 {
+	  @apply text-xl leading-[120%]  font-bold;
+	}
+	.text-preset-3 {
+	  @apply text-base leading-[150%]   font-bold;
+	}
+	.text-preset-4 {
+	  @apply text-sm leading-[150%] font-bold;
+	}
+	.text-preset-5 {
+	  @apply text-xs leading-[150%] font-normal;
+	}
+}
+
 /* @custom-variant dark (&:where(.dark, .dark *)); */
 
+@theme {
 
-/*@theme {
-	--font-nunito:'Nunito Sans';
-
-}
-*/
-/*body{
-    background-color: rgb(245, 245, 245);
-     font-size: 14px; 
-     font-family: 'Mooli', sans-serif; 
-     font-family: 'Poppins', sans-serif; 
-}*/
-
-/* :root {
-	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-	line-height: 1.5;
-	font-weight: 400;
+	/* Light Theme */
+	--color-Light-Mode-Text:hsl(200, 15%, 8%);
+	--color-Light-Mode-Input:hsl(0, 0%, 50%);
+	--color-Light-Mode-Background:rgb(245, 245, 245);
 	
-	font-synthesis: none;
-	text-rendering: optimizeLegibility;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-} */
-
-
-/*.dark {
-	color: #dcdcdc;
-	background-color: #292929; 
+	/*Dark Theme */
+	--color-Dark-Mode-Elements:hsl(209, 23%, 22%);
+	--color-Dark-Mode-Background:hsl(207, 26%, 17%);
+  
 }
-*/
+  

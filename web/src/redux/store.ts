@@ -1,12 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-// import boardReducer from "./boardSlice";
+import budgetReducer from "./budgetSlice";
 
 
 export const store = configureStore({
     reducer: {
-        // boards : boardReducer,
-        // modal : modalReducer,
-        // input : inputReducer
+        budgets : budgetReducer,
     },
 });
 
