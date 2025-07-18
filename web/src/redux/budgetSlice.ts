@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction,createAsyncThunk } from "@reduxjs/toolkit";
 import { BudgetState} from "@/types";
 import { fetchBudgets } from "./fetchBudgets";
+import { BudgetType } from "@/types";
 
 const initialState: BudgetState = {
-    // budgets: [{id_board: -1, board_name: "",column: []}],
+    // budgets: [{id_budget: -1, budget_name: "",column: []}],
     budgets: [],
     status: "idle",
     error: null,
@@ -21,9 +22,6 @@ const budgetSlice = createSlice({
             .addCase(fetchBudgets.fulfilled, (state, action) => {
                 state.status = "received";
                 state.budgets = action.payload;
-                // if (state.activeBoardId === null && state.budgets.length > 0) {
-                //     state.activeBoardId = state.budgets[0].id_board;
-                // }
             })
             .addCase(fetchBudgets.rejected, (state, action) => {
                 state.status = "rejected";
@@ -31,14 +29,42 @@ const budgetSlice = createSlice({
             });
     },
     reducers: {
-        // setActiveBoard: (state, action: PayloadAction<number | null>) => {
-        //     state.activeBoardId = action.payload;
-        // }
+        addBudget: (state, action: PayloadAction<{
+            nom_budget: string, montant: number, 
+            date_creation: string
+        }>) => {
+            const {nom_budget,montant,date_creation} = action.payload;
+            const newID = Date.now();
+            const newBudget = {
+                id_budget: newID,
+                nom_budget: nom_budget,
+                montant: montant,
+                date_creation: date_creation
+            };
+            state.budgets.push(newBudget);
+        },
+        deleteBudget: (state, action: PayloadAction<number>) => {
+            const id_budget = action.payload;
+            const updatedBudget = state.budgets.filter((budget:BudgetType) => budget.id_budget !== id_budget);
+            state.budgets = updatedBudget;
+        },
+        editBudget: (state, action: PayloadAction<{
+            id_budget: number, nom_budget: string, montant: number, 
+            date_creation: string
+        }>) => {
+            const { id_budget, nom_budget, montant,date_creation } = action.payload;
+            const budget = state.budgets.find((budget:BudgetType) => budget.id_budget === id_budget);
+            if (budget) {
+                budget.nom_budget = nom_budget;
+                budget.montant = montant;
+                budget.date_creation = date_creation;
+            }
+        }
     }
 });
 
 export const {
-    
+    addBudget
 } = budgetSlice.actions;
 
 export default budgetSlice.reducer;

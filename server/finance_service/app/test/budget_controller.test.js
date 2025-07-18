@@ -29,35 +29,33 @@ describe('Budget controller',()=>{
         expect(res._getData()).toEqual(data);
     });
 
-    // it("insert budget with status 200",async()=>{
-    //     req.body = {libelle: 'Sleep for 1 hour'};
-    //     db.budget.aggregate.mockResolvedValue([{ max : 5 }]);
-    //     const newTodo = [{
-    //         libelle: 'Sleep for 1 hour',done: false,rang: '5'
-    //     }]
-    //     db.budget.create.mockResolvedValue(newTodo);
-    //     await budgetController.insertTodoList(req,res,next);
-    //     expect(db.todolist.create).toHaveBeenCalledWith({
-    //         libelle: 'Sleep for 1 hour',done: false,rang: '5'
-    //     });
-    //     expect(res.statusCode).toEqual(200);
-    //     expect(res._getData()).toEqual({success:true});
-    // });
-    // it("delete todolist with status 200",async()=>{
+    it("insert budget with status 200",async()=>{
+        req.body = {nom_budget: 'Vacances', montant: 1500, date_creation: '2024-03-15'};
+        const data = [{nom_budget: 'Vacances', montant: 1500, date_creation: '2024-03-15'}];
+        db.budget.create.mockResolvedValue(data);
+        await budgetController.addBudget(req,res,next);
+        expect(db.budget.create).toHaveBeenCalledWith({
+            nom_budget: 'Vacances', montant: 1500, date_creation: '2024-03-15'
+        });
+        expect(res.statusCode).toEqual(200);
+    });
+
+    // it("delete budget with status 200",async()=>{
     //     req.params = {id: '67a1beef2b664bd6f5338b15'};
-    //     db.todolist.deleteOne.mockResolvedValue({_id: '67a1beef2b664bd6f5338b15'});
-    //     await budgetController.deleteTodoList(req,res,next);
-    //     expect(db.todolist.deleteOne).toHaveBeenCalledWith({_id: '67a1beef2b664bd6f5338b15'});
+    //     db.budget.deleteOne.mockResolvedValue({_id: '67a1beef2b664bd6f5338b15'});
+    //     await budgetController.deletebudget(req,res,next);
+    //     expect(db.budget.deleteOne).toHaveBeenCalledWith({_id: '67a1beef2b664bd6f5338b15'});
     //     expect(res.statusCode).toEqual(200);
     //     expect(res._getData()).toEqual({success:true});
     // });
+
     // it("update checbox with status 200",async()=>{
     //     req.body = {id: '67a1beef2b664bd6f5338b15',done: true};
-    //     db.todolist.updateOne.mockResolvedValue(    
+    //     db.budget.updateOne.mockResolvedValue(    
     //         { _id : '67a1beef2b664bd6f5338b15',done: true  }
     //     );
     //     await budgetController.updateCheckbox(req,res,next);
-    //     expect(db.todolist.updateOne).toHaveBeenCalledWith(
+    //     expect(db.budget.updateOne).toHaveBeenCalledWith(
     //         { _id : '67a1beef2b664bd6f5338b15' },
     //         {  $set: { done: true }}
     //     );
@@ -70,11 +68,11 @@ describe('Budget controller',()=>{
     //             { _id: '67a1beef2b664bd6f5338b15', rang: '5' }
     //         ]
     //     };
-    //     db.todolist.updateOne.mockResolvedValue(    
+    //     db.budget.updateOne.mockResolvedValue(    
     //         { _id : '67a1beef2b664bd6f5338b15',rang : '5'  }
     //     );
-    //     await budgetController.updateTodoListOrder(req,res,next);
-    //     expect(db.todolist.updateOne).toHaveBeenCalledWith(
+    //     await budgetController.updatebudgetOrder(req,res,next);
+    //     expect(db.budget.updateOne).toHaveBeenCalledWith(
     //         { _id : '67a1beef2b664bd6f5338b15' },
     //         {  $set: { rang : '5' }}
     //     );

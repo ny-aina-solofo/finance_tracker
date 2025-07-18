@@ -4,7 +4,7 @@ import { fetchBudgets } from "../../redux/fetchBudgets";
 import { BudgetType } from "@/types";
 import { RootState } from "@/redux/store";
 import BudgetCard from "../BudgetCard";
-
+import AddBudgetModal from "../Modals/Budget/AddBudgetModal";
 
 const Budget =()=>{
     const dispatch = useDispatch();
@@ -40,13 +40,8 @@ const Budget =()=>{
     return(
         <main className="container flex flex-col gap-8">
             <div className="flex items-center justify-between">
-                <h1 className="text-preset-1 text-gray-900">Budgets</h1>
-                {/* <Dialog>
-                    <DialogTrigger asChild>
-                        <Button>+Add New Pot</Button>
-                    </DialogTrigger>
-                    <AddNewPot />
-                </Dialog> */}
+                <h1 className="text-preset-1 text-gray-900">Budgets</h1>                
+                <AddBudgetModal/>   
             </div>
             {content}
             {/* <Pagination

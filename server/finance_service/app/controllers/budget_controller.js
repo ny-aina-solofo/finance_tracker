@@ -1,7 +1,5 @@
 const db = require('../models/models');
 const Budget = db.budget;
-// const Depense = db.depense;
-// const Revenu = db.revenu;
 
 const getBudget = async (req,res,next) => {
     try {
@@ -19,9 +17,17 @@ const getBudget = async (req,res,next) => {
 }
 
 const addBudget = async (req,res,next) =>{
-    const budget_name = req.body.budget_name;
-    await Budget.create({budget_name : budget_name});
-    res.status(200).send({success:true});
+    try {
+        const nom_budget = req.body.nom_budget;
+        const montant = req.body.montant;
+        const date_creation = req.body.date_creation;
+        await Budget.create({nom_budget:nom_budget,montant:montant, date_creation:date_creation});
+        res.status(200).send({success:true});    
+    } catch (error) {
+        console.error("Error inserting budget data:", error);
+        res.status(500).send({ message: "Error retrieving budget data.", error: error.message });
+        next(error);
+    }
 }
 const deleteBudget = async (req,res,next) =>{
     const id_budget = req.params.id_budget;
@@ -52,7 +58,7 @@ const updateBudget = async (req,res,next) =>{
 
 module.exports = {
     getBudget,
-    // addBudget,
+    addBudget,
     // deleteBudget,
     // updateBudget
 }; 

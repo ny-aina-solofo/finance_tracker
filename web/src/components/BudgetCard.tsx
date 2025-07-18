@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch } from 'react-redux';
 import { BudgetType } from "@/types";
-
+import { Progress } from "@/components/ui/progress"
 
 const BudgetCard =({ id_budget,nom_budget,montant,date_creation,date_modification}:BudgetType) => {
     return (
@@ -23,6 +23,7 @@ const BudgetCard =({ id_budget,nom_budget,montant,date_creation,date_modificatio
                     <p className="text-preset-1">{montant}</p>
                 </div>
                 <div className="flex flex-col gap-3">
+                    <Progress value={33} />
                     {/* <Progress
                         className="h-2"
                         maxValue={pot.target}
