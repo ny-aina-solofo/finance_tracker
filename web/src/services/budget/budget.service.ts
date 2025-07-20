@@ -4,9 +4,10 @@ class BudgetService {
     getBudget(){
         return http.get('/get-budget',{});
     }
-    // addBudget(budget_name:string){
-    //     return http.post('/add-budget',{budget_name});
-    // }
+    addBudget(budgetName:string, montant:number, date_creation:string | undefined){
+        return http.post('/add-budget',{budgetName,montant,date_creation});
+    }
+
     // deleteBudget(id_budget:number){
     //     return http.delete(`/delete-budget/${id_budget}`);
     // }

@@ -32,12 +32,16 @@ describe("http service test", () => {
         expect(data).toEqual(budget);
     });
 
-    // it("insert todo", async () => {
-    //     const newLibelle = 'Sleep for 1 hour';
-    //     mockedHttp.post.mockResolvedValue({ data: { success: true } });
-    //     await budgetService.insertTodoList(newLibelle);
-    //     expect(mockedHttp.post).toHaveBeenCalledWith('/insert-todo', { libelle: newLibelle });
-    // });
+    it("insert budget", async () => {
+        const budgetName:string = 'test';
+        const montant:number = 333;
+        const date_creation:string | undefined = '2024-03-15';
+        mockedHttp.post.mockResolvedValue({ data: { success: true } });
+        await budgetService.addBudget(budgetName,montant,date_creation);
+        expect(mockedHttp.post).toHaveBeenCalledWith('/add-budget', { 
+            budgetName:budgetName, montant:montant, date_creation:date_creation 
+        });
+    });
 
     // it("delete todo", async () => {
     //     const _id = '67a1beef2b664bd6f5338b15';

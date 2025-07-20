@@ -18,10 +18,12 @@ const getBudget = async (req,res,next) => {
 
 const addBudget = async (req,res,next) =>{
     try {
-        const nom_budget = req.body.nom_budget;
+        const nom_budget = req.body.budgetName;
         const montant = req.body.montant;
         const date_creation = req.body.date_creation;
-        await Budget.create({nom_budget:nom_budget,montant:montant, date_creation:date_creation});
+        console.log(date_creation);
+        
+        // await Budget.create({id_budget:44,nom_budget:nom_budget,montant:montant, date_creation:date_creation});
         res.status(200).send({success:true});    
     } catch (error) {
         console.error("Error inserting budget data:", error);

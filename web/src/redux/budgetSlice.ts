@@ -31,7 +31,7 @@ const budgetSlice = createSlice({
     reducers: {
         addBudget: (state, action: PayloadAction<{
             nom_budget: string, montant: number, 
-            date_creation: string
+            date_creation: string | undefined
         }>) => {
             const {nom_budget,montant,date_creation} = action.payload;
             const newID = Date.now();
