@@ -112,13 +112,11 @@ const EditBudgetModal = ({id_budget,setIsPopoverOpen}:BudgetProps)=> {
     return (
         <Dialog  open={isModalOpen} onOpenChange={setIsModalOpen}>
             <DialogTrigger asChild>
-                <Button
-                    variant="secondary"
-                    size="lg"
-                    className="border-none bg-transparent"
+                <div
+                    className="cursor-pointer font-bold py-2"
                >
                     Modifier
-                </Button>
+                </div>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>

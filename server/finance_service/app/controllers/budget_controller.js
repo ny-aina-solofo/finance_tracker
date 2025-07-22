@@ -32,19 +32,15 @@ const addBudget = async (req,res,next) =>{
     }
 }
 const deleteBudget = async (req,res,next) =>{
-    const id_budget = req.params.id_budget;
-    // console.log(id_budget);
-    // const selectColumn = await Column.findAll({where : {id_budget : id_budget}});
-    // if (selectColumn.length > 0) {
-    //     for (const column of selectColumn) {
-    //         const id_column = column.id_column;
-    //         // console.log("id_column:", id_column);
-    //         await Task.destroy({ where: { id_column: id_column } });
-    //     }
-    //     await Column.destroy({ where: { id_budget: id_budget } });
-    //     await Budget.destroy({ where: { id_budget: id_budget } });
-    // }
-    res.status(200).send({success:true});
+    try {
+        const id_budget = req.params.id_budget;
+        await Budget.destroy({ where: { id_budget: id_budget } });
+        res.status(200).send({success:true});
+    } catch (error) {
+        console.error("Error fetching budget data:", error);
+        res.status(500).send({ message: "Error retrieving budget data.", error: error.message });
+        next(error);
+    }
 }
 const updateBudget = async (req,res,next) =>{
     try {
@@ -73,6 +69,6 @@ const updateBudget = async (req,res,next) =>{
 module.exports = {
     getBudget,
     addBudget,
-    // deleteBudget,
+    deleteBudget,
     updateBudget
 }; 

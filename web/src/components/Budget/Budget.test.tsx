@@ -41,17 +41,4 @@ describe("Budget component tests", () => {
         render(<MockBudget/>)
         expect(budgets.map((item:BudgetType) => item.nom_budget)).toEqual(['Vacances', 'Achats']);    
     });
-    // it("should open add-budget-modal on plus button click", () => {
-    //     render(<MockBudget/>);
-    //     const { store, invoke } = create();
-    //     invoke((dispatch:any, getState: () => void) => {
-    //         dispatch(openModal("addBudgetModal"))
-    //         getState()
-    //     })
-    //     const plusButton = screen.getByTestId('add-budget');
-    //     fireEvent.click(plusButton);
-    //     expect(store.dispatch).toHaveBeenCalledWith(openModal("addBudgetModal"));
-    // });
-
-    
 });

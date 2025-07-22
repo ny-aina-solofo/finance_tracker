@@ -20,7 +20,7 @@ import {
     PopoverTrigger,
   } from "@/components/ui/popover"
 import { Calendar } from "@/components/ui/calendar"
-import { CalendarIcon } from "lucide-react"
+import { CalendarIcon, PlusIcon } from "lucide-react"
 import { cn } from '@/lib/utils'
 import { format, formatISO } from 'date-fns'
 import budgetService from "@/services/budget/budget.service";
@@ -100,7 +100,7 @@ const AddBudgetModal = ()=> {
     return (
         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
             <DialogTrigger asChild>
-                <Button>+ Ajouter</Button>
+                <Button size="lg"><PlusIcon/> Ajouter</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>

@@ -10,7 +10,8 @@ import {
     PopoverTrigger,
   } from '@/components/ui/popover'
 import EditBudgetModal from './Modals/Budget/EditBudgetModal';
-//   import { Dots } from '@/components/ui/icons'
+import DeleteBudgetModal from './Modals/Budget/DeleteBudgetModal';
+import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 
 interface BudgetProps {
     budgets: BudgetType;
@@ -32,8 +33,7 @@ const BudgetCard =({budgets}:BudgetProps) => {
                 </div>
                 <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
                     <PopoverTrigger>
-                        {/* <Dots /> */}
-                        <p className='cursor-pointer'>click</p>
+                        <DotsHorizontalIcon className='h-5 w-5 cursor-pointer'/>
                     </PopoverTrigger>
                     <PopoverContent asChild>
                         <div className="flex w-[114px] flex-col gap-1 px-5 py-3">
@@ -42,18 +42,10 @@ const BudgetCard =({budgets}:BudgetProps) => {
                                 setIsPopoverOpen={setIsPopoverOpen}
                             />
                             <hr />
-                            <Dialog>
-                                <DialogTrigger asChild>
-                                    <Button
-                                        variant="secondary"
-                                        size="sm"
-                                        className="border-none bg-transparent text-secondary-red"
-                                    >
-                                        Delete Pot
-                                    </Button>
-                                </DialogTrigger>
-                                {/* <DeletePotModal potId={pot.id} /> */}
-                            </Dialog>
+                            <DeleteBudgetModal    
+                                id_budget={budgets.id_budget} 
+                                setIsPopoverOpen={setIsPopoverOpen}
+                            />                            
                         </div>
                     </PopoverContent>
                 </Popover>

@@ -40,14 +40,16 @@ describe('Budget controller',()=>{
         expect(res.statusCode).toEqual(200);
     });
 
-    // it("delete budget with status 200",async()=>{
-    //     req.params = {id: '67a1beef2b664bd6f5338b15'};
-    //     db.budget.deleteOne.mockResolvedValue({_id: '67a1beef2b664bd6f5338b15'});
-    //     await budgetController.deletebudget(req,res,next);
-    //     expect(db.budget.deleteOne).toHaveBeenCalledWith({_id: '67a1beef2b664bd6f5338b15'});
-    //     expect(res.statusCode).toEqual(200);
-    //     expect(res._getData()).toEqual({success:true});
-    // });
+    it("delete budget with status 200",async()=>{
+        req.params = {id_budget:44}
+        db.budget.destroy.mockResolvedValue({id_budget:44});
+        await budgetController.deleteBudget(req,res,next);
+        expect(db.budget.destroy).toHaveBeenCalledWith({ 
+            where: { id_budget: 44 } 
+        });
+        expect(res.statusCode).toEqual(200);
+        expect(res._getData()).toEqual({success:true});
+    });
 
     it("update budget with status 200",async()=>{
         req.params = {id_budget:44}

@@ -43,12 +43,12 @@ describe("http service test", () => {
         });
     });
 
-    // it("delete todo", async () => {
-    //     const _id = '67a1beef2b664bd6f5338b15';
-    //     mockedHttp.delete.mockResolvedValue({ data: { success: true } });
-    //     await budgetService.deleteTodoList(_id);
-    //     expect(mockedHttp.delete).toHaveBeenCalledWith(`/delete-todo/${_id}`);
-    // });
+    it("delete budget", async () => {
+        const id_budget:number = 44
+        mockedHttp.delete.mockResolvedValue({ data: { success: true } });
+        await budgetService.deleteBudget(id_budget);
+        expect(mockedHttp.delete).toHaveBeenCalledWith(`/delete-budget/${id_budget}`);
+    });
 
     it("update budget", async () => {
         const id_budget:number = 44
