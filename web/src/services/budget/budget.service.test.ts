@@ -33,13 +33,13 @@ describe("http service test", () => {
     });
 
     it("insert budget", async () => {
-        const budgetName:string = 'test';
+        const nom_budget:string = 'test';
         const montant:number = 333;
         const date_creation:string | undefined = '2024-03-15';
         mockedHttp.post.mockResolvedValue({ data: { success: true } });
-        await budgetService.addBudget(budgetName,montant,date_creation);
+        await budgetService.addBudget(nom_budget,montant,date_creation);
         expect(mockedHttp.post).toHaveBeenCalledWith('/add-budget', { 
-            budgetName:budgetName, montant:montant, date_creation:date_creation 
+            nom_budget:nom_budget, montant:montant, date_creation:date_creation 
         });
     });
 
@@ -50,22 +50,15 @@ describe("http service test", () => {
     //     expect(mockedHttp.delete).toHaveBeenCalledWith(`/delete-todo/${_id}`);
     // });
 
-    // it("update checkbox", async () => {
-    //     const _id = '67a1beef2b664bd6f5338b15';
-    //     const done = true;
-    //     mockedHttp.put.mockResolvedValue({ data: { success: true } });
-    //     await budgetService.updateCheckbox(_id,done);
-    //     expect(mockedHttp.put).toHaveBeenCalledWith('/update-checkbox',{id : _id ,done : done});
-    // });
-    // it("update list order", async () => {
-    //     const updatedList = [{
-    //         _id: '67a1beef2b664bd6f5338b15',
-    //         libelle: 'Sleep for 1 hour',
-    //         done: false,
-    //         rang: '1'            
-    //     }];
-    //     mockedHttp.put.mockResolvedValue({ data: { success: true } });
-    //     await budgetService.updateTodoListOrder(updatedList);
-    //     expect(mockedHttp.put).toHaveBeenCalledWith('/update-order',{updatedList : updatedList});
-    // });
+    it("update budget", async () => {
+        const id_budget:number = 44
+        const nom_budget:string = 'test';
+        const montant:number = 333;
+        const date_creation:string | undefined = '2024-03-15';
+        mockedHttp.put.mockResolvedValue({ data: { success: true } });
+        await budgetService.updateBudget(id_budget,nom_budget,montant,date_creation);
+        expect(mockedHttp.put).toHaveBeenCalledWith(`/update-budget/${id_budget}`,{
+            nom_budget:nom_budget, montant:montant, date_creation:date_creation     
+        });
+    });
 });

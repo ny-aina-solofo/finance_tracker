@@ -49,36 +49,24 @@ describe('Budget controller',()=>{
     //     expect(res._getData()).toEqual({success:true});
     // });
 
-    // it("update checbox with status 200",async()=>{
-    //     req.body = {id: '67a1beef2b664bd6f5338b15',done: true};
-    //     db.budget.updateOne.mockResolvedValue(    
-    //         { _id : '67a1beef2b664bd6f5338b15',done: true  }
-    //     );
-    //     await budgetController.updateCheckbox(req,res,next);
-    //     expect(db.budget.updateOne).toHaveBeenCalledWith(
-    //         { _id : '67a1beef2b664bd6f5338b15' },
-    //         {  $set: { done: true }}
-    //     );
-    //     expect(res.statusCode).toEqual(200);
-    //     expect(res._getData()).toEqual({success:true});
-    // });
-    // it("update list order with status 200",async()=>{
-    //     req.body = {
-    //         updatedList: [
-    //             { _id: '67a1beef2b664bd6f5338b15', rang: '5' }
-    //         ]
-    //     };
-    //     db.budget.updateOne.mockResolvedValue(    
-    //         { _id : '67a1beef2b664bd6f5338b15',rang : '5'  }
-    //     );
-    //     await budgetController.updatebudgetOrder(req,res,next);
-    //     expect(db.budget.updateOne).toHaveBeenCalledWith(
-    //         { _id : '67a1beef2b664bd6f5338b15' },
-    //         {  $set: { rang : '5' }}
-    //     );
-    //     expect(res.statusCode).toEqual(200);
-    //     expect(res._getData()).toEqual({success:true});
-    // });
+    it("update budget with status 200",async()=>{
+        req.params = {id_budget:44}
+        req.body = {nom_budget: 'Vacances', montant: 1500, date_creation: '2024-03-15'};
+        const data = [{id_budget:44,nom_budget: 'Vacances', montant: 1500, date_creation: '2024-03-15'}];
+        db.budget.update.mockResolvedValue(data);
+        await budgetController.updateBudget(req,res,next);
+        expect(db.budget.update).toHaveBeenCalledWith(
+            { 
+                nom_budget: 'Vacances', montant: 1500, date_creation: '2024-03-15'
+            },
+            { 
+                where: { id_budget: 44 } 
+            }
+        );
+        expect(res.statusCode).toEqual(200);
+        expect(res._getData()).toEqual({success:true});
+    });
+    
 })
 
 

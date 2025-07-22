@@ -59,12 +59,14 @@ const budgetSlice = createSlice({
                 budget.montant = montant;
                 budget.date_creation = date_creation;
             }
+            
         }
     }
 });
 
 export const {
-    addBudget
+    addBudget,
+    editBudget
 } = budgetSlice.actions;
 
 export default budgetSlice.reducer;

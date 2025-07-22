@@ -12,8 +12,8 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useDispatch } from "react-redux"
-import { addBudget } from '@/redux/budgetSlice';
+import { useDispatch,useSelector } from "react-redux"
+import { editBudget } from '@/redux/budgetSlice';
 import {
     Popover,
     PopoverContent,
@@ -24,13 +24,23 @@ import { CalendarIcon } from "lucide-react"
 import { cn } from '@/lib/utils'
 import { format, formatISO } from 'date-fns'
 import budgetService from "@/services/budget/budget.service";
+import { RootState } from '@/redux/store';
+import { BudgetType } from "@/types";
 
+interface BudgetProps {
+    id_budget: number;
+    setIsPopoverOpen:(data:boolean) => void; 
+}
 
-const AddBudgetModal = ()=> {
+const EditBudgetModal = ({id_budget,setIsPopoverOpen}:BudgetProps)=> {
     const dispatch = useDispatch();
-    const [budgetName,setBudgetName]= React.useState<string>('')
-    const [montant,setMontant]= React.useState<string>('')
-    const [date, setDate] = React.useState<Date | undefined>(undefined);
+
+    const budgets = useSelector((state:RootState) => state.budgets.budgets);
+    const selectedBudget = budgets.find((budget:BudgetType) => budget.id_budget === id_budget);
+
+    const [budgetName,setBudgetName]= React.useState<string>(selectedBudget.nom_budget)
+    const [montant,setMontant]= React.useState<string>(selectedBudget.montant)
+    const [date, setDate] = React.useState<Date | undefined>(selectedBudget.date_creation);
     
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
@@ -38,14 +48,14 @@ const AddBudgetModal = ()=> {
     const [budgetNameError, setBudgetNameError] = useState<string | null>(null);
     const [montantError, setMontantError] = useState<string | null>(null);
      
-    const handleAddBudget = (event:React.FormEvent)=>{
+    const handleEditBudget = (event:React.FormEvent)=>{
         event.preventDefault(); 
         let isValid = true;
         let montant_to_int = parseInt(montant);
-        let formattedDate = date ? format(date, 'yyyy-MM-dd') : undefined;
+        let formattedDate = date ? format(date, 'yyyy-MM-dd') : selectedBudget.date_creation;
 
         // Validate Nom (Budget Name)
-        if (!budgetName.trim()) {
+        if (!budgetName) {
             setBudgetNameError('Le nom du budget est obligatoire.');
             isValid = false;
         } else {
@@ -53,7 +63,7 @@ const AddBudgetModal = ()=> {
         }
 
         // Validate Montant
-        if (!montant.trim()) {
+        if (!montant) {
             setMontantError('Le montant est obligatoire.');
             isValid = false;
         } else if (isNaN(montant_to_int)) {
@@ -69,19 +79,20 @@ const AddBudgetModal = ()=> {
         }
         
         if (isValid) {
-            // console.log(budgetName, montant, formattedDate);
-            dispatch(addBudget({
+            dispatch(editBudget({
+                id_budget,
                 nom_budget: budgetName,
                 montant: montant_to_int,
-                date_creation: formattedDate || undefined
+                date_creation: formattedDate
             }));
-            budgetService.addBudget(budgetName,montant_to_int,formattedDate).then(()=>{})
-            setBudgetName('');
-            setMontant('');
-            setDate(undefined);
+            budgetService.updateBudget(id_budget,budgetName,montant_to_int,formattedDate).then(()=>{})
+            setBudgetName(selectedBudget);
+            setMontant(selectedBudget);
+            setDate(selectedBudget.date_creation);
             setBudgetNameError(null);
             setMontantError(null);
-            setIsModalOpen(false);     
+            setIsModalOpen(false);
+            setIsPopoverOpen(false);     
         }
     }    
     const handleDateSelect = (selectedDate: Date | undefined) => {
@@ -90,27 +101,31 @@ const AddBudgetModal = ()=> {
     };
 
     const handleReset = ()=>{
-        setBudgetName('');
-        setMontant('');
-        setDate(undefined)    
+        setBudgetName(selectedBudget.nom_budget);
+        setMontant(selectedBudget.montant);
+        setDate(selectedBudget.date_creation)    
         setBudgetNameError(null);
         setMontantError(null);
-        setIsModalOpen(false); 
+        setIsModalOpen(false);
+        setIsPopoverOpen(false); 
     }
     return (
-        <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <Dialog  open={isModalOpen} onOpenChange={setIsModalOpen}>
             <DialogTrigger asChild>
-                <Button>+ Ajouter</Button>
+                <Button
+                    variant="secondary"
+                    size="lg"
+                    className="border-none bg-transparent"
+               >
+                    Modifier
+                </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle className="mb-3">Ajouter un budget à gérer</DialogTitle>
-                    <DialogDescription className="mb-3">
-                        Ajoutez un nom, un montant et la date de la création de votre budget, 
-                        puis enregistrez 
-                    </DialogDescription>
+                    <DialogTitle className="mb-3">Modifiez {selectedBudget.nom_budget}</DialogTitle>
+                    <DialogDescription></DialogDescription>
                 </DialogHeader>
-                <form onSubmit={handleAddBudget}>
+                <form onSubmit={handleEditBudget}>
                     <div className="grid gap-4">
                         <div className="grid gap-3 mb-3">
                             <Label htmlFor="name-1">Nom</Label>
@@ -194,6 +209,7 @@ const AddBudgetModal = ()=> {
                 </form>
             </DialogContent>
         </Dialog>
+        
     )
 }
-export default AddBudgetModal;
+export default EditBudgetModal;
