@@ -29,7 +29,7 @@ describe('transactions controller',()=>{
             { id_transaction: 2, libelle: 'Salaire', montant: 2000, type_transaction: 'revenu' },      
         ]
         pool.query.mockReturnValue({rows:data}); 
-        await transactionsController.getTransactions(req,res,next); 
+        await transactionsController.getTransaction(req,res,next); 
         expect(res.statusCode).toEqual(200);
         expect(Array.isArray(data)).toBe(true);
         expect(res._getData()).toEqual(data);

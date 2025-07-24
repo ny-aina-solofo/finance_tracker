@@ -7,14 +7,6 @@ import create from "../create";
 import { BudgetType } from "@/types";
 import Budget from "./Budget";
 
-// import { openModal } from "../../redux/modalSlice";
-// import { setActiveBudget } from "../../redux/budgetSlice";
-
-// const mockBudget: BudgetType = {
-//     id_budget: 2, nom_budget: 'Vacances', montant: 1500, 
-//     date_creation: '2024-03-15', date_modification: '2024-03-15 09:30:00.000' 
-// };
-
 const budgets= [
     {
         id_budget: 2, nom_budget: 'Vacances', montant: 1500, 

@@ -1,11 +1,11 @@
 import { Routes, Route, useNavigate } from "react-router";
-import { Budget } from "./components";
+import { Budget, Transactions } from "./components";
 
 const App = () => {
     return (
         <div className="h-full w-full bg-Light-Mode-Background">
-
-            <Budget/>
+            <Transactions/>
+            {/* <Budget/> */}
         </div>
         // <Routes>
         //     <Route  

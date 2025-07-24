@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchBudgets } from "../../redux/fetchBudgets";
 import { BudgetType } from "@/types";
 import { RootState } from "@/redux/store";
-import BudgetCard from "../BudgetCard";
+import BudgetCard from "./BudgetCard";
 import AddBudgetModal from "../Modals/Budget/AddBudgetModal";
 
 const Budget =()=>{

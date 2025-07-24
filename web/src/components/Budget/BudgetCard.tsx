@@ -9,8 +9,8 @@ import {
     PopoverContent,
     PopoverTrigger,
   } from '@/components/ui/popover'
-import EditBudgetModal from './Modals/Budget/EditBudgetModal';
-import DeleteBudgetModal from './Modals/Budget/DeleteBudgetModal';
+import EditBudgetModal from '../Modals/Budget/EditBudgetModal';
+import DeleteBudgetModal from '../Modals/Budget/DeleteBudgetModal';
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 
 interface BudgetProps {

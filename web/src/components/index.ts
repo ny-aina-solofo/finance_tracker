@@ -1,8 +1,8 @@
 import Budget from "./Budget/Budget";
-import AddBudgetModal from "./Modals/Budget/AddBudgetModal";
+import Transactions from "./Transactions/Transactions";
 
 
 export { 
     Budget,
-    AddBudgetModal    
+    Transactions,
 };

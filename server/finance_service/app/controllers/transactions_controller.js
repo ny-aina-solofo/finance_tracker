@@ -4,7 +4,7 @@ const Depense = db.depense;
 const Revenu = db.revenu;
 const query_transactions = require('./query_transactions')
 
-const getTransactions = async (req,res,next) => {
+const getTransaction = async (req,res,next) => {
     try {
         const sql_select = query_transactions;
         const result = await pool.query(sql_select,[]);  
@@ -18,5 +18,5 @@ const getTransactions = async (req,res,next) => {
 }
 
 module.exports = {
-    getTransactions
+    getTransaction
 }; 
