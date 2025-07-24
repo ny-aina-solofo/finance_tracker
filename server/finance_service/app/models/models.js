@@ -27,6 +27,8 @@ const db = {} ;
 db.Sequelize = Sequelize ; 
 db.sequelize = sequelize ; 
 
-db.budget = require('./budget.model')(sequelize,Sequelize);
+db.budget = require('./budget_model')(sequelize,Sequelize);
+db.depense = require('./depense_model')(sequelize,Sequelize);
+db.revenu = require('./revenu_model')(sequelize,Sequelize);
 
 module.exports = db ; 

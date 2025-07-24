@@ -37,7 +37,7 @@ const deleteBudget = async (req,res,next) =>{
         await Budget.destroy({ where: { id_budget: id_budget } });
         res.status(200).send({success:true});
     } catch (error) {
-        console.error("Error fetching budget data:", error);
+        console.error("Error deleting budget data:", error);
         res.status(500).send({ message: "Error retrieving budget data.", error: error.message });
         next(error);
     }
@@ -60,7 +60,7 @@ const updateBudget = async (req,res,next) =>{
         );
         res.status(200).send({success:true});    
     } catch (error) {
-        console.error("Error inserting budget data:", error);
+        console.error("Error updating budget data:", error);
         res.status(500).send({ message: "Error retrieving budget data.", error: error.message });
         next(error);
     }
