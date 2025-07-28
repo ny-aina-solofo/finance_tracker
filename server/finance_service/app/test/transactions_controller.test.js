@@ -65,4 +65,31 @@ describe('transactions controller',()=>{
         }
         
     });
+    it("update transactions with status 200",async()=>{
+        req.params = {id_transaction:44}
+        req.body = {
+            libelle: 'Vacances', montant: 1500, date_creation: '2024-03-15',
+            id_budget:2,type_transaction:'depense'
+        };
+        const data = [{libelle: 'Vacances', montant: 1500, date_creation: '2024-03-15',id_budget:2}];
+        
+        if (req.body.type_transaction === 'depense') {
+            db.depense.update.mockResolvedValue(data);        
+            await transactionsController.updateTransaction(req,res,next);
+            expect(db.depense.update).toHaveBeenCalledWith(
+                {libelle: 'Vacances', montant: 1500, date_creation: '2024-03-15',id_budget:2},
+                {where: { id_depense: 44 }}
+            );
+            expect(res.statusCode).toEqual(200);
+        } else {
+            db.revenu.update.mockResolvedValue(data);
+            await transactionsController.updateTransaction(req,res,next);
+            expect(db.revenu.update).toHaveBeenCalledWith(
+                {libelle: 'Vacances', montant: 1500, date_creation: '2024-03-15',id_budget:2},
+                {where: { id_revenu: 44 }}
+            );
+            expect(res.statusCode).toEqual(200);
+        }
+        
+    });
 })

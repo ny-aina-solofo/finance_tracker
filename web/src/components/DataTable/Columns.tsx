@@ -1,10 +1,18 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import React from "react"
+import React,{useState} from "react"
 import { TransactionsType } from "@/types";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+  } from '@/components/ui/popover'
+import { Button } from "@/components/ui/button"
+import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
+import EditTransaction from "../Modals/Transactions/EditTransactions";
 
 export const columns: ColumnDef<TransactionsType>[] = [
     {
@@ -79,4 +87,31 @@ export const columns: ColumnDef<TransactionsType>[] = [
             );
         },
     },
+    {
+        id: "actions",
+        enableHiding: false,
+        cell: ({ row }) => {
+            const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+            const transactions = row.original
+            return (
+                <div className="text-right">
+                    <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+                        <PopoverTrigger asChild>
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                                <MoreHorizontal />
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent asChild>
+                            <div className="flex w-[114px] flex-col gap-1 px-5 py-3">
+                                <EditTransaction
+                                    selectedTransactions={transactions}       
+                                    setIsPopoverOpen={setIsPopoverOpen}
+                                />                                
+                            </div>
+                        </PopoverContent>
+                    </Popover>  
+                </div>
+            )
+        },
+    }
 ]

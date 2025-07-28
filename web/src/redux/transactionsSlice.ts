@@ -20,7 +20,15 @@ const TransactionSlice = createSlice({
             })
             .addCase(fetchTransactions.fulfilled, (state, action) => {
                 state.status = "received";
-                state.transactions = action.payload;
+                // state.transactions = action.payload;
+                state.transactions = action.payload.map((t: TransactionsType) => ({
+                    ...t,
+                    date_modification: t.date_modification || new Date().toISOString()
+                })).sort((a: TransactionsType, b: TransactionsType) => {
+                    const dateA = a.date_modification ? new Date(a.date_modification).getTime() : 0;
+                    const dateB = b.date_modification ? new Date(b.date_modification).getTime() : 0;
+                    return dateB - dateA; // Sort in descending order (latest first)
+                });
             })
             .addCase(fetchTransactions.rejected, (state, action) => {
                 state.status = "rejected";
@@ -62,25 +70,35 @@ const TransactionSlice = createSlice({
         //     const updatedTransaction = state.transactions.filter((t:TransactionsType) => t.id_transactions !== id_transactions);
         //     state.transactions = updatedTransaction;
         // },
-        // editTransaction: (state, action: PayloadAction<{
-        //     id_Transaction: number, libelle: string, montant: number, 
-        //     date_creation: string
-        // }>) => {
-        //     const { id_Transaction, libelle, montant,date_creation } = action.payload;
-        //     const Transaction = state.transactions.find((transaction:TransactionsType) => Transaction.id_Transaction === id_Transaction);
-        //     if (Transaction) {
-        //         Transaction.libelle = libelle;
-        //         Transaction.montant = montant;
-        //         Transaction.date_creation = date_creation;
-        //     }
+        editTransaction: (state, action: PayloadAction<{
+            id_transaction: number, libelle: string, montant: number, date_creation: string | undefined,
+            nom_budget:string,type_transaction:string
+        }>) => {
+            const { id_transaction, libelle, montant,date_creation,nom_budget,type_transaction } = action.payload;
+            const transaction = state.transactions.find((transaction:TransactionsType) => transaction.id_transaction === id_transaction);
+            if (transaction) {
+                if (type_transaction === 'depense') {
+                    transaction.libelle = libelle;
+                    transaction.montant = montant;
+                    transaction.date_creation = date_creation;
+                    transaction.nom_budget = nom_budget;            
+                    transaction.type_transaction = type_transaction;
+                } else {
+                    transaction.libelle = libelle;
+                    transaction.montant = montant;
+                    transaction.date_creation = date_creation;
+                    transaction.nom_budget = nom_budget            
+                    transaction.type_transaction = type_transaction;
+                }
+            }
             
-        // }
+        }
     }
 });
 
 export const {
     addTransaction,
-    // editTransaction,
+    editTransaction,
     // deleteTransaction
 } = TransactionSlice.actions;
 

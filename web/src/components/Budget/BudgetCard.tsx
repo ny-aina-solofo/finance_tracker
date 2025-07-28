@@ -2,8 +2,6 @@ import React,{useState} from 'react'
 import { useDispatch } from 'react-redux';
 import { BudgetType } from "@/types";
 import { Progress } from "@/components/ui/progress"
-import { Button } from '@/components/ui/button'
-import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import {
     Popover,
     PopoverContent,

@@ -14,9 +14,5 @@ const sql_transactions = `
         b.nom_budget,'revenu' AS type_transaction 
     FROM finance.revenu r LEFT JOIN finance.budget b 
     ON r.id_budget = b.id_budget 
-
-    ORDER BY
-        date_creation DESC;
-
 `
 module.exports = sql_transactions;
