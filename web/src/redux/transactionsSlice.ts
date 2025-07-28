@@ -65,11 +65,11 @@ const TransactionSlice = createSlice({
             }
             
         },
-        // deleteTransaction: (state, action: PayloadAction<number>) => {
-        //     const id_Transaction = action.payload;
-        //     const updatedTransaction = state.transactions.filter((t:TransactionsType) => t.id_transactions !== id_transactions);
-        //     state.transactions = updatedTransaction;
-        // },
+        deleteTransaction: (state, action: PayloadAction<number>) => {
+            const id_transaction = action.payload;
+            const updatedTransaction = state.transactions.filter((t:TransactionsType) => t.id_transaction !== id_transaction);
+            state.transactions = updatedTransaction;
+        },
         editTransaction: (state, action: PayloadAction<{
             id_transaction: number, libelle: string, montant: number, date_creation: string | undefined,
             nom_budget:string,type_transaction:string
@@ -99,7 +99,7 @@ const TransactionSlice = createSlice({
 export const {
     addTransaction,
     editTransaction,
-    // deleteTransaction
+    deleteTransaction,
 } = TransactionSlice.actions;
 
 export default TransactionSlice.reducer;

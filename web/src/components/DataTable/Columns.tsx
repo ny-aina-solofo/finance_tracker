@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
 import EditTransaction from "../Modals/Transactions/EditTransactions";
+import DeleteTransactions from "../Modals/Transactions/DeleteTransactions";
 
 export const columns: ColumnDef<TransactionsType>[] = [
     {
@@ -104,6 +105,10 @@ export const columns: ColumnDef<TransactionsType>[] = [
                         <PopoverContent asChild>
                             <div className="flex w-[114px] flex-col gap-1 px-5 py-3">
                                 <EditTransaction
+                                    selectedTransactions={transactions}       
+                                    setIsPopoverOpen={setIsPopoverOpen}
+                                />
+                                <DeleteTransactions
                                     selectedTransactions={transactions}       
                                     setIsPopoverOpen={setIsPopoverOpen}
                                 />                                

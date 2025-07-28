@@ -52,12 +52,17 @@ describe("http service test", () => {
         });
     });
 
-    // it("delete transaction", async () => {
-    //     const id_transaction:number = 44
-    //     mockedHttp.delete.mockResolvedValue({ data: { success: true } });
-    //     await transactionService.deletetransaction(id_transaction);
-    //     expect(mockedHttp.delete).toHaveBeenCalledWith(`/delete-transaction/${id_transaction}`);
-    // });
+    it("delete transaction", async () => {
+        const id_transaction:number = 44;
+        const type_transaction:string = 'revenu';
+        mockedHttp.delete.mockResolvedValue({ data: { success: true } });
+        await transactionService.deleteTransaction(id_transaction,type_transaction);
+        expect(mockedHttp.delete).toHaveBeenCalledWith(`/delete-transaction/${id_transaction}`,{
+            params: {
+                type_transaction: type_transaction
+            }
+        });
+    });
 
     it("update transaction", async () => {
         const id_transaction:number = 44

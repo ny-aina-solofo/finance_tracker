@@ -79,8 +79,27 @@ const updateTransaction = async (req,res,next) =>{
         next(error);
     }
 }
+const deleteTransaction = async (req,res,next) =>{
+    try {
+        const id_transaction = req.params.id_transaction;
+        const type_transaction = req.query.type_transaction;
+        if (type_transaction === 'depense') {
+            await Depense.destroy({where: {id_depense : id_transaction}});
+            res.status(200).send({success:true});
+        } else {
+            await Revenu.destroy({where: {id_revenu : id_transaction}});
+            res.status(200).send({success:true});
+        }   
+    } catch (error) {
+        console.error("Error deleting budget data:", error);
+        res.status(500).send({ message: "Error retrieving budget data.", error: error.message });
+        next(error);
+    }
+}
+
 module.exports = {
     getTransaction,
     addTransaction,
-    updateTransaction
+    updateTransaction,
+    deleteTransaction
 }; 

@@ -90,6 +90,25 @@ describe('transactions controller',()=>{
             );
             expect(res.statusCode).toEqual(200);
         }
+    });
+    it("delete transaction with status 200",async()=>{
+        req.params = {id_transaction:44};
+        req.query = {type_transaction:'depense'};
+        
+        if (req.query.type_transaction === 'depense') {
+            db.depense.destroy.mockResolvedValue({id_transaction:44});
+            await transactionsController.deleteTransaction(req,res,next);
+            expect(db.depense.destroy).toHaveBeenCalledWith({where: { id_depense: 44 }});
+            expect(res.statusCode).toEqual(200);
+            expect(res._getData()).toEqual({success:true});
+        } else {
+            db.revenu.destroy.mockResolvedValue({id_transaction:44});
+            await transactionsController.deletetransaction(req,res,next);
+            expect(db.transaction.destroy).toHaveBeenCalledWith({where: { id_revenu: 44 }});
+            expect(res.statusCode).toEqual(200);
+            expect(res._getData()).toEqual({success:true});
+        }
         
     });
+    
 })
