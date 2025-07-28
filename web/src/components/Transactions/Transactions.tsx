@@ -5,6 +5,7 @@ import { TransactionsType } from "@/types";
 import { RootState } from "@/redux/store";
 import { DataTable } from "../DataTable/DataTable";
 import { columns } from "../DataTable/Columns";
+import AddTransaction from "../Modals/Transactions/AddTransactions";
 
 const Transactions =()=>{
     const dispatch = useDispatch();
@@ -32,7 +33,7 @@ const Transactions =()=>{
         <main className="container flex flex-col gap-8">
             <div className="flex items-center justify-between">
                 <h1 className="text-preset-1 text-gray-900">Transactions</h1>                
-                {/* <AddTransactionsModal/>    */}
+                <AddTransaction/>   
             </div>
             {content}
             {/* <Pagination

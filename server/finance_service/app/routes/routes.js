@@ -9,7 +9,7 @@ router.put('/update-budget/:id_budget',budgetController.updateBudget);
 
 const transactionsController = require('../controllers/transactions_controller');
 router.get('/get-transaction',transactionsController.getTransaction);
-// router.post('/add-transactions',transactionsController.addtransactions);
+router.post('/add-transaction',transactionsController.addTransaction);
 // router.delete('/delete-transactions/:id_transactions',transactionsController.deletetransactions);
 // router.put('/update-transactions/:id_transactions',transactionsController.updateBudget);
 

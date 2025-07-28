@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice,PayloadAction } from "@reduxjs/toolkit";
 import { TransactionState} from "@/types";
 import { fetchTransactions } from "./fetchTransactions";
 import { TransactionsType } from "@/types";
@@ -28,33 +28,48 @@ const TransactionSlice = createSlice({
             });
     },
     reducers: {
-        // addTransaction: (state, action: PayloadAction<{
-        //     nom_Transaction: string, montant: number, 
-        //     date_creation: string | undefined
-        // }>) => {
-        //     const {nom_Transaction,montant,date_creation} = action.payload;
-        //     const newID = Date.now();
-        //     const newTransaction = {
-        //         id_Transaction: newID,
-        //         nom_Transaction: nom_Transaction,
-        //         montant: montant,
-        //         date_creation: date_creation
-        //     };
-        //     state.transactions.push(newTransaction);
-        // },
+        addTransaction: (state, action: PayloadAction<{
+            libelle: string, montant: number, date_creation: string | undefined,
+            nom_budget:string,type_transaction:string
+        }>) => {
+            const {libelle,montant,date_creation,nom_budget,type_transaction} = action.payload;
+            const newID = Date.now();
+            if (type_transaction === 'depense') {
+                const newDepense = {
+                    id_depense: newID,
+                    libelle: libelle,
+                    montant: montant,
+                    date_creation: date_creation,
+                    nom_budget: nom_budget,
+                    type_transaction: type_transaction
+                };
+                state.transactions.push(newDepense);    
+            } else {
+                const newRevenu = {
+                    id_revenu: newID,
+                    libelle: libelle,
+                    montant: montant,
+                    date_creation: date_creation,
+                    nom_budget: nom_budget,
+                    type_transaction: type_transaction
+                };
+                state.transactions.push(newRevenu);
+            }
+            
+        },
         // deleteTransaction: (state, action: PayloadAction<number>) => {
         //     const id_Transaction = action.payload;
         //     const updatedTransaction = state.transactions.filter((t:TransactionsType) => t.id_transactions !== id_transactions);
         //     state.transactions = updatedTransaction;
         // },
         // editTransaction: (state, action: PayloadAction<{
-        //     id_Transaction: number, nom_Transaction: string, montant: number, 
+        //     id_Transaction: number, libelle: string, montant: number, 
         //     date_creation: string
         // }>) => {
-        //     const { id_Transaction, nom_Transaction, montant,date_creation } = action.payload;
+        //     const { id_Transaction, libelle, montant,date_creation } = action.payload;
         //     const Transaction = state.transactions.find((transaction:TransactionsType) => Transaction.id_Transaction === id_Transaction);
         //     if (Transaction) {
-        //         Transaction.nom_Transaction = nom_Transaction;
+        //         Transaction.libelle = libelle;
         //         Transaction.montant = montant;
         //         Transaction.date_creation = date_creation;
         //     }
@@ -64,7 +79,7 @@ const TransactionSlice = createSlice({
 });
 
 export const {
-    // addTransaction,
+    addTransaction,
     // editTransaction,
     // deleteTransaction
 } = TransactionSlice.actions;

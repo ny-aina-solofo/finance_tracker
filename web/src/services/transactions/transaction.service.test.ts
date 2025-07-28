@@ -38,16 +38,19 @@ describe("http service test", () => {
         expect(data).toEqual(transactions);
     });
 
-    // it("insert transaction", async () => {
-    //     const nom_transaction:string = 'test';
-    //     const montant:number = 333;
-    //     const date_creation:string | undefined = '2024-03-15';
-    //     mockedHttp.post.mockResolvedValue({ data: { success: true } });
-    //     await transactionService.addtransaction(nom_transaction,montant,date_creation);
-    //     expect(mockedHttp.post).toHaveBeenCalledWith('/add-transaction', { 
-    //         nom_transaction:nom_transaction, montant:montant, date_creation:date_creation 
-    //     });
-    // });
+    it("insert transaction", async () => {
+        const libelle:string = 'test';
+        const montant:number = 333;
+        const date_creation:string | undefined = '2024-03-15';
+        const id_budget:number = 2;
+        const type_transaction = 'revenu'
+        mockedHttp.post.mockResolvedValue({ data: { success: true } });
+        await transactionService.addTransaction(libelle,montant,date_creation,id_budget,type_transaction);
+        expect(mockedHttp.post).toHaveBeenCalledWith('/add-transaction', { 
+            libelle:libelle, montant:montant, date_creation:date_creation, id_budget:id_budget,
+            type_transaction:type_transaction 
+        });
+    });
 
     // it("delete transaction", async () => {
     //     const id_transaction:number = 44
@@ -58,13 +61,13 @@ describe("http service test", () => {
 
     // it("update transaction", async () => {
     //     const id_transaction:number = 44
-    //     const nom_transaction:string = 'test';
+    //     const libelle:string = 'test';
     //     const montant:number = 333;
     //     const date_creation:string | undefined = '2024-03-15';
     //     mockedHttp.put.mockResolvedValue({ data: { success: true } });
-    //     await transactionService.updatetransaction(id_transaction,nom_transaction,montant,date_creation);
+    //     await transactionService.updatetransaction(id_transaction,libelle,montant,date_creation);
     //     expect(mockedHttp.put).toHaveBeenCalledWith(`/update-transaction/${id_transaction}`,{
-    //         nom_transaction:nom_transaction, montant:montant, date_creation:date_creation     
+    //         libelle:libelle, montant:montant, date_creation:date_creation     
     //     });
     // });
 });

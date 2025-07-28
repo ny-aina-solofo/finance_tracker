@@ -4,9 +4,12 @@ class TransactionService {
     getTransaction(){
         return http.get('/get-transaction',{});
     }
-    // addTransaction(nom_Transaction:string, montant:number, date_creation:string | undefined){
-    //     return http.post('/add-Transaction',{nom_Transaction,montant,date_creation});
-    // }
+    addTransaction(
+        libelle:string, montant:number, date_creation:string | undefined,
+        id_budget:number,type_transaction:string
+    ){
+        return http.post('/add-transaction',{libelle,montant,date_creation,id_budget,type_transaction});
+    }
     // deleteTransaction(id_Transaction:number){
     //     return http.delete(`/delete-Transaction/${id_Transaction}`);
     // }
