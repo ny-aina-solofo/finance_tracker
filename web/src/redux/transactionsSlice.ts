@@ -20,15 +20,15 @@ const TransactionSlice = createSlice({
             })
             .addCase(fetchTransactions.fulfilled, (state, action) => {
                 state.status = "received";
-                // state.transactions = action.payload;
-                state.transactions = action.payload.map((t: TransactionsType) => ({
-                    ...t,
-                    date_modification: t.date_modification || new Date().toISOString()
-                })).sort((a: TransactionsType, b: TransactionsType) => {
-                    const dateA = a.date_modification ? new Date(a.date_modification).getTime() : 0;
-                    const dateB = b.date_modification ? new Date(b.date_modification).getTime() : 0;
-                    return dateB - dateA; // Sort in descending order (latest first)
-                });
+                state.transactions = action.payload;
+                // state.transactions = action.payload.map((t: TransactionsType) => ({
+                //     ...t,
+                //     date_modification: t.date_modification || new Date().toISOString()
+                // })).sort((a: TransactionsType, b: TransactionsType) => {
+                //     const dateA = a.date_modification ? new Date(a.date_modification).getTime() : 0;
+                //     const dateB = b.date_modification ? new Date(b.date_modification).getTime() : 0;
+                //     return dateB - dateA; // Sort in descending order (latest first)
+                // });
             })
             .addCase(fetchTransactions.rejected, (state, action) => {
                 state.status = "rejected";

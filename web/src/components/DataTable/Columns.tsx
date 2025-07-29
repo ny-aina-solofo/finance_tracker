@@ -89,6 +89,15 @@ export const columns: ColumnDef<TransactionsType>[] = [
         },
     },
     {
+        accessorKey: "type_transaction",
+        header: "", // Empty header because we don't want to display it
+        // You can leave cell out or return null if you don't want it rendered
+        cell: () => null,
+        enableHiding: true, // Allow hiding the column if it's visible by default
+        enableSorting: false, // Not sortable by this column directly
+        enableColumnFilter: true, // Explicitly enable filter on this column
+    },
+    {
         id: "actions",
         enableHiding: false,
         cell: ({ row }) => {
