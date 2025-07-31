@@ -9,7 +9,7 @@ import {
     getFilteredRowModel,
     getPaginationRowModel,
     getSortedRowModel,
-    useReactTable,
+    useReactTable,    
 } from '@tanstack/react-table'
 import {
   Table,
@@ -19,16 +19,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-  } from '@/components/ui/select'
 import { Input } from "../ui/input"
-import { BudgetType } from "@/types";
-import budgetService from "@/services/budget/budget.service";
+import PaginationTable from "./PaginationTable";
+import FilterTable from "./FilterTable";
+import SortingTable from "./SortingTable";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -41,30 +35,27 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
-    const [budgets, setBudgets] = useState<BudgetType[]>([]);
-    
-    useEffect(() => {
-        budgetService.getBudget().then(response => {
-            const data = response?.data || [];
-            setBudgets(data);
-        }).catch(error => {
-            console.error("Erreur lors de la récupération des budgets :", error);
-        });
-    }, []);
+    const [pagination, setPagination] = useState({
+        pageIndex: 0, // initial page index
+        pageSize: 10, // initial page size
+    });
+
     
     const table = useReactTable({
         data,
         columns,
         getCoreRowModel: getCoreRowModel(),
-        // getPaginationRowModel: getPaginationRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         getSortedRowModel: getSortedRowModel(),
         state: {
-          sorting,
-          columnFilters,
+            sorting,
+            columnFilters,
+            pagination
         },
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
+        onPaginationChange: setPagination
     })
     
   return (
@@ -79,88 +70,15 @@ export function DataTable<TData, TValue>({
                     }
                     className="max-w-sm"
                 />
-                 <div className="ml-auto hidden gap-2 lg:flex lg:gap-5">
-                    <div className="flex items-center gap-2">
-                        <label
-                            htmlFor="primary-sort-select"
-                            className="text-preset-5 font-normal text-grey-500"
-                        >
-                            triez par
-                        </label>
-                        <Select
-                            name="primary-sort-select"
-                            onValueChange={(value) => {
-                                let desc = false
-                                const currentFilters = columnFilters.filter(f => f.id !== 'type_transaction');
-                                if (value === 'latest') {
-                                    setSorting([{ id: 'date_creation', desc: true }]);
-                                    setColumnFilters(currentFilters);
-                                } else if (value === 'oldest') {
-                                    setSorting([{ id: 'date_creation', desc: false }]);
-                                    setColumnFilters(currentFilters);
-                                } else if (value === 'atoz') {
-                                    setSorting([{ id: 'libelle', desc: false }]);
-                                    setColumnFilters(currentFilters);
-                                } else if (value === 'ztoa') {
-                                    setSorting([{ id: 'libelle', desc: true }]);
-                                    setColumnFilters(currentFilters);
-                                } else if (value === 'revenu') {
-                                    setSorting([]);
-                                    // Set a filter for 'type_transaction' to 'revenu'
-                                    setColumnFilters([...currentFilters, { id: 'type_transaction', value: 'revenu' }]); 
-                                } else if (value === 'depense') {
-                                    setSorting([]);
-                                    setColumnFilters([...currentFilters, { id: 'type_transaction', value: 'depense' }]);
-                                } else {
-                                    setSorting([])
-                                    setColumnFilters(currentFilters)
-                                }
-                            }}
-                        >
-                            <SelectTrigger className="w-44">
-                                <SelectValue placeholder="Toutes les transactions" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="all">Toutes les transactions</SelectItem>
-                                <SelectItem value="latest">Plus récent</SelectItem>
-                                <SelectItem value="oldest">Plus ancien</SelectItem>
-                                <SelectItem value="atoz">A à Z</SelectItem>
-                                <SelectItem value="ztoa">Z à A</SelectItem>
-                                <SelectItem value="revenu">Revenu</SelectItem>
-                                <SelectItem value="depense">Depense</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <label
-                            htmlFor="secondary-sort-select"
-                            className="text-preset-5 font-normal text-grey-500"
-                        >
-                            Filtrez par budget
-                        </label>
-                        <Select
-                            name="secondary-sort-select"
-                            onValueChange={(value) => {
-                            if (value === 'all') {
-                                setColumnFilters([])
-                            } else {
-                                setColumnFilters([{ id: 'nom_budget', value }])
-                            }
-                            }}
-                        >
-                            <SelectTrigger className="w-44">
-                                <SelectValue placeholder="Toutes les budgets" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="all">Toutes les budgets</SelectItem>
-                                {budgets.map((item:BudgetType) => (
-                                    <SelectItem key={item.id_budget} value={item.nom_budget}>
-                                        {item.nom_budget}
-                                    </SelectItem>    
-                                ))}
-                            </SelectContent>
-                        </Select>
-                    </div>
+                <div className="ml-auto hidden gap-2 lg:flex lg:gap-5">
+                    <SortingTable
+                        setSorting={setSorting}
+                        columnFilters={columnFilters}
+                        setColumnFilters={setColumnFilters}
+                    />
+                    <FilterTable
+                        setColumnFilters={setColumnFilters}
+                    />
                 </div>   
             </div>
             <Table>
@@ -205,8 +123,9 @@ export function DataTable<TData, TValue>({
                     )}
                 </TableBody>
             </Table>    
-        </div>
-        
+            
+            <PaginationTable table={table} />
+        </div>    
     </div>
   )
 }
