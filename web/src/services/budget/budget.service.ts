@@ -1,4 +1,4 @@
-import http from '../http_common';
+import http from '../http_common_budget';
 
 class BudgetService {
     getBudget(){

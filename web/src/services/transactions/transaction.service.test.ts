@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import transactionService from './transaction.service';
-import http from '../http_common';
+import http from '../http_common_budget';
 import { Mocked } from 'vitest'; // Importez Mocked
 
-vi.mock('../http_common', () => {
+vi.mock('../http_common_budget', () => {
     return {
         default: {
             get: vi.fn(),

@@ -5,7 +5,7 @@ const authJwt = require('../middleware/authJwt');
 const verifySignup = require('../middleware/verifySignup');
 const userController = require('../controllers/user_controller');
 
-router.post('/signup',userController.signUp);
+router.post('/signup',verifySignup.checkDuplicate,userController.signUp);
 
 // router.get('/signin',authJwt,userController.signIn);
 // router.delete('/delete-board/:id_board',userController.deleteBoard);

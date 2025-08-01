@@ -9,9 +9,7 @@ const signUp = async (req,res,next) =>{
         const email = req.body.email;
         const hash = bcrypt.hashSync(password_user, 10); 
 
-        // console.log(nom_user,email,hash);
         await User.create({nom: nom,password_user: hash,email: email})
-        // await User.create({id_user:44,nom_user:nom_user,password_user:password_user, email:email});
         res.status(200).send({success:true});
     } catch (error) {
         console.error("Error inserting user data:", error);
