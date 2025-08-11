@@ -2,16 +2,19 @@ const userController = require("../controllers/user_controller");
 const db = require("../models/models");
 const httpMocks = require('node-mocks-http');
 const bcrypt = require('bcryptjs');
+const jwt = require("jsonwebtoken");
 
 jest.mock("bcryptjs", () => ({
     hashSync: jest.fn(() => "hashed_password_mocked"),
     compareSync: jest.fn(() => "compare_mocked")
-    
 }));
-
+jest.mock("jsonwebtoken",()=>({
+    sign :jest.fn(()=>"token")
+}))
 jest.mock("../models/models", () => ({
     user: {
         findAll: jest.fn(),
+        findOne: jest.fn(),
         create: jest.fn(),
         destroy: jest.fn(),
         update: jest.fn()
@@ -37,17 +40,26 @@ describe('user controller',()=>{
         expect(res.statusCode).toEqual(200);
     });
     
-    // it("get user with status 200",async()=>{
-    //     const data = [{
-    //         id_user: 2, nom: 'Développeur', password_user: 'test123', 
-    //         email: 'test@finance.com' 
-    //     }]
-    //     db.user.findAll.mockReturnValue(data); 
-    //     await userController.getLogin(req,res,next); // Exécution du contrôleur 
-    //     expect(res.statusCode).toEqual(200);
-    //     expect(Array.isArray(data)).toBe(true);
-    //     expect(res._getData()).toEqual(data);
-    // });
+    it("get user with status 200",async()=>{
+        req.body = {email: 'test@finance.com',password_user: 'test123', };
+        const data = [{
+            id_user: 2, nom: 'Développeur', password_user: 'test123', 
+            email: 'test@finance.com' 
+        }]
+        const token = "token"
+        jest.spyOn(bcrypt, 'compareSync').mockReturnValue(true);
+        db.user.findOne.mockResolvedValue(data); 
+        await userController.signIn(req,res,next); // Exécution du contrôleur 
+
+        const responseBody = res._getData();
+        expect(responseBody).toHaveProperty('id', data.id_user);
+        expect(responseBody).toHaveProperty('token');
+        expect(typeof responseBody.token).toBe('string');
+
+        expect(res.statusCode).toEqual(200);
+        expect(Array.isArray(data)).toBe(true);
+        expect(res._getData()).toEqual({id:data.id_user,token:token});
+    });
 
 
     // it("delete user with status 200",async()=>{

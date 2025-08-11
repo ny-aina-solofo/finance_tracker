@@ -1,5 +1,6 @@
 import React, { useState,useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -23,19 +24,17 @@ import { Input } from "@/components/ui/input"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Eye } from "lucide-react";
-import { SignUpFormSchema, signUpSchema } from '@/lib/validations'
+import { LoginFormSchema, loginSchema } from '@/lib/validations'
 import usersService from "@/services/users/users.service";
 import { toast } from "sonner"
-import { useNavigate } from "react-router";
 
-const SignupForm = () => {
+const LoginForm = () => {
     const [showPassword, setShowPassword] = React.useState<boolean>(false);    
     const navigate = useNavigate();
-
-    const form = useForm<SignUpFormSchema>({
-        resolver: zodResolver(signUpSchema),
+    
+    const form = useForm<LoginFormSchema>({
+        resolver: zodResolver(loginSchema),
         defaultValues: {
-            name: "",
             email: "",
             password: "",
         }
@@ -45,37 +44,28 @@ const SignupForm = () => {
     }
     const { reset, formState: { isSubmitting }} = form
     
-    async function onSubmit(values: SignUpFormSchema) {
+    async function onSubmit(values: LoginFormSchema) {
         try {
-            await usersService.signUp(values.name,values.password,values.email);
-            toast.success("Compte créé avec succès, vous pouvez maintenant vous connecter.");
+            await usersService.signIn(values.email,values.password);
+            toast.success("connexion réussie");
             reset({
-                name: '',
                 email: '',
                 password: '',
             })
-            navigate('/');
+            navigate('/dashboard');
         } catch (error){
             console.error(error);
-            toast.error("Erreur lors de la création du compte");
+            toast.error("Erreur lors de la connexion");
         };
         
     }
-    const handleReset = ()=> {
-        reset({
-            name: '',
-            email: '',
-            password: '',
-        })
-        navigate('/');
-    }
     return (
         <div className={cn("flex flex-col gap-6")}>
-            <Card className="w-full max-w-sm">
-                <CardHeader >
-                    <CardTitle className="text-xl text-center">Bienvenue</CardTitle>
+            <Card className="">
+                <CardHeader className="">
+                    <CardTitle className="text-xl text-center">Login</CardTitle>
                     <CardDescription>
-                        Créez un compte pour gérer vos budgets en toutes sécurités 
+                        Connectez-vous afin d'accéder à l'application en toutes sécurités 
                     </CardDescription>
                 </CardHeader>
                 <Form {...form}>
@@ -83,24 +73,11 @@ const SignupForm = () => {
                         <CardContent className="flex flex-col gap-6">
                             <FormField
                                 control={form.control}
-                                name="name"
-                                render={({ field }) => (
-                                <FormItem className="grid gap-3">
-                                    <FormLabel>Nom</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="Entrez un nom" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
                                 name="email"
                                 render={({ field }) => (
-                                <FormItem className="relative grid gap-3">
+                                <FormItem className="relative ">
                                     <FormLabel>Email</FormLabel>
-                                    <FormControl className="">
+                                    <FormControl className="grid gap-3">
                                         <Input type="email" placeholder="Entrez votre email" {...field} />
                                     </FormControl>
                                     <FormMessage />
@@ -135,46 +112,38 @@ const SignupForm = () => {
                                     <FormMessage />
                                 </FormItem>
                                 )}
-                            />
+                            />        
                         </CardContent>
-                        <CardFooter className="mt-4 flex-col gap-2">
+                        <CardFooter className="mt-4 flex-col gap-2">    
                             <Button
                                 disabled={isSubmitting}
                                 className="w-full"
                                 type="submit"
                             >
-                                Créer
-                            </Button>
-                            <Button
-                                variant='outline'
-                                onClick={handleReset}
-                                className="w-full"
-                                type="button"
-                            >
-                                Annuler
+                                Se connecter
                             </Button>
                             <div
                                 className=" mt-4 text-center text-sm text-preset-4 inline-flex 
                                 items-center gap-2 truncate text-center font-normal text-grey-500"
                             >
-                                Avez vous déjà un compte?{' '}
+                                vous n'avez pas de compte?{' '}
                                 <span 
                                     className="cursor-pointer font-bold text-grey-900 underline"
-                                    onClick={()=>navigate('/')}
+                                    onClick={()=>navigate('/signup')}
                                 >
-                                    Se connecter
+                                    S'inscrire
                                 </span>
                             </div>
                         </CardFooter>
                     </form>
                 </Form>
             </Card>
-            {/* <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
+            <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
                 By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
                 and <a href="#">Privacy Policy</a>.
-            </div> */}
+            </div>
         </div>
     )
 }
 
-export default SignupForm;
+export default LoginForm;

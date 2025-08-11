@@ -7,9 +7,7 @@ const verifyToken = (req, res, next) => {
         const token = req.headers.authorization.split(' ')[1];
         const decodedToken = jwt.verify(token, process.env.SECRET_KEY);
         const id = decodedToken.id;
-        req.auth = {
-            id: id
-        };
+        req.id_user = id;
         next();
     } catch(error) {
         res.status(401).json({ error });
@@ -17,6 +15,4 @@ const verifyToken = (req, res, next) => {
 };
 
 
-module.exports = { 
-    verifyToken
-};
+module.exports = verifyToken;

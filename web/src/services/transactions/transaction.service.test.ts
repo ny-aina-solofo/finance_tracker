@@ -19,6 +19,7 @@ const mockedHttp = http as Mocked<typeof http>;
 describe("http service test", () => {
     beforeEach(() => {
         vi.clearAllMocks();
+        sessionStorage.clear();
     });
 
     it("get transaction", async () => {
@@ -32,9 +33,14 @@ describe("http service test", () => {
                 date_modification:"2024-06-15T11:00:00.000Z",id_budget:5,type_transaction:"depense"
             }
         ]        
+        const mockUser = { token: "fake-jwt-token-for-test" };
+        sessionStorage.setItem("utilisateur connecté", JSON.stringify(mockUser));
+
         mockedHttp.get.mockResolvedValue(transactions);
         const data = await transactionService.getTransaction();
-        expect(mockedHttp.get).toHaveBeenCalledWith('/get-transaction',{});
+        expect(mockedHttp.get).toHaveBeenCalledWith('/get-transaction',
+            { headers: { Authorization: `Bearer ${mockUser.token}`}}
+        );
         expect(data).toEqual(transactions);
     });
 
@@ -44,20 +50,28 @@ describe("http service test", () => {
         const date_creation:string | undefined = '2024-03-15';
         const id_budget:number = 2;
         const type_transaction:string = 'revenu'
+        const mockUser = { token: "fake-jwt-token-for-test" };
+        sessionStorage.setItem("utilisateur connecté", JSON.stringify(mockUser));
+
         mockedHttp.post.mockResolvedValue({ data: { success: true } });
         await transactionService.addTransaction(libelle,montant,date_creation,id_budget,type_transaction);
         expect(mockedHttp.post).toHaveBeenCalledWith('/add-transaction', { 
             libelle:libelle, montant:montant, date_creation:date_creation, id_budget:id_budget,
             type_transaction:type_transaction 
-        });
+        },{ headers: { Authorization: `Bearer ${mockUser.token}`}});
     });
 
     it("delete transaction", async () => {
         const id_transaction:number = 44;
         const type_transaction:string = 'revenu';
+        const mockUser = { token: "fake-jwt-token-for-test" };
+        sessionStorage.setItem("utilisateur connecté", JSON.stringify(mockUser));
+        const authHeaders = { headers: { Authorization: `Bearer ${mockUser.token}`}};
+
         mockedHttp.delete.mockResolvedValue({ data: { success: true } });
         await transactionService.deleteTransaction(id_transaction,type_transaction);
         expect(mockedHttp.delete).toHaveBeenCalledWith(`/delete-transaction/${id_transaction}`,{
+            ...authHeaders,
             params: {
                 type_transaction: type_transaction
             }
@@ -71,6 +85,9 @@ describe("http service test", () => {
         const date_creation:string | undefined = '2024-03-15';
         const id_budget:number = 2;
         const type_transaction:string = 'revenu'
+        const mockUser = { token: "fake-jwt-token-for-test" };
+        sessionStorage.setItem("utilisateur connecté", JSON.stringify(mockUser));
+
         mockedHttp.put.mockResolvedValue({ data: { success: true } });
         await transactionService.updateTransaction(
             id_transaction,libelle,montant,date_creation,
@@ -79,6 +96,6 @@ describe("http service test", () => {
         expect(mockedHttp.put).toHaveBeenCalledWith(`/update-transaction/${id_transaction}`,{
             libelle:libelle, montant:montant, date_creation:date_creation,    
             id_budget:id_budget,type_transaction:type_transaction 
-        });
+        },{ headers: { Authorization: `Bearer ${mockUser.token}`}});
     });
 });

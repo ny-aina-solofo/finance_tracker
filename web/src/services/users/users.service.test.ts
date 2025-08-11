@@ -21,6 +21,15 @@ describe("http service test", () => {
         vi.clearAllMocks();
     });
 
+    it("get login", async () => {
+        const email:string = 'test@finance.com';
+        const password_user:string = 'test123';
+        const auth = [{id:2,token:"token"}]        
+        mockedHttp.post.mockResolvedValue(auth);
+        await userService.signIn(email,password_user);
+        expect(mockedHttp.post).toHaveBeenCalledWith('/signin',{email:email,password_user:password_user});
+    });
+
     it("insert user", async () => {
         const nom:string = 'Développeur';
         const password_user:string = 'test123';
@@ -30,25 +39,6 @@ describe("http service test", () => {
         expect(mockedHttp.post).toHaveBeenCalledWith('/signup', { 
             nom:nom, password_user:password_user, email:email });
     });
-
-    // it("get user", async () => {
-    //     const users= [
-    //         {
-    //             id_user:7,nom:"Intérêts Bancaires",password_user:10,email:"2024-06-29T21:00:00.000Z"
-    //             ,date_modification:"2024-06-30T06:00:00.000Z",id_budget:5,type_user:"revenu"
-    //         },
-    //         {
-    //             id_user:12,nom:"Livre",password_user:20,email:"2024-06-14T21:00:00.000Z",
-    //             date_modification:"2024-06-15T11:00:00.000Z",id_budget:5,type_user:"depense"
-    //         }
-    //     ]        
-    //     mockedHttp.get.mockResolvedValue(users);
-    //     const data = await userService.getuser();
-    //     expect(mockedHttp.get).toHaveBeenCalledWith('/get-user',{});
-    //     expect(data).toEqual(users);
-    // });
-
-
 
     // it("delete user", async () => {
     //     const id_user:number = 44;
