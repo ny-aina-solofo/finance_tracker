@@ -1,12 +1,11 @@
 import React, { useState,useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchBudgets } from "../../redux/fetchBudgets";
 import { BudgetType } from "@/types";
 import { RootState } from "@/redux/store";
-import BudgetCard from "./BudgetCard";
-import AddBudgetModal from "../Modals/Budget/AddBudgetModal";
+import { AddBudgetModal, BudgetCard } from "@/components";
+import { fetchBudgets } from "@/redux/fetchBudgets";
 
-const Budget =()=>{
+const BudgetPage =()=>{
     const dispatch = useDispatch();
     const { budgets, status, error } = useSelector((state: RootState) => state.budgets);
     let content;
@@ -57,4 +56,4 @@ const Budget =()=>{
         </main>   
     )
 }
-export default Budget;
+export default BudgetPage;

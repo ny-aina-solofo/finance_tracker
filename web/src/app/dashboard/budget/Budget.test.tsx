@@ -2,10 +2,9 @@ import { cleanup, render, screen, fireEvent, waitFor } from "@testing-library/re
 import { beforeEach, expect, it, vi, describe, afterEach } from "vitest";
 import React from "react";
 import { Provider } from "react-redux";
-import { store } from "../../redux/store";
-import create from "../create";
 import { BudgetType } from "@/types";
-import Budget from "./Budget";
+import BudgetPage from "./page";
+import { store } from "@/redux/store";
 
 const budgets= [
     {
@@ -21,7 +20,7 @@ const budgets= [
 const MockBudget = () => {
     return (
         <Provider store={store}>
-            <Budget/>
+            <BudgetPage/>
         </Provider>
     );
 };

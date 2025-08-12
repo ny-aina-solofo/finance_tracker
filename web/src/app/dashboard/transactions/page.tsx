@@ -1,13 +1,11 @@
 import React, { useState,useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchTransactions } from "../../redux/fetchTransactions";
 import { TransactionsType } from "@/types";
 import { RootState } from "@/redux/store";
-import { DataTable } from "../DataTable/DataTable";
-import { columns } from "../DataTable/Columns";
-import AddTransaction from "../Modals/Transactions/AddTransactions";
+import { fetchTransactions } from "@/redux/fetchTransactions";
+import { AddTransaction, columns, DataTable } from "@/components";
 
-const Transactions =()=>{
+const TransactionPage =()=>{
     const dispatch = useDispatch();
     const { transactions, status, error } = useSelector((state: RootState) => state.transactions);
     let content;
@@ -49,4 +47,4 @@ const Transactions =()=>{
         </main>   
     )
 }
-export default Transactions;
+export default TransactionPage;

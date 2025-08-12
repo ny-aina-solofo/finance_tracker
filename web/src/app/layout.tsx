@@ -1,0 +1,43 @@
+import { Routes, Route, useNavigate,createBrowserRouter,RouterProvider } from "react-router";
+import React from "react";
+import DashboardLayout from "./dashboard/layout";
+import Dashboard from "./dashboard/page";
+import BudgetPage from "./dashboard/budget/page";
+import TransactionPage from "./dashboard/transactions/page";
+
+
+const router = createBrowserRouter([
+    {
+        // path:"/",
+        // element: <LoginPage />
+    },
+    {
+        path: "/dashboard",
+        element: <DashboardLayout />,
+        children: [
+            {
+                path: "overview", 
+                element: <Dashboard />,
+            },
+            {
+                path: "budget", 
+                element: <BudgetPage />,
+            },
+            {
+                path: "transactions",
+                element: <TransactionPage />,
+            },
+        ],
+    },
+]);
+
+const RootLayout = () => {
+    
+    return (
+        <>
+            <RouterProvider router={router} />
+        </>
+    )
+}
+
+export default RootLayout;
