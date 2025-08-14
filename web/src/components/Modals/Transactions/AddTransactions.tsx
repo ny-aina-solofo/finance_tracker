@@ -41,7 +41,11 @@ import { addTransaction } from "@/redux/transactionsSlice";
 import { BudgetType } from "@/types";
 import budgetService from "@/services/budget/budget.service";
 
-const AddTransaction = ()=> {
+interface Props {
+    id_budget : number | null;
+};
+
+const AddTransaction = ({id_budget}:Props)=> {
     const dispatch = useDispatch();
 
     const [budgets, setBudgets] = useState<BudgetType[]>([]);
@@ -54,7 +58,8 @@ const AddTransaction = ()=> {
             console.error("Erreur lors de la récupération des budgets :", error);
         });
     }, []);
-
+    const budgetsToShow = id_budget ? budgets.filter((b: BudgetType) => b.id_budget === id_budget) : budgets;
+    
     const [libelle,setLibelle]= React.useState<string>('')
     const [montant,setMontant]= React.useState<string>('')
     const [budgetId,setBudgetId]=React.useState<string>(budgets.length > 0 ? budgets[0].id_budget.toString() : '')
@@ -178,23 +183,34 @@ const AddTransaction = ()=> {
                         </div>
                         <div className="grid gap-3 mb-3">
                             <Label htmlFor="budget">Budget</Label>
-                            <Select 
-                                value={budgetId} 
-                                onValueChange={setBudgetId}
-                            >
-                                <SelectTrigger className="w-full">
-                                    <SelectValue placeholder="sélectionnez le type de transaction" />
-                                </SelectTrigger>
-                                <SelectContent >
-                                    <SelectGroup>
-                                    {budgets.map((item:BudgetType) => (
-                                        <SelectItem key={item.id_budget} value={item.id_budget.toString()}>
-                                            {item.nom_budget}
-                                        </SelectItem>    
+                            {id_budget ? (
+                                <Select>
+                                    {budgetsToShow.map((item:BudgetType) => (
+                                        <SelectTrigger className="w-full" key={item.id_budget}>
+                                            <SelectValue placeholder={`${item.nom_budget}`} />
+                                        </SelectTrigger>    
                                     ))}
-                                    </SelectGroup>
-                                </SelectContent>
-                            </Select>
+                                </Select>
+                            ) : (
+                                <Select 
+                                    value={budgetId} 
+                                    onValueChange={setBudgetId}
+                                >
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="sélectionnez le budget correspondant" />
+                                    </SelectTrigger>
+                                    <SelectContent >
+                                        <SelectGroup>
+                                        {budgetsToShow.map((item:BudgetType) => (
+                                            <SelectItem key={item.id_budget} value={item.id_budget.toString()}>
+                                                {item.nom_budget}
+                                            </SelectItem>    
+                                        ))}
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
+                            )}
+                            
                         </div>
                         <div className="grid gap-3 mb-3">
                             <Label htmlFor="date">

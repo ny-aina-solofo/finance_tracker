@@ -39,7 +39,7 @@ const BudgetPage =()=>{
     return(
         <main className="container flex flex-col gap-8">
             <div className="flex items-center justify-between">
-                <h1 className="text-preset-1 text-gray-900">Budgets</h1>                
+                <h1 className="text-preset-1 text-gray-900">Budget</h1>                
                 <AddBudgetModal/>   
             </div>
             {content}

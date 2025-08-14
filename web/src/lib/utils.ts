@@ -9,8 +9,8 @@ export function cn(...inputs: ClassValue[]) {
 // Menu items.
 export const menuItems = [
     {
-        title: "Overview",
-        url: "/dashboard/overview",
+        title: "Acceuil",
+        url: "/dashboard",
         icon: IconHome,
     },
     {

@@ -16,7 +16,7 @@ const router = createBrowserRouter([
         element: <DashboardLayout />,
         children: [
             {
-                path: "overview", 
+                index:true ,
                 element: <Dashboard />,
             },
             {
@@ -26,7 +26,7 @@ const router = createBrowserRouter([
             {
                 path: "transactions",
                 element: <TransactionPage />,
-            },
+            }
         ],
     },
 ]);

@@ -1,5 +1,5 @@
-import React,{useState} from 'react'
-import { useDispatch } from 'react-redux';
+import React, { useState,useEffect } from "react";
+import { useDispatch,useSelector } from 'react-redux';
 import { BudgetType } from "@/types";
 import { Progress } from "@/components/ui/progress"
 import {
@@ -10,6 +10,10 @@ import {
 import EditBudgetModal from '../Modals/Budget/EditBudgetModal';
 import DeleteBudgetModal from '../Modals/Budget/DeleteBudgetModal';
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
+import BudgetDashboard from "../Dashboard/BudgetDashboard";
+import { Button } from "../ui/button";
+import { IconEye } from "@tabler/icons-react";
+import { useNavigate } from "react-router";
 
 interface BudgetProps {
     budgets: BudgetType;
@@ -17,8 +21,12 @@ interface BudgetProps {
 
 const BudgetCard =({budgets}:BudgetProps) => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
-        
+    
+    const viewTransactions = ()=>{
+        navigate(`/dashboard/transactions?budget=${budgets.id_budget}`);
+    }
     return (
         <div className="flex flex-col gap-8 rounded-[12px] bg-white px-5 py-6">
             <header className="flex items-center justify-between">
@@ -49,52 +57,10 @@ const BudgetCard =({budgets}:BudgetProps) => {
                 </Popover>
             </header>
             <section className="flex h-[114px] flex-col justify-center gap-4">
-                <div className="flex items-center justify-between">
-                    <h4 className="text-preset-4 text-gray-500">Montant Total</h4>
-                    <p className="text-preset-1">{budgets.montant}</p>
-                </div>
-                <div className="flex flex-col gap-3">
-                    <Progress value={33} />
-                    {/* <Progress
-                        className="h-2"
-                        maxValue={pot.target}
-                        value={pot.total}
-                        indicatorColor={getColorHexCode(pot.theme)}
-                    /> */}
-                    <div className="flex items-center">
-                        <div className="relative flex flex-1 flex-col justify-between pl-5">
-                            <p className="text-preset-5 text-grey-500">Depense</p>
-                            <p className="text-preset-4 font-bold text-grey-900">
-                                {budgets.montant}
-                            </p>
-                        </div>
-                        <div className="relative flex flex-1 flex-col justify-between pl-5">
-                            <p className="text-preset-5 text-grey-500">Revenu</p>
-                            <p className="text-preset-4 font-bold text-grey-900">
-                                {budgets.montant}
-                            </p>
-                        </div>
-                    </div>
-                </div>
+                <BudgetDashboard budgets={budgets}/>
             </section>
-            <section className="mb-[14px] flex gap-4">
-                {/* <Dialog>
-                <DialogTrigger asChild>
-                    <Button variant="secondary" className="flex-1">
-                    + Add Money
-                    </Button>
-                </DialogTrigger>
-                <AddMoneyModal pot={pot} />
-                </Dialog>
-
-                <Dialog>
-                <DialogTrigger asChild>
-                    <Button variant="secondary" className="flex-1">
-                    Withdraw
-                    </Button>
-                </DialogTrigger>
-                <WithdrawMoney pot={pot} />
-                </Dialog> */}
+            <section className="">
+                <Button size="lg" className="w-full" onClick={viewTransactions}><IconEye/> Voir Transactions</Button>
             </section>
         </div>
     )
