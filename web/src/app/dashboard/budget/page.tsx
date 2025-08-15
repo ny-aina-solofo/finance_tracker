@@ -20,18 +20,16 @@ const BudgetPage =()=>{
         if (Array.isArray(budgets) && budgets.length > 0) {
             content = (
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                    {budgets.length > 0 ? (
-                        budgets.map((item: BudgetType) => <BudgetCard key={item.id_budget} budgets={item} />)
-                    ) : (
-                        <p className="text-preset-4 text-start text-grey-300">
-                            Aucun budget à afficher. 
-                            Cliquez sur <strong>+ Ajouter</strong> pour en ajouter une.
-                        </p>
-                    )}
+                    {budgets.map((item: BudgetType) => <BudgetCard key={item.id_budget} budgets={item} />)}
                 </div>
             );
         } else {
-            content = <p>No budgets found.</p>;
+            content =  (
+                <p className="text-preset-4 text-start text-grey-300">
+                    Aucun budget à afficher. 
+                    Cliquez sur <strong>+ Ajouter</strong> pour en ajouter une.
+                </p>
+            );
         }
     } else if (status === 'rejected') {
         content = <p>Error: {error}</p>;

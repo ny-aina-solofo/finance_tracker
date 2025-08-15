@@ -18,12 +18,10 @@ class TransactionService {
         });
     }
     updateTransaction(
-        id_transaction:number,libelle:string,montant:number, date_creation:string | undefined,
-        id_budget:number,type_transaction:string
+        id_transaction:number,libelle:string,date_creation:string | undefined,type_transaction:string
     ){
         return http.put(`/update-transaction/${id_transaction}`,{
-            libelle,montant,date_creation,
-            id_budget,type_transaction
+            libelle,date_creation,type_transaction
         });
     }
 }

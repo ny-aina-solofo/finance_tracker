@@ -40,6 +40,7 @@ import transactionService from "@/services/transactions/transaction.service";
 import { addTransaction } from "@/redux/transactionsSlice";
 import { BudgetType } from "@/types";
 import budgetService from "@/services/budget/budget.service";
+import { fetchTransactions } from "@/redux/fetchTransactions";
 
 interface Props {
     id_budget : number | null;
@@ -77,11 +78,7 @@ const AddTransaction = ({id_budget}:Props)=> {
         let isValid = true;
         let montant_to_int = parseInt(montant);
         let formattedDate = date ? format(date, 'yyyy-MM-dd') : undefined;
-        let id_budget = parseInt(budgetId);
-        const selectedBudget = budgets.find(budget => budget.id_budget === id_budget);
-        const nom_budget = selectedBudget ? selectedBudget.nom_budget : 'Inconnu';
-
-
+        
         // Validate Nom
         if (!libelle.trim()) {
             setLibelleError('Le nom du budget est obligatoire.');
@@ -108,11 +105,24 @@ const AddTransaction = ({id_budget}:Props)=> {
         
         if (isValid) {
             // console.log(libelle,montant_to_int,formattedDate,nom_budget,id_budget,typeTransactions);
-            dispatch(addTransaction({
-                libelle: libelle, montant: montant_to_int, date_creation: formattedDate,
-                nom_budget: nom_budget,type_transaction:typeTransactions
-            }));
-            transactionService.addTransaction(libelle,montant_to_int,formattedDate,id_budget,typeTransactions).then(()=>{})
+            if (id_budget) {
+                const selectedBudget = budgets.find(budget => budget.id_budget === id_budget);
+                const nom_budget = selectedBudget ? selectedBudget.nom_budget : 'Inconnu';
+                dispatch(addTransaction({
+                    libelle: libelle, montant: montant_to_int, date_creation: formattedDate,
+                    nom_budget: nom_budget,type_transaction:typeTransactions
+                }));
+                // transactionService.addTransaction(libelle,montant_to_int,formattedDate,id_budget,typeTransactions).then(()=>{})
+                // dispatch(fetchTransactions() as any);
+            } else {
+                const selectedBudget = budgets.find(budget => budget.id_budget === parseInt(budgetId));
+                const nom_budget = selectedBudget ? selectedBudget.nom_budget : 'Inconnu';
+                dispatch(addTransaction({
+                    libelle: libelle, montant: montant_to_int, date_creation: formattedDate,
+                    nom_budget: nom_budget,type_transaction:typeTransactions
+                }));
+                // transactionService.addTransaction(libelle,montant_to_int,formattedDate,parseInt(budgetId),typeTransactions).then(()=>{})    
+            }
             setLibelle('');
             setMontant('');
             setDate(undefined);

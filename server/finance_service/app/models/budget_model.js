@@ -10,7 +10,7 @@ module.exports = (sequelize, Sequelize) =>{
             type : Sequelize.STRING,
             allowNull:false
         },
-        montant : {
+        montant_initial : {
             type : Sequelize.INTEGER,
             allowNull:false
         },
@@ -22,6 +22,14 @@ module.exports = (sequelize, Sequelize) =>{
             type : Sequelize.DATE,
             defaultValue: Sequelize.NOW,
             allowNull:false
+        },
+        id_utilisateur : {
+            type : Sequelize.STRING,
+            allowNull:false    
+        },
+        montant_actuel : {
+            type : Sequelize.INTEGER,
+            allowNull:false    
         }
     },{
         freezeTableName: true ,// Désactive la pluralisation automatique

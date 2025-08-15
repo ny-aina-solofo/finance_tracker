@@ -1,9 +1,11 @@
 export type BudgetType = {
     id_budget: number;
     nom_budget: string;
-    montant: number;
+    montant_initial: number;
+    montant_actuel:number;
     date_creation: string;
     date_modification: string;
+    id_utilisateur:string;
 
 }
 export type TransactionsType = {

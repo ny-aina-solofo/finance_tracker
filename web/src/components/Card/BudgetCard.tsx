@@ -1,7 +1,6 @@
 import React, { useState,useEffect } from "react";
 import { useDispatch,useSelector } from 'react-redux';
 import { BudgetType } from "@/types";
-import { Progress } from "@/components/ui/progress"
 import {
     Popover,
     PopoverContent,
@@ -9,10 +8,9 @@ import {
   } from '@/components/ui/popover'
 import EditBudgetModal from '../Modals/Budget/EditBudgetModal';
 import DeleteBudgetModal from '../Modals/Budget/DeleteBudgetModal';
-import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 import BudgetDashboard from "../Dashboard/BudgetDashboard";
 import { Button } from "../ui/button";
-import { IconEye } from "@tabler/icons-react";
+import { IconEye,IconDots } from "@tabler/icons-react";
 import { useNavigate } from "react-router";
 
 interface BudgetProps {
@@ -39,10 +37,10 @@ const BudgetCard =({budgets}:BudgetProps) => {
                 </div>
                 <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
                     <PopoverTrigger>
-                        <DotsHorizontalIcon className='h-5 w-5 cursor-pointer'/>
+                        <IconDots className='h-5 w-5 cursor-pointer'/>
                     </PopoverTrigger>
                     <PopoverContent asChild>
-                        <div className="flex w-[114px] flex-col gap-1 px-5 py-3">
+                        <div className="flex w-full flex-col gap-1 px-5 py-3">
                             <EditBudgetModal 
                                 id_budget={budgets.id_budget} 
                                 setIsPopoverOpen={setIsPopoverOpen}
@@ -56,7 +54,7 @@ const BudgetCard =({budgets}:BudgetProps) => {
                     </PopoverContent>
                 </Popover>
             </header>
-            <section className="flex h-[114px] flex-col justify-center gap-4">
+            <section className="flex h-full flex-col justify-center gap-4">
                 <BudgetDashboard budgets={budgets}/>
             </section>
             <section className="">

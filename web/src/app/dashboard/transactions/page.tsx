@@ -29,7 +29,12 @@ const TransactionPage =()=>{
                     <DataTable columns={columns} data={budgetTransactions} id_budget={id_budget} />
                 );
             } else {
-                content = <p>No Transactions found.</p>;
+                content = (
+                    <p className=" text-start text-grey-300">
+                        Aucune Transactions à afficher. 
+                        Cliquez sur <strong>+ Ajouter</strong> pour en ajouter une.
+                    </p>
+                );
             }
         } else if (status === 'rejected') {
             content = <p>Error: {error}</p>;
@@ -43,7 +48,12 @@ const TransactionPage =()=>{
                     <DataTable columns={columns} data={transactions} id_budget={id_budget} />
                 );
             } else {
-                content = <p>No Transactions found.</p>;
+                content = (
+                    <p className=" text-start text-grey-300">
+                        Aucune Transactions à afficher. 
+                        Cliquez sur <strong>+ Ajouter</strong> pour en ajouter une.
+                    </p>
+                );
             }
         } else if (status === 'rejected') {
             content = <p>Error: {error}</p>;
