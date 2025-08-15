@@ -1,17 +1,31 @@
-import http from '../http_common';
+import http from '../http_common_budget';
 
 class TransactionService {
+    getAuthHeaders() {
+        const currentUser = sessionStorage.getItem("utilisateur connecté");
+        const parseData = currentUser ? JSON.parse(currentUser) : null; 
+        const token = parseData.token;
+        if (token) {
+            return { headers: { Authorization: `Bearer ${token}`} };
+        }
+        return {};
+    }
     getTransaction(){
-        return http.get('/get-transaction',{});
+        return http.get('/get-transaction',this.getAuthHeaders());
     }
     addTransaction(
         libelle:string, montant:number, date_creation:string | undefined,
         id_budget:number,type_transaction:string
     ){
-        return http.post('/add-transaction',{libelle,montant,date_creation,id_budget,type_transaction});
+        return http.post('/add-transaction',
+            {libelle,montant,date_creation,id_budget,type_transaction},
+            this.getAuthHeaders()
+        );
     }
     deleteTransaction(id_transaction:number,type_transaction:string){
+        const authHeaders = this.getAuthHeaders();
         return http.delete(`/delete-transaction/${id_transaction}`, {
+            ...authHeaders,
             params: {
                 type_transaction: type_transaction
             }
@@ -24,7 +38,7 @@ class TransactionService {
         return http.put(`/update-transaction/${id_transaction}`,{
             libelle,montant,date_creation,
             id_budget,type_transaction
-        });
+        },this.getAuthHeaders());
     }
 }
 
