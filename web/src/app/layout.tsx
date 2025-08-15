@@ -4,12 +4,18 @@ import DashboardLayout from "./dashboard/layout";
 import Dashboard from "./dashboard/page";
 import BudgetPage from "./dashboard/budget/page";
 import TransactionPage from "./dashboard/transactions/page";
+import LoginPage from "./login/loginPage";
+import SignUpPage from "./login/signupPage";
 
 
 const router = createBrowserRouter([
     {
-        // path:"/",
-        // element: <LoginPage />
+        path:"/",
+        element: <LoginPage />
+    },
+    {
+        path:"/signup",
+        element: <SignUpPage />
     },
     {
         path: "/dashboard",

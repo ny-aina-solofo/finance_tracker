@@ -24,6 +24,7 @@ const getBudget = async (req,res,next) => {
 
 const addBudget = async (req,res,next) =>{
     try {
+        const id_user = req.id_user;
         const nom_budget = req.body.nom_budget;
         const montant = req.body.montant;
         const date_creation = req.body.date_creation;
@@ -34,9 +35,6 @@ const addBudget = async (req,res,next) =>{
             nom_budget:nom_budget,montant_initial:montant, 
             date_creation:date_creation,montant_actuel:montant
         });
-        const id_user = req.id_user;
-        
-        
         res.status(200).send({success:true});    
     } catch (error) {
         console.error("Error inserting budget data:", error);
