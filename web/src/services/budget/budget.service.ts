@@ -19,8 +19,8 @@ class BudgetService {
     deleteBudget(id_budget:number){
         return http.delete(`/delete-budget/${id_budget}`,this.getAuthHeaders());
     }
-    updateBudget(id_budget:number,nom_budget:string,montant:number, date_creation:string | undefined){
-        return http.put(`/update-budget/${id_budget}`,{nom_budget,montant,date_creation},this.getAuthHeaders());
+    updateBudget(id_budget:number,nom_budget:string,date_creation:string | undefined){
+        return http.put(`/update-budget/${id_budget}`,{nom_budget,date_creation},this.getAuthHeaders());
     }
 }
 

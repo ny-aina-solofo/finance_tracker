@@ -2,9 +2,9 @@ import { cleanup, render, screen, fireEvent, waitFor } from "@testing-library/re
 import { beforeEach, expect, it, vi, describe, afterEach } from "vitest";
 import React from "react";
 import { Provider } from "react-redux";
-import { store } from "../../redux/store";
+import { store } from "../../../redux/store";
 import { TransactionsType } from "@/types";
-import Transactions from "./Transactions";
+import TransactionPage from "./page";
 
 const transactions= [
     {
@@ -20,7 +20,7 @@ const transactions= [
 const MockTransactions = () => {
     return (
         <Provider store={store}>
-            <Transactions/>
+            <TransactionPage/>
         </Provider>
     );
 };

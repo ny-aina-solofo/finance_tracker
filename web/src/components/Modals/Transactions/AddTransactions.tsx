@@ -40,8 +40,13 @@ import transactionService from "@/services/transactions/transaction.service";
 import { addTransaction } from "@/redux/transactionsSlice";
 import { BudgetType } from "@/types";
 import budgetService from "@/services/budget/budget.service";
+import { fetchTransactions } from "@/redux/fetchTransactions";
 
-const AddTransaction = ()=> {
+interface Props {
+    id_budget : number | null;
+};
+
+const AddTransaction = ({id_budget}:Props)=> {
     const dispatch = useDispatch();
 
     const [budgets, setBudgets] = useState<BudgetType[]>([]);
@@ -54,7 +59,8 @@ const AddTransaction = ()=> {
             console.error("Erreur lors de la récupération des budgets :", error);
         });
     }, []);
-
+    const budgetsToShow = id_budget ? budgets.filter((b: BudgetType) => b.id_budget === id_budget) : budgets;
+    
     const [libelle,setLibelle]= React.useState<string>('')
     const [montant,setMontant]= React.useState<string>('')
     const [budgetId,setBudgetId]=React.useState<string>(budgets.length > 0 ? budgets[0].id_budget.toString() : '')
@@ -72,11 +78,7 @@ const AddTransaction = ()=> {
         let isValid = true;
         let montant_to_int = parseInt(montant);
         let formattedDate = date ? format(date, 'yyyy-MM-dd') : undefined;
-        let id_budget = parseInt(budgetId);
-        const selectedBudget = budgets.find(budget => budget.id_budget === id_budget);
-        const nom_budget = selectedBudget ? selectedBudget.nom_budget : 'Inconnu';
-
-
+        
         // Validate Nom
         if (!libelle.trim()) {
             setLibelleError('Le nom du budget est obligatoire.');
@@ -103,11 +105,24 @@ const AddTransaction = ()=> {
         
         if (isValid) {
             // console.log(libelle,montant_to_int,formattedDate,nom_budget,id_budget,typeTransactions);
-            dispatch(addTransaction({
-                libelle: libelle, montant: montant_to_int, date_creation: formattedDate,
-                nom_budget: nom_budget,type_transaction:typeTransactions
-            }));
-            transactionService.addTransaction(libelle,montant_to_int,formattedDate,id_budget,typeTransactions).then(()=>{})
+            if (id_budget) {
+                const selectedBudget = budgets.find(budget => budget.id_budget === id_budget);
+                const nom_budget = selectedBudget ? selectedBudget.nom_budget : 'Inconnu';
+                dispatch(addTransaction({
+                    libelle: libelle, montant: montant_to_int, date_creation: formattedDate,
+                    nom_budget: nom_budget,type_transaction:typeTransactions
+                }));
+                // transactionService.addTransaction(libelle,montant_to_int,formattedDate,id_budget,typeTransactions).then(()=>{})
+                // dispatch(fetchTransactions() as any);
+            } else {
+                const selectedBudget = budgets.find(budget => budget.id_budget === parseInt(budgetId));
+                const nom_budget = selectedBudget ? selectedBudget.nom_budget : 'Inconnu';
+                dispatch(addTransaction({
+                    libelle: libelle, montant: montant_to_int, date_creation: formattedDate,
+                    nom_budget: nom_budget,type_transaction:typeTransactions
+                }));
+                // transactionService.addTransaction(libelle,montant_to_int,formattedDate,parseInt(budgetId),typeTransactions).then(()=>{})    
+            }
             setLibelle('');
             setMontant('');
             setDate(undefined);
@@ -178,23 +193,34 @@ const AddTransaction = ()=> {
                         </div>
                         <div className="grid gap-3 mb-3">
                             <Label htmlFor="budget">Budget</Label>
-                            <Select 
-                                value={budgetId} 
-                                onValueChange={setBudgetId}
-                            >
-                                <SelectTrigger className="w-full">
-                                    <SelectValue placeholder="sélectionnez le type de transaction" />
-                                </SelectTrigger>
-                                <SelectContent >
-                                    <SelectGroup>
-                                    {budgets.map((item:BudgetType) => (
-                                        <SelectItem key={item.id_budget} value={item.id_budget.toString()}>
-                                            {item.nom_budget}
-                                        </SelectItem>    
+                            {id_budget ? (
+                                <Select>
+                                    {budgetsToShow.map((item:BudgetType) => (
+                                        <SelectTrigger className="w-full" key={item.id_budget}>
+                                            <SelectValue placeholder={`${item.nom_budget}`} />
+                                        </SelectTrigger>    
                                     ))}
-                                    </SelectGroup>
-                                </SelectContent>
-                            </Select>
+                                </Select>
+                            ) : (
+                                <Select 
+                                    value={budgetId} 
+                                    onValueChange={setBudgetId}
+                                >
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="sélectionnez le budget correspondant" />
+                                    </SelectTrigger>
+                                    <SelectContent >
+                                        <SelectGroup>
+                                        {budgetsToShow.map((item:BudgetType) => (
+                                            <SelectItem key={item.id_budget} value={item.id_budget.toString()}>
+                                                {item.nom_budget}
+                                            </SelectItem>    
+                                        ))}
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
+                            )}
+                            
                         </div>
                         <div className="grid gap-3 mb-3">
                             <Label htmlFor="date">

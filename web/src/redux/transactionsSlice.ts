@@ -42,6 +42,7 @@ const TransactionSlice = createSlice({
         }>) => {
             const {libelle,montant,date_creation,nom_budget,type_transaction} = action.payload;
             const newID = Date.now();
+            
             if (type_transaction === 'depense') {
                 const newDepense = {
                     id_depense: newID,
@@ -71,23 +72,18 @@ const TransactionSlice = createSlice({
             state.transactions = updatedTransaction;
         },
         editTransaction: (state, action: PayloadAction<{
-            id_transaction: number, libelle: string, montant: number, date_creation: string | undefined,
-            nom_budget:string,type_transaction:string
+            id_transaction: number, libelle: string, date_creation: string | undefined,type_transaction:string
         }>) => {
-            const { id_transaction, libelle, montant,date_creation,nom_budget,type_transaction } = action.payload;
+            const { id_transaction, libelle, date_creation,type_transaction } = action.payload;
             const transaction = state.transactions.find((transaction:TransactionsType) => transaction.id_transaction === id_transaction);
             if (transaction) {
                 if (type_transaction === 'depense') {
                     transaction.libelle = libelle;
-                    transaction.montant = montant;
-                    transaction.date_creation = date_creation;
-                    transaction.nom_budget = nom_budget;            
+                    transaction.date_creation = date_creation;            
                     transaction.type_transaction = type_transaction;
                 } else {
                     transaction.libelle = libelle;
-                    transaction.montant = montant;
                     transaction.date_creation = date_creation;
-                    transaction.nom_budget = nom_budget            
                     transaction.type_transaction = type_transaction;
                 }
             }

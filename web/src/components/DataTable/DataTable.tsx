@@ -25,13 +25,15 @@ import FilterTable from "./FilterTable";
 import SortingTable from "./SortingTable";
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
+  id_budget:number | null;
 }
 
 export function DataTable<TData, TValue>({
     columns,
     data,
+    id_budget
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
@@ -78,6 +80,7 @@ export function DataTable<TData, TValue>({
                     />
                     <FilterTable
                         setColumnFilters={setColumnFilters}
+                        id_budget={id_budget}
                     />
                 </div>   
             </div>

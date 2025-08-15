@@ -8,16 +8,16 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { BudgetType } from "@/types";
 import budgetService from "@/services/budget/budget.service";
+import { BudgetType } from "@/types";
 
 interface FilterTableProps {
     setColumnFilters:(data:any)=>void;
+    id_budget : number | null;
 };
 
-const FilterTable = ({setColumnFilters}:FilterTableProps)=> {
+const FilterTable = ({setColumnFilters,id_budget}:FilterTableProps)=> {
     const [budgets, setBudgets] = useState<BudgetType[]>([]);
-    
     useEffect(() => {
         budgetService.getBudget().then(response => {
             const data = response?.data || [];
@@ -27,6 +27,8 @@ const FilterTable = ({setColumnFilters}:FilterTableProps)=> {
         });
     }, []);
 
+    const budgetsToShow = id_budget ? budgets.filter((b: BudgetType) => b.id_budget === id_budget) : budgets;
+    
     return (
         <div className="flex items-center gap-2">
             <label
@@ -35,28 +37,40 @@ const FilterTable = ({setColumnFilters}:FilterTableProps)=> {
             >
                 Filtrez par budget
             </label>
-            <Select
-                name="secondary-sort-select"
-                onValueChange={(value) => {
-                if (value === 'all') {
-                    setColumnFilters([])
-                } else {
-                    setColumnFilters([{ id: 'nom_budget', value }])
-                }
-                }}
-            >
-                <SelectTrigger className="w-44">
-                    <SelectValue placeholder="Toutes les budgets" />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectItem value="all">Toutes les budgets</SelectItem>
-                    {budgets.map((item:BudgetType) => (
-                        <SelectItem key={item.id_budget} value={item.nom_budget}>
-                            {item.nom_budget}
-                        </SelectItem>    
+            {id_budget ? (
+                <Select>
+                    {budgetsToShow.map((item:BudgetType) => (
+                        <SelectTrigger className="w-44" key={item.id_budget}>
+                            <SelectValue placeholder={`${item.nom_budget}`} />
+                        </SelectTrigger>    
                     ))}
-                </SelectContent>
-            </Select>
+                </Select>
+            ) : (
+                <Select
+                    name="secondary-sort-select"
+                    onValueChange={(value) => {
+                        if (value === 'all') {
+                            setColumnFilters([])
+                        } else {
+                            setColumnFilters([{ id: 'nom_budget', value }])
+                        }
+                    }}
+                >
+                    <SelectTrigger className="w-44">
+                        <SelectValue placeholder="Toutes les budgets" />
+                    </SelectTrigger>
+                    <SelectContent>    
+                        <SelectItem value="all">Toutes les budgets</SelectItem>
+                        {budgetsToShow.map((item:BudgetType) => (
+                            <SelectItem key={item.id_budget} value={item.nom_budget}>
+                                {item.nom_budget}
+                            </SelectItem>    
+                        ))}
+                        
+                    </SelectContent>
+                </Select>
+            )}
+            
         </div>
     )
 }

@@ -68,15 +68,14 @@ describe("http budget service test", () => {
     it("update budget", async () => {
         const id_budget:number = 44
         const nom_budget:string = 'test';
-        const montant:number = 333;
         const date_creation:string | undefined = '2024-03-15';
         const mockUser = { token: "fake-jwt-token-for-test" };
         sessionStorage.setItem("utilisateur connecté", JSON.stringify(mockUser));
         
         mockedHttp.put.mockResolvedValue({ data: { success: true } });
-        await budgetService.updateBudget(id_budget,nom_budget,montant,date_creation);
+        await budgetService.updateBudget(id_budget,nom_budget,date_creation);
         expect(mockedHttp.put).toHaveBeenCalledWith(`/update-budget/${id_budget}`,
-            {nom_budget:nom_budget, montant:montant, date_creation:date_creation},
+            {nom_budget:nom_budget,date_creation:date_creation},
             { headers: { Authorization: `Bearer ${mockUser.token}`} }
         );
     });

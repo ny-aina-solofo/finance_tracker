@@ -81,21 +81,17 @@ describe("http service test", () => {
     it("update transaction", async () => {
         const id_transaction:number = 44
         const libelle:string = 'test';
-        const montant:number = 333;
         const date_creation:string | undefined = '2024-03-15';
-        const id_budget:number = 2;
         const type_transaction:string = 'revenu'
         const mockUser = { token: "fake-jwt-token-for-test" };
         sessionStorage.setItem("utilisateur connecté", JSON.stringify(mockUser));
 
         mockedHttp.put.mockResolvedValue({ data: { success: true } });
         await transactionService.updateTransaction(
-            id_transaction,libelle,montant,date_creation,
-            id_budget,type_transaction
+            id_transaction,libelle,date_creation,type_transaction
         );
         expect(mockedHttp.put).toHaveBeenCalledWith(`/update-transaction/${id_transaction}`,{
-            libelle:libelle, montant:montant, date_creation:date_creation,    
-            id_budget:id_budget,type_transaction:type_transaction 
+            libelle:libelle, date_creation:date_creation,type_transaction:type_transaction 
         },{ headers: { Authorization: `Bearer ${mockUser.token}`}});
     });
 });

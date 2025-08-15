@@ -1,22 +1,41 @@
-import { Routes, Route, useNavigate } from "react-router";
-import { Toaster } from "sonner";
-import LoginPage from "./login/loginPage";
-import SignUpPage from "./login/signupPage";
-import { Budget, Transactions } from "@/components";
-
+import { Routes, Route, useNavigate,createBrowserRouter,RouterProvider } from "react-router";
 import React from "react";
+import DashboardLayout from "./dashboard/layout";
+import Dashboard from "./dashboard/page";
+import BudgetPage from "./dashboard/budget/page";
+import TransactionPage from "./dashboard/transactions/page";
 
+
+const router = createBrowserRouter([
+    {
+        // path:"/",
+        // element: <LoginPage />
+    },
+    {
+        path: "/dashboard",
+        element: <DashboardLayout />,
+        children: [
+            {
+                index:true ,
+                element: <Dashboard />,
+            },
+            {
+                path: "budget", 
+                element: <BudgetPage />,
+            },
+            {
+                path: "transactions",
+                element: <TransactionPage />,
+            }
+        ],
+    },
+]);
 
 const RootLayout = () => {
     
     return (
         <>
-            <Routes>
-                <Route path="/" element= {<LoginPage/>}/>
-                <Route path="/signup" element= {<SignUpPage/>}/>
-                <Route path="/dashboard" element= {<Transactions/>}/>
-            </Routes>
-            <Toaster position="bottom-center" richColors/>
+            <RouterProvider router={router} />
         </>
     )
 }

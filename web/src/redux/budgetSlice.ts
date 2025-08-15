@@ -21,7 +21,15 @@ const budgetSlice = createSlice({
             })
             .addCase(fetchBudgets.fulfilled, (state, action) => {
                 state.status = "received";
-                state.budgets = action.payload;
+                // state.budgets = action.payload;
+                state.budgets = action.payload.map((b:BudgetType) => ({
+                    ...b,
+                    date_modification: b.date_modification || new Date().toISOString()
+                })).sort((a:BudgetType, b:BudgetType) => {
+                    const dateA = a.date_modification ? new Date(a.date_modification).getTime() : 0;
+                    const dateB = b.date_modification ? new Date(b.date_modification).getTime() : 0;
+                    return dateB - dateA; // Sort in descending order (latest first)
+                });
             })
             .addCase(fetchBudgets.rejected, (state, action) => {
                 state.status = "rejected";
@@ -49,14 +57,12 @@ const budgetSlice = createSlice({
             state.budgets = updatedBudget;
         },
         editBudget: (state, action: PayloadAction<{
-            id_budget: number, nom_budget: string, montant: number, 
-            date_creation: string
+            id_budget: number, nom_budget: string,date_creation: string
         }>) => {
-            const { id_budget, nom_budget, montant,date_creation } = action.payload;
+            const { id_budget, nom_budget,date_creation } = action.payload;
             const budget = state.budgets.find((budget:BudgetType) => budget.id_budget === id_budget);
             if (budget) {
                 budget.nom_budget = nom_budget;
-                budget.montant = montant;
                 budget.date_creation = date_creation;
             }
             

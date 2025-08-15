@@ -39,19 +39,16 @@ const EditBudgetModal = ({id_budget,setIsPopoverOpen}:BudgetProps)=> {
     const selectedBudget = budgets.find((budget:BudgetType) => budget.id_budget === id_budget);
 
     const [budgetName,setBudgetName]= React.useState<string>(selectedBudget.nom_budget)
-    const [montant,setMontant]= React.useState<string>(selectedBudget.montant)
     const [date, setDate] = React.useState<Date | undefined>(selectedBudget.date_creation);
     
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
     const [budgetNameError, setBudgetNameError] = useState<string | null>(null);
-    const [montantError, setMontantError] = useState<string | null>(null);
-     
+    
     const handleEditBudget = (event:React.FormEvent)=>{
         event.preventDefault(); 
         let isValid = true;
-        let montant_to_int = parseInt(montant);
         let formattedDate = date ? format(date, 'yyyy-MM-dd') : selectedBudget.date_creation;
 
         // Validate Nom (Budget Name)
@@ -61,36 +58,16 @@ const EditBudgetModal = ({id_budget,setIsPopoverOpen}:BudgetProps)=> {
         } else {
             setBudgetNameError(null);
         }
-
-        // Validate Montant
-        if (!montant) {
-            setMontantError('Le montant est obligatoire.');
-            isValid = false;
-        } else if (isNaN(montant_to_int)) {
-            setMontantError('Le montant doit être un nombre valide.');
-            isValid = false;
-        }
-        else if (montant_to_int <= 0) {
-            setMontantError('Le montant doit être supérieur à zéro.');
-            isValid = false;
-        }
-         else {
-            setMontantError(null);
-        }
-        
         if (isValid) {
             dispatch(editBudget({
                 id_budget,
                 nom_budget: budgetName,
-                montant: montant_to_int,
                 date_creation: formattedDate
             }));
-            budgetService.updateBudget(id_budget,budgetName,montant_to_int,formattedDate).then(()=>{})
+            budgetService.updateBudget(id_budget,budgetName,formattedDate).then(()=>{})
             setBudgetName(selectedBudget.nom_budget);
-            setMontant(selectedBudget.montant);
             setDate(selectedBudget.date_creation);
             setBudgetNameError(null);
-            setMontantError(null);
             setIsModalOpen(false);
             setIsPopoverOpen(false);     
         }
@@ -102,10 +79,8 @@ const EditBudgetModal = ({id_budget,setIsPopoverOpen}:BudgetProps)=> {
 
     const handleReset = ()=>{
         setBudgetName(selectedBudget.nom_budget);
-        setMontant(selectedBudget.montant);
         setDate(selectedBudget.date_creation)    
         setBudgetNameError(null);
-        setMontantError(null);
         setIsModalOpen(false);
         setIsPopoverOpen(false); 
     }
@@ -138,21 +113,6 @@ const EditBudgetModal = ({id_budget,setIsPopoverOpen}:BudgetProps)=> {
                             />
                             {budgetNameError && (
                                 <p className="text-red-500 text-sm mt-1">{budgetNameError}</p>
-                            )}
-                        </div>
-                        <div className="grid gap-3 mb-3">
-                            <Label htmlFor="username-1">Montant</Label>
-                            <Input 
-                                id="montant" name="username" placeholder="5000" 
-                                value={montant} 
-                                onChange={(e) => {
-                                    setMontant(e.target.value);
-                                    setMontantError(null); // Clear error on change
-                                }}
-                                className={montantError ? 'border-red-500' : ''}
-                            />
-                            {montantError && (
-                                <p className="text-red-500 text-sm mt-1">{montantError}</p>
                             )}
                         </div>
                         <div className="grid gap-3 mb-3">

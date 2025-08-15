@@ -25,7 +25,7 @@ const DeleteTransactions = ({selectedTransactions,setIsPopoverOpen}:TransactionP
     const type_transaction = selectedTransactions.type_transaction;
     const handleDelete = ()=>{
         dispatch(deleteTransaction(id_transaction));
-        transactionService.deleteTransaction(id_transaction,type_transaction).then(()=>{})
+        // transactionService.deleteTransaction(id_transaction,type_transaction).then(()=>{})
         setIsModalOpen(false);
         setIsPopoverOpen(false);     
         
