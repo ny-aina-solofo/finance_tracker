@@ -21,10 +21,12 @@ const DeleteTransactions = ({selectedTransactions,setIsPopoverOpen}:TransactionP
     const dispatch = useDispatch();
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const libelle = selectedTransactions.libelle;
     const id_transaction = selectedTransactions.id_transaction;
     const type_transaction = selectedTransactions.type_transaction;
     const handleDelete = ()=>{
-        dispatch(deleteTransaction(id_transaction));
+        console.log(libelle);
+        dispatch(deleteTransaction({id_transaction,type_transaction}));
         // transactionService.deleteTransaction(id_transaction,type_transaction).then(()=>{})
         setIsModalOpen(false);
         setIsPopoverOpen(false);     

@@ -2,21 +2,15 @@ import React, { useState,useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { TransactionsType } from "@/types";
 import { RootState } from "@/redux/store";
-import { fetchTransactions } from "@/redux/fetchTransactions";
 import { AddTransaction, columns, DataTable } from "@/components";
 import { useSearchParams } from "react-router";
 
 const TransactionPage =()=>{
-    const dispatch = useDispatch();
     const [searchParams] = useSearchParams();
     const id_budget_string = searchParams.get('budget');
     const id_budget = id_budget_string ? parseInt(id_budget_string) : null;
     const { transactions, status, error } = useSelector((state: RootState) => state.transactions);
     let content;
-
-    useEffect(() => {
-        dispatch(fetchTransactions() as any);
-    }, [dispatch]); 
 
     if (id_budget) {    
         const budgetTransactions = transactions.filter((tr:TransactionsType)=> tr.id_budget === id_budget);
@@ -62,7 +56,7 @@ const TransactionPage =()=>{
     return(
         <main className="container flex flex-col gap-8">
             <div className="flex items-center justify-between">
-                <h1 className="text-preset-1 text-gray-900">Transactions</h1>                
+                <div></div>
                 <AddTransaction id_budget={id_budget}/>   
             </div>
             {content}

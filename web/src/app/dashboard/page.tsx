@@ -2,14 +2,8 @@ import React, { useState,useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/redux/store";
 import { TransactionsType } from "@/types";
-import { fetchTransactions } from "@/redux/fetchTransactions";
 
 const Dashboard = () => {
-    const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(fetchTransactions() as any);
-    }, [dispatch]); 
-    
     const transactions = useSelector((state: RootState) => state.transactions.transactions);
     const expenses = transactions.filter((tr:TransactionsType)=> tr.type_transaction === "depense")
     const income = transactions.filter((tr:TransactionsType)=> tr.type_transaction === "revenu")

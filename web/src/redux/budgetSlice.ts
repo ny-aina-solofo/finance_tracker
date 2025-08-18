@@ -4,7 +4,6 @@ import { fetchBudgets } from "./fetchBudgets";
 import { BudgetType } from "@/types";
 
 const initialState: BudgetState = {
-    // budgets: [{id_budget: -1, budget_name: "",column: []}],
     budgets: [],
     status: "idle",
     error: null,
@@ -21,7 +20,6 @@ const budgetSlice = createSlice({
             })
             .addCase(fetchBudgets.fulfilled, (state, action) => {
                 state.status = "received";
-                // state.budgets = action.payload;
                 state.budgets = action.payload.map((b:BudgetType) => ({
                     ...b,
                     date_modification: b.date_modification || new Date().toISOString()

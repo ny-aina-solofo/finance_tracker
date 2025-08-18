@@ -6,6 +6,7 @@ import BudgetPage from "./dashboard/budget/page";
 import TransactionPage from "./dashboard/transactions/page";
 import LoginPage from "./login/loginPage";
 import SignUpPage from "./login/signupPage";
+import { Toaster } from "sonner";
 
 
 const router = createBrowserRouter([
@@ -42,6 +43,7 @@ const RootLayout = () => {
     return (
         <>
             <RouterProvider router={router} />
+            <Toaster richColors/>
         </>
     )
 }

@@ -36,11 +36,8 @@ import { Calendar } from "@/components/ui/calendar"
 import { CalendarIcon, PlusIcon } from "lucide-react"
 import { cn } from '@/lib/utils'
 import { format, formatISO } from 'date-fns'
-import transactionService from "@/services/transactions/transaction.service";
 import { addTransaction } from "@/redux/transactionsSlice";
 import { BudgetType } from "@/types";
-import budgetService from "@/services/budget/budget.service";
-import { fetchTransactions } from "@/redux/fetchTransactions";
 
 interface Props {
     id_budget : number | null;
@@ -48,22 +45,12 @@ interface Props {
 
 const AddTransaction = ({id_budget}:Props)=> {
     const dispatch = useDispatch();
-
-    const [budgets, setBudgets] = useState<BudgetType[]>([]);
-
-    useEffect(() => {
-        budgetService.getBudget().then(response => {
-            const data = response?.data || [];
-            setBudgets(data);
-        }).catch(error => {
-            console.error("Erreur lors de la récupération des budgets :", error);
-        });
-    }, []);
+    const budgets = useSelector((state: RootState) => state.budgets.budgets);    
     const budgetsToShow = id_budget ? budgets.filter((b: BudgetType) => b.id_budget === id_budget) : budgets;
     
     const [libelle,setLibelle]= React.useState<string>('')
     const [montant,setMontant]= React.useState<string>('')
-    const [budgetId,setBudgetId]=React.useState<string>(budgets.length > 0 ? budgets[0].id_budget.toString() : '')
+    const [budgetId,setBudgetId]=React.useState<string>('')
     const [typeTransactions,setTypeTransactions]= React.useState<string>('')
     const [date, setDate] = React.useState<Date | undefined>(undefined);
     
@@ -72,7 +59,7 @@ const AddTransaction = ({id_budget}:Props)=> {
 
     const [libelleError, setLibelleError] = useState<string | null>(null);
     const [montantError, setMontantError] = useState<string | null>(null);
-     
+
     const handleAddTransaction = (event:React.FormEvent)=>{
         event.preventDefault(); 
         let isValid = true;
@@ -106,7 +93,7 @@ const AddTransaction = ({id_budget}:Props)=> {
         if (isValid) {
             // console.log(libelle,montant_to_int,formattedDate,nom_budget,id_budget,typeTransactions);
             if (id_budget) {
-                const selectedBudget = budgets.find(budget => budget.id_budget === id_budget);
+                const selectedBudget = budgets.find((budget:BudgetType) => budget.id_budget === id_budget);
                 const nom_budget = selectedBudget ? selectedBudget.nom_budget : 'Inconnu';
                 dispatch(addTransaction({
                     libelle: libelle, montant: montant_to_int, date_creation: formattedDate,
@@ -115,7 +102,7 @@ const AddTransaction = ({id_budget}:Props)=> {
                 // transactionService.addTransaction(libelle,montant_to_int,formattedDate,id_budget,typeTransactions).then(()=>{})
                 // dispatch(fetchTransactions() as any);
             } else {
-                const selectedBudget = budgets.find(budget => budget.id_budget === parseInt(budgetId));
+                const selectedBudget = budgets.find((budget:BudgetType) => budget.id_budget === parseInt(budgetId));
                 const nom_budget = selectedBudget ? selectedBudget.nom_budget : 'Inconnu';
                 dispatch(addTransaction({
                     libelle: libelle, montant: montant_to_int, date_creation: formattedDate,

@@ -30,6 +30,6 @@ afterEach(cleanup);
 describe("Budget component tests", () => {
     it("display correct budget list manage state correctly ",async()=>{
         render(<MockBudget/>)
-        expect(budgets.map((item:BudgetType) => item.nom_budget)).toEqual(['Vacances', 'Achats']);    
+        expect(budgets.map((item:any) => item.nom_budget)).toEqual(['Vacances', 'Achats']);    
     });
 });

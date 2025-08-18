@@ -1,6 +1,8 @@
 "use client"
 
 import React,{ useState, useEffect } from "react";
+import { useDispatch,useSelector } from "react-redux"
+import { RootState } from "@/redux/store";
 import {
     Select,
     SelectContent,
@@ -8,8 +10,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import budgetService from "@/services/budget/budget.service";
 import { BudgetType } from "@/types";
+
 
 interface FilterTableProps {
     setColumnFilters:(data:any)=>void;
@@ -17,16 +19,7 @@ interface FilterTableProps {
 };
 
 const FilterTable = ({setColumnFilters,id_budget}:FilterTableProps)=> {
-    const [budgets, setBudgets] = useState<BudgetType[]>([]);
-    useEffect(() => {
-        budgetService.getBudget().then(response => {
-            const data = response?.data || [];
-            setBudgets(data);
-        }).catch(error => {
-            console.error("Erreur lors de la récupération des budgets :", error);
-        });
-    }, []);
-
+    const budgets = useSelector((state: RootState) => state.budgets.budgets);
     const budgetsToShow = id_budget ? budgets.filter((b: BudgetType) => b.id_budget === id_budget) : budgets;
     
     return (

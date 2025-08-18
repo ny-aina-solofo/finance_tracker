@@ -3,16 +3,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { BudgetType } from "@/types";
 import { RootState } from "@/redux/store";
 import { AddBudgetModal, BudgetCard } from "@/components";
-import { fetchBudgets } from "@/redux/fetchBudgets";
+import { Input } from "@/components/ui/input";
 
 const BudgetPage =()=>{
-    const dispatch = useDispatch();
     const { budgets, status, error } = useSelector((state: RootState) => state.budgets);
     let content;
-
-    useEffect(() => {
-        dispatch(fetchBudgets() as any);
-    }, [dispatch]); 
 
     if (status === 'loading') {
         content = <p>Loading budgets...</p>;
@@ -25,7 +20,7 @@ const BudgetPage =()=>{
             );
         } else {
             content =  (
-                <p className="text-preset-4 text-start text-grey-300">
+                <p className="text-start text-grey-300">
                     Aucun budget à afficher. 
                     Cliquez sur <strong>+ Ajouter</strong> pour en ajouter une.
                 </p>
@@ -37,7 +32,17 @@ const BudgetPage =()=>{
     return(
         <main className="container flex flex-col gap-8">
             <div className="flex items-center justify-between">
-                <h1 className="text-preset-1 text-gray-900">Budget</h1>                
+                <div className="max-w-sm">
+                    <Input
+                        placeholder="Cherchez une transaction"
+                        // value={bu}
+                        // onChange={(event) =>
+                        //     table.getColumn('libelle')?.setFilterValue(event.target.value)
+                        // }
+                        className="h-10  bg-white"
+                    />            
+                </div>
+                          
                 <AddBudgetModal/>   
             </div>
             {content}

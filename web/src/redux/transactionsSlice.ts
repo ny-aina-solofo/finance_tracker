@@ -12,64 +12,44 @@ const initialState: TransactionState = {
 const TransactionSlice = createSlice({
     name: "Transactions",
     initialState,
-    extraReducers: (builder) => {
-        builder
-            .addCase(fetchTransactions.pending, (state) => {
-                state.status = 'loading';
-                state.error = null;
-            })
-            .addCase(fetchTransactions.fulfilled, (state, action) => {
-                state.status = "received";
-                state.transactions = action.payload;
-                // state.transactions = action.payload.map((t: TransactionsType) => ({
-                //     ...t,
-                //     date_modification: t.date_modification || new Date().toISOString()
-                // })).sort((a: TransactionsType, b: TransactionsType) => {
-                //     const dateA = a.date_modification ? new Date(a.date_modification).getTime() : 0;
-                //     const dateB = b.date_modification ? new Date(b.date_modification).getTime() : 0;
-                //     return dateB - dateA; // Sort in descending order (latest first)
-                // });
-            })
-            .addCase(fetchTransactions.rejected, (state, action) => {
-                state.status = "rejected";
-                state.error = action.payload || "Cannot load data";
-            });
-    },
     reducers: {
+        setTransactions:(state, action: PayloadAction<{data:any[]}>)=>{
+            const {data} = action.payload;
+            state.status = "received";
+            state.transactions = data.map((t: TransactionsType) => ({
+                ...t,
+                date_modification: t.date_modification || new Date().toISOString()
+            })).sort((a: TransactionsType, b: TransactionsType) => {
+                const dateA = a.date_modification ? new Date(a.date_modification).getTime() : 0;
+                const dateB = b.date_modification ? new Date(b.date_modification).getTime() : 0;
+                return dateB - dateA; // Sort in descending order (latest first)
+            });;
+        },
         addTransaction: (state, action: PayloadAction<{
             libelle: string, montant: number, date_creation: string | undefined,
             nom_budget:string,type_transaction:string
         }>) => {
             const {libelle,montant,date_creation,nom_budget,type_transaction} = action.payload;
             const newID = Date.now();
-            
-            if (type_transaction === 'depense') {
-                const newDepense = {
-                    id_depense: newID,
-                    libelle: libelle,
-                    montant: montant,
-                    date_creation: date_creation,
-                    nom_budget: nom_budget,
-                    type_transaction: type_transaction
-                };
-                state.transactions.push(newDepense);    
-            } else {
-                const newRevenu = {
-                    id_revenu: newID,
-                    libelle: libelle,
-                    montant: montant,
-                    date_creation: date_creation,
-                    nom_budget: nom_budget,
-                    type_transaction: type_transaction
-                };
-                state.transactions.push(newRevenu);
-            }
-            
+            const newTransactions = {
+                id_transaction: newID,
+                libelle: libelle,
+                montant: montant,
+                date_creation: date_creation,
+                nom_budget: nom_budget,
+                type_transaction: type_transaction
+            };
+            state.transactions.push(newTransactions);
         },
-        deleteTransaction: (state, action: PayloadAction<number>) => {
-            const id_transaction = action.payload;
-            const updatedTransaction = state.transactions.filter((t:TransactionsType) => t.id_transaction !== id_transaction);
+        deleteTransaction: (state, action: PayloadAction<{id_transaction:number,type_transaction:string}>) => {
+            const {id_transaction,type_transaction} = action.payload;
+            const updatedTransaction = state.transactions.filter((t:TransactionsType) => {
+                const isMatch = t.id_transaction === id_transaction && t.type_transaction === type_transaction;
+                return !isMatch;
+            });
+
             state.transactions = updatedTransaction;
+            
         },
         editTransaction: (state, action: PayloadAction<{
             id_transaction: number, libelle: string, date_creation: string | undefined,type_transaction:string
@@ -77,25 +57,31 @@ const TransactionSlice = createSlice({
             const { id_transaction, libelle, date_creation,type_transaction } = action.payload;
             const transaction = state.transactions.find((transaction:TransactionsType) => transaction.id_transaction === id_transaction);
             if (transaction) {
-                if (type_transaction === 'depense') {
-                    transaction.libelle = libelle;
-                    transaction.date_creation = date_creation;            
-                    transaction.type_transaction = type_transaction;
-                } else {
-                    transaction.libelle = libelle;
-                    transaction.date_creation = date_creation;
-                    transaction.type_transaction = type_transaction;
-                }
-            }
-            
-        }
+                transaction.libelle = libelle;
+                transaction.date_creation = date_creation;            
+                transaction.type_transaction = type_transaction;
+            }  
+        },
+        setLoadingStatus:(state, action: PayloadAction<{}>)=>{
+            state.status = "loading";
+            state.error = null
+        },
+        setErrorStatus:(state, action: PayloadAction<{error:any}>)=>{
+            const {error} = action.payload;
+            state.status = "rejected";
+            state.error = error && "Cannot load data";
+        }, 
+
     }
 });
 
 export const {
+    setTransactions,
     addTransaction,
     editTransaction,
     deleteTransaction,
+    setLoadingStatus,
+    setErrorStatus
 } = TransactionSlice.actions;
 
 export default TransactionSlice.reducer;
