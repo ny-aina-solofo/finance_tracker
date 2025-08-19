@@ -4,18 +4,19 @@ import { BudgetType } from "@/types";
 import { RootState } from "@/redux/store";
 import { AddBudgetModal, BudgetCard } from "@/components";
 import { Input } from "@/components/ui/input";
+import SearchBudgetForm from "@/components/Form/SearchBudgetForm";
 
 const BudgetPage =()=>{
-    const { budgets, status, error } = useSelector((state: RootState) => state.budgets);
+    const { filteredBudgets, status, error } = useSelector((state: RootState) => state.budgets);
     let content;
 
     if (status === 'loading') {
         content = <p>Loading budgets...</p>;
     } else if (status === 'received') {
-        if (Array.isArray(budgets) && budgets.length > 0) {
+        if (Array.isArray(filteredBudgets) && filteredBudgets.length > 0) {
             content = (
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                    {budgets.map((item: BudgetType) => <BudgetCard key={item.id_budget} budgets={item} />)}
+                    {filteredBudgets.map((item: BudgetType) => <BudgetCard key={item.id_budget} budgets={item} />)}
                 </div>
             );
         } else {
@@ -33,14 +34,7 @@ const BudgetPage =()=>{
         <main className="container flex flex-col gap-8">
             <div className="flex items-center justify-between">
                 <div className="max-w-sm">
-                    <Input
-                        placeholder="Cherchez une transaction"
-                        // value={bu}
-                        // onChange={(event) =>
-                        //     table.getColumn('libelle')?.setFilterValue(event.target.value)
-                        // }
-                        className="h-10  bg-white"
-                    />            
+                    <SearchBudgetForm/>
                 </div>
                           
                 <AddBudgetModal/>   

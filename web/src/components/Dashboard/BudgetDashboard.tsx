@@ -2,25 +2,15 @@ import React, { useState,useEffect } from "react";
 import { useDispatch,useSelector } from 'react-redux';
 import { BudgetType } from "@/types";
 import { Progress } from "@/components/ui/progress"
-import transactionService from "@/services/transactions/transaction.service";
 import { TransactionsType } from "@/types";
+import { RootState } from "@/redux/store";
 
 interface BudgetProps {
     budgets: BudgetType;
 }
 
 const BudgetDashboard = ({budgets}:BudgetProps) => {
-    const [transactions, setTransactions] = useState<TransactionsType[]>([]);
-            
-    useEffect(() => {
-        transactionService.getTransaction().then(response => {
-            const data = response?.data || [];
-            setTransactions(data);
-        }).catch(error => {
-            console.error("Erreur lors de la récupération des budgets :", error);
-        });
-    }, []);
-    
+    const transactions = useSelector((state: RootState) => state.transactions.transactions);
     const budgetTransactions = transactions.filter((tr:TransactionsType)=> tr.id_budget === budgets.id_budget);
     const expenses = budgetTransactions.filter((tr:TransactionsType)=> tr.type_transaction === "depense")
     const income = budgetTransactions.filter((tr:TransactionsType)=> tr.type_transaction === "revenu")
@@ -32,7 +22,7 @@ const BudgetDashboard = ({budgets}:BudgetProps) => {
     const tolalExpenses = expenseAmount.reduce(
         (accumulator:number, currentValue:number) => accumulator + currentValue,0
     )
-    const percentage = (tolalExpenses / budgets.montant_actuel)*100;
+    const percentage = (tolalExpenses / budgets.montant_initial)*100;
 
     return (
         <div>
@@ -50,7 +40,7 @@ const BudgetDashboard = ({budgets}:BudgetProps) => {
                     <p className="text-preset-5 text-grey-500">
                         {percentage.toFixed(2)}%
                     </p>
-                    <p className="text-preset-5 text-grey-500">{`${tolalExpenses}/${budgets.montant_actuel}`}</p>
+                    <p className="text-preset-5 text-grey-500">{`${tolalExpenses}/${budgets.montant_initial}`}</p>
                 </div>
                 {/* <div className="flex items-center mt-4 mb-4">
                     <div className="relative flex flex-1 flex-col justify-between pl-5">

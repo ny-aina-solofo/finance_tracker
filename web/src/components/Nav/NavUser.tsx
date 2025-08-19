@@ -1,3 +1,5 @@
+import React, { useState,useEffect } from "react";
+import { useDispatch,useSelector } from "react-redux";
 import {
     IconCreditCard,
     IconDotsVertical,
@@ -27,21 +29,18 @@ import {
     useSidebar,
 } from "@/components/ui/sidebar"
 import { Button } from "../ui/button"
+import userService from "@/services/users/users.service";
+import LogOutModal from "../Modals/User/LogOutModal";
 
-const data = {
-    user: {
-      name: "shadcn",
-      email: "m@example.com",
-      avatar: "/avatars/shadcn.jpg",
-    }
-}
 export function NavUser() {
     const { isMobile } = useSidebar()
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false); 
+    const users = userService.getCurrentUser()
 
     return (
         <SidebarMenu>
             <SidebarMenuItem>
-                <DropdownMenu>
+                <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
                     <DropdownMenuTrigger asChild>
                         <Button
                             size="lg"
@@ -51,15 +50,12 @@ export function NavUser() {
                                 bg-neutral-950 text-white
                             "
                         >
-                            <Avatar className="h-8 w-8 rounded-lg grayscale">
-                                <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+                            <Avatar className="h-8 w-8 rounded-lg">
+                                {/* <AvatarImage src="" alt="@shadcn" /> */}
                                 <AvatarFallback>CN</AvatarFallback>
                             </Avatar>
                             <div className="grid flex-1 text-left text-sm leading-tight">
-                                <span className="truncate font-medium">{data.user.name}</span>
-                                <span className="text-muted-foreground truncate text-xs">
-                                    {data.user.email}
-                                </span>
+                                <span className="truncate font-medium">{users.nom}</span>
                             </div>
                             <IconDotsVertical className="ml-auto size-4" />
                         </Button>
@@ -73,28 +69,25 @@ export function NavUser() {
                         <DropdownMenuLabel className="p-0 font-normal">
                             <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                                 <Avatar className="h-8 w-8 rounded-lg">
-                                    <AvatarImage src={data.user.avatar} alt={data.user.name} />
+                                    {/* <AvatarImage src="" alt={users.nom} /> */}
                                     <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                                 </Avatar>
                                 <div className="grid flex-1 text-left text-sm leading-tight">
-                                <span className="truncate font-medium">{data.user.name}</span>
-                                <span className="text-muted-foreground truncate text-xs">
-                                    {data.user.email}
-                                </span>
+                                <span className="truncate font-medium">{users.nom}</span>
+                                
                                 </div>
                             </div>
                         </DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuGroup>
+                        {/* <DropdownMenuGroup>
                             <DropdownMenuItem>
                                 <IconUserCircle className="!size-5"  />
                                 Account
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>
-                            <IconLogout className="!size-5"  />
-                            Log out
+                        <DropdownMenuSeparator /> */}
+                        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                            <LogOutModal setIsDropdownOpen={setIsDropdownOpen}/>
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>

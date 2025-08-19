@@ -23,6 +23,7 @@ export type Status = "idle" | "loading" | "received" | "rejected";
 
 export type BudgetState = {
     budgets: any;
+    filteredBudgets: any;
     status: Status;
     error: string | null;
 }

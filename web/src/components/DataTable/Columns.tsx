@@ -11,9 +11,9 @@ import {
     PopoverTrigger,
   } from '@/components/ui/popover'
 import { Button } from "@/components/ui/button"
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
 import EditTransaction from "../Modals/Transactions/EditTransactions";
 import DeleteTransactions from "../Modals/Transactions/DeleteTransactions";
+import { IconDots } from "@tabler/icons-react";
 
 export const columns: ColumnDef<TransactionsType>[] = [
     {
@@ -108,7 +108,7 @@ export const columns: ColumnDef<TransactionsType>[] = [
                     <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
                         <PopoverTrigger asChild>
                             <Button variant="ghost" className="h-8 w-8 p-0">
-                                <MoreHorizontal />
+                                <IconDots/>
                             </Button>
                         </PopoverTrigger>
                         <PopoverContent asChild>

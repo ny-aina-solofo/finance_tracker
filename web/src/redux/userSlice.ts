@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction,createAsyncThunk } from "@reduxjs/toolkit";
 import { UserState} from "@/types";
-import { fetchUsers } from "./fetchUsers";
 
 const initialState: UserState = {
     users: [],
@@ -11,21 +10,6 @@ const initialState: UserState = {
 const userSlice = createSlice({
     name: "users",
     initialState,
-    extraReducers: (builder) => {
-        builder
-            .addCase(fetchUsers.pending, (state) => {
-                state.status = 'loading';
-                state.error = null;
-            })
-            .addCase(fetchUsers.fulfilled, (state, action) => {
-                state.status = "received";
-                state.users = action.payload;
-            })
-            .addCase(fetchUsers.rejected, (state, action) => {
-                state.status = "rejected";
-                state.error = action.payload || "Cannot load data";
-            });
-    },
     reducers: {
         // addBudget: (state, action: PayloadAction<{
         //     nom_budget: string, montant: number, 

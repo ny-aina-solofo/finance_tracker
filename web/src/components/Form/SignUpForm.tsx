@@ -85,9 +85,9 @@ const SignupForm = () => {
                                 control={form.control}
                                 name="name"
                                 render={({ field }) => (
-                                <FormItem className="grid gap-3">
+                                <FormItem className="relative">
                                     <FormLabel>Nom</FormLabel>
-                                    <FormControl>
+                                    <FormControl className="grid gap-3">
                                         <Input placeholder="Entrez un nom" {...field} />
                                     </FormControl>
                                     <FormMessage />
@@ -98,9 +98,9 @@ const SignupForm = () => {
                                 control={form.control}
                                 name="email"
                                 render={({ field }) => (
-                                <FormItem className="relative grid gap-3">
+                                <FormItem className="relative ">
                                     <FormLabel>Email</FormLabel>
-                                    <FormControl className="">
+                                    <FormControl className="grid gap-3">
                                         <Input type="email" placeholder="Entrez votre email" {...field} />
                                     </FormControl>
                                     <FormMessage />

@@ -13,7 +13,6 @@ const signUp = async (req,res,next) =>{
         
         const hash = bcrypt.hashSync(password_user, 10); 
         const newUser = await User.create({nom: nom,password_user: hash,email: email})
-        // Generate JWT
         const token = jwt.sign(
             { id_user: newUser.id_user, email: newUser.email }, process.env.SECRET_KEY,
             { algorithm: 'HS256', expiresIn: 3600 }
@@ -22,7 +21,6 @@ const signUp = async (req,res,next) =>{
     } catch (error) {
         console.error("Error inserting user data:", error);
         res.status(500).send({ message: "Error retrieving user data.", error: error.message });
-        // next(error);
     }
 }
 
@@ -45,11 +43,15 @@ const signIn = async (req,res,next) => {
             { id: existingUser.id_user },process.env.SECRET_KEY,
             { algorithm: 'HS256', expiresIn: 3600 }
         ) 
-        res.status(200).send({id: existingUser.id_user,token : token});
+        const userData = {
+            id: existingUser.id_user,
+            nom: existingUser.nom ,
+            token : token
+        }
+        res.status(200).send(userData);
     } catch (error) {
         console.error("Error fetching user data:", error);
         res.status(500).send({ message: "Error retrieving user data.", error: error.message });
-        // next(error); // Optionally pass the error to the next middleware
     }
 }
 const validateUser = async (req, res, next) => {
@@ -65,7 +67,6 @@ const validateUser = async (req, res, next) => {
     } catch (error) {
         console.error("Erreur lors de la validation de l'utilisateur:", error);
         res.status(500).send({ message: "Erreur lors de la validation.", error: error.message });
-        // next(error);
     }
 };
 
