@@ -3,7 +3,7 @@ import { Outlet } from "react-router";
 import { useDispatch,useSelector } from "react-redux";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/Sidebar/AppSidebar";
-import { SiteHeader } from "@/components/Header/SiteHeader";
+import { SiteHeader } from "@/app/dashboard/SiteHeader";
 import { fetchBudgets } from "@/redux/fetchBudgets";
 import transactionService from "@/services/transactions/transaction.service";
 import { setErrorStatus, setLoadingStatus, setTransactions } from "@/redux/transactionsSlice";

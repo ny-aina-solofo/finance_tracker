@@ -11,8 +11,8 @@ import {
     PopoverTrigger,
   } from '@/components/ui/popover'
 import { Button } from "@/components/ui/button"
-import EditTransaction from "../Modals/Transactions/EditTransactions";
-import DeleteTransactions from "../Modals/Transactions/DeleteTransactions";
+import EditTransaction from "../../../../components/Modals/Transactions/EditTransactions";
+import DeleteTransactions from "../../../../components/Modals/Transactions/DeleteTransactions";
 import { IconDots } from "@tabler/icons-react";
 
 export const columns: ColumnDef<TransactionsType>[] = [

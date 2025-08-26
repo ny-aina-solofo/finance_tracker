@@ -61,13 +61,12 @@ const EditTransaction = ({selectedTransactions,setIsPopoverOpen}:TransactionProp
 
         
         if (isValid) {
-            // console.log(libelle,formattedDate,nom_budget,id_budget,typeTransactions);
             dispatch(editTransaction({
                 id_transaction,libelle: libelle, date_creation: formattedDate,type_transaction:typeTransactions
             }));
-            // transactionService.updateTransaction(
-            //     id_transaction, libelle, formattedDate,typeTransactions
-            // ).then(()=>{})
+            transactionService.updateTransaction(
+                id_transaction, libelle, formattedDate,typeTransactions
+            ).then(()=>{})
 
             setLibelle(selectedTransactions.libelle);
             setDate(selectedTransactions.date_creation);

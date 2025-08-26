@@ -6,8 +6,8 @@ import {
     SidebarMenuButton,
     SidebarMenuItem, SidebarFooter
 } from "@/components/ui/sidebar"
-import NavMenu from "../Nav/NavMenu"
-import { NavUser } from "../Nav/NavUser"
+import NavMenu from "./NavMenu"
+import { NavUser } from "./NavUser"
 
 
 export function AppSidebar() {
