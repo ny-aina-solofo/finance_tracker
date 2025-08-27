@@ -9,7 +9,7 @@ import {
     getFilteredRowModel,
     getPaginationRowModel,
     getSortedRowModel,
-    useReactTable,    
+    useReactTable,  
 } from '@tanstack/react-table'
 import {
   Table,
@@ -26,7 +26,10 @@ import SortingTable from "./SortingTable";
 import * as XLSX from 'xlsx';
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
-import { IconDownload } from "@tabler/icons-react";
+import { IconDownload, IconSearch } from "@tabler/icons-react";
+import { AddTransaction} from "@/components";
+import { TransactionsType } from "@/types";
+import { format } from "date-fns";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -65,50 +68,64 @@ export function DataTable<TData, TValue>({
     })
     
     const exportToExcel = () => {
-        const wb: XLSX.WorkBook = XLSX.utils.book_new(); // Créez un classeur
-  
-        // Créez une feuille Excel à partir de votre table HTML²
-        const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(document.getElementById('table-principale'));
-      
-        // Obtenez la date actuelle
-        const currentDate = new Date();
-      
-        // Générez une chaîne de date au format "AAAA-MM-JJ" (par exemple, "2023-10-12")
-        const dateStr = currentDate.toISOString().slice(0, 10);
-      
-        // Créez le nom du fichier en incluant la date
-        const fileName = `transactions_${id_budget}_${dateStr}.xlsx`;
-      
-        // Ajoutez la feuille au classeur avec le nom que vous avez généré
-        XLSX.utils.book_append_sheet(wb, ws, 'transactions');
-      
-        // Enregistrez le fichier Excel avec le nom généré
         try {
+            const cleanedData = table.getRowModel().rows.map(row => {
+                const originalRow = row.original as TransactionsType;
+                return {
+                    Motif: originalRow.libelle,
+                    Budget: originalRow.nom_budget,
+                    Date: format(originalRow.date_creation, 'yyyy-MM-dd'),
+                    Montant: originalRow.montant,
+                    Type: originalRow.type_transaction,
+                };
+            });            
+            const wb: XLSX.WorkBook = XLSX.utils.book_new();
+            const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(cleanedData);
+            const currentDate = new Date();
+            const dateStr = currentDate.toISOString().slice(0, 10);
+            const nom_budget = table.getRowModel().rows.map(row => {
+                const originalRow = row.original as TransactionsType;
+                if(originalRow.id_budget === id_budget){
+                    return originalRow.nom_budget
+                }
+            });
+            let fileName;
+            if(id_budget !== null) {
+                fileName = `transactions_du budget_${nom_budget}_${dateStr}.xlsx`;
+            }else{
+                fileName = `transactions_${dateStr}.xlsx`;
+            }
+            XLSX.utils.book_append_sheet(wb, ws, 'transactions');
             XLSX.writeFile(wb, fileName);
             toast.success('Le téléchargement a été lancé');
         } catch (error) {
-            toast.error('Le téléchargement a échoué');
+            toast.error('Le téléchargement a échoué : '+error);
         }
     }  
     return (
         <div className="mb-10 h-full w-full">
+            <div className="flex items-center justify-between mb-5">
+                <Input
+                    placeholder="Cherchez une transaction"
+                    value={(table.getColumn('libelle')?.getFilterValue() as string) ?? ''}
+                    onChange={(event) =>
+                        table.getColumn('libelle')?.setFilterValue(event.target.value)
+                    }
+                    className="max-w-sm h-10 bg-white border border-input focus-visible:border focus-visible:border-ring"
+                />
+                <div className="flex gap-4">
+                    <Button size="lg" variant="outline" onClick={exportToExcel}><IconDownload/> Exporter</Button>    
+                    <AddTransaction id_budget={id_budget}/>   
+                </div>
+            </div>
             <div className="rounded-xl bg-white px-5 py-2 md:p-8 lg:py-6">
-                <div className="flex items-center py-6">
-                    <Input
-                        placeholder="Cherchez une transaction"
-                        value={(table.getColumn('libelle')?.getFilterValue() as string) ?? ''}
-                        onChange={(event) =>
-                            table.getColumn('libelle')?.setFilterValue(event.target.value)
-                        }
-                        className="max-w-sm"
-                    />
-                    <div className="ml-auto hidden gap-2 lg:flex lg:gap-5">
-                        {/* <SortingTable
+                <div className="flex items-center mb-6">    
+                    <div className="hidden gap-2 lg:flex lg:gap-5">
+                        <SortingTable
                             setSorting={setSorting}
                             columnFilters={columnFilters}
                             setColumnFilters={setColumnFilters}
-                        /> */}
-                        <Button size="lg" variant="secondary" onClick={exportToExcel}><IconDownload/> Exporter</Button>
+                        />
                         <FilterTable
                             setColumnFilters={setColumnFilters}
                             id_budget={id_budget}

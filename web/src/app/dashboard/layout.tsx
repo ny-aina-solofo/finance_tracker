@@ -3,10 +3,11 @@ import { Outlet } from "react-router";
 import { useDispatch,useSelector } from "react-redux";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/Sidebar/AppSidebar";
-import { SiteHeader } from "@/app/dashboard/SiteHeader";
 import { fetchBudgets } from "@/redux/fetchBudgets";
 import transactionService from "@/services/transactions/transaction.service";
 import { setErrorStatus, setLoadingStatus, setTransactions } from "@/redux/transactionsSlice";
+import { SidebarTrigger } from "@/components/ui/sidebar"
+import { useParams,useLocation } from "react-router"
 
 export default function DashboardLayout() {
     const dispatch = useDispatch();
@@ -22,13 +23,33 @@ export default function DashboardLayout() {
             dispatch(setErrorStatus({error}))
         });    
     }, [dispatch]); 
+    
+    const location = useLocation();
+    const pathname = location.pathname;
 
+    // Sépare le chemin en segments et prend le dernier
+    // Ex: "/dashboard/transactions" -> ["", "dashboard", "transactions"] -> "transactions"
+    // Si le chemin est "/dashboard", on prend "dashboard"
+    const pathSegments = pathname.split('/').filter(Boolean);
+    const lastSegment = pathSegments.length > 0 ? pathSegments[pathSegments.length - 1] : 'Acceuil';
+    let displayPage;
+    if (lastSegment === "dashboard") {
+        displayPage = "Acceuil";     
+    } else {
+        displayPage = lastSegment.charAt(0).toUpperCase() + lastSegment.slice(1);
+    }
+    
     return (
         <SidebarProvider >
             <AppSidebar />
             <SidebarInset className="bg-Light-Mode-Background">
                 <div>
-                    <SiteHeader/>                    
+                    <header className="bg-white flex h-12 shrink-0 items-center gap-2">
+                        <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
+                            <SidebarTrigger className="-ml-1" />
+                            <h1 className="text-base font-medium">{displayPage}</h1>
+                        </div>
+                    </header>
                     <main className="p-4">
                         <Outlet/>
                     </main>

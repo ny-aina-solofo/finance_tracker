@@ -2,7 +2,6 @@ import React, { useState,useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { TransactionsType } from "@/types";
 import { RootState } from "@/redux/store";
-import { AddTransaction} from "@/components";
 import { useSearchParams } from "react-router";
 import { DataTable } from "./DataTable/DataTable";
 import { columns } from "./DataTable/Columns";
@@ -58,12 +57,6 @@ const TransactionPage =()=>{
 
     return(
         <main className="container flex flex-col gap-8">
-            <div className="flex items-center justify-between">
-                <div></div>
-                <div>
-                    <AddTransaction id_budget={id_budget}/>   
-                </div>
-            </div>
             {content}
         </main>   
     )
