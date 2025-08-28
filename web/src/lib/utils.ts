@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
-import { IconHome, IconMonkeybar, IconTransactionBitcoin, IconTransfer } from "@tabler/icons-react"
+import { IconArrowsTransferUpDown, IconChartPie, IconChartPie2Filled, IconHome, IconHomeFilled, IconMonkeybar, IconTransactionBitcoin, IconTransfer, IconTransferVertical } from "@tabler/icons-react"
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
@@ -11,16 +11,16 @@ export const menuItems = [
     {
         title: "Acceuil",
         url: "/dashboard",
-        icon: IconHome,
+        icon: IconHomeFilled,
     },
     {
         title: "Bugdet",
         url: "/dashboard/budget",
-        icon: IconTransactionBitcoin,
+        icon: IconChartPie2Filled,
     },
     {
         title: "Transactions",
         url: "/dashboard/transactions",
-        icon: IconTransfer,
+        icon: IconArrowsTransferUpDown,
     }
 ]

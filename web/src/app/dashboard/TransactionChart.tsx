@@ -24,6 +24,8 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { TransactionsType } from "@/types";
+import { Link } from "react-router";
+import { IconCaretRightFilled } from "@tabler/icons-react";
 
 export const description = "An interactive bar chart"
 
@@ -50,19 +52,15 @@ export function TransactionChart({transactions}:Props) {
     });
     // const lastDate = transactions[0].date_creation;
     // console.log(lastDate);
-    let content;
-
+    
     const filteredData = sortedTransactions.filter((item:TransactionsType) => {
         const date = new Date(item.date_creation)
         const referenceDate = new Date("2024-06-30")
         let daysToSubtract = 7
-        content = (<span className="hidden @[540px]/card:block">7 derniers jours</span>);
         if (timeRange === "30d") {
             daysToSubtract = 30
-            content = (<span className="hidden @[540px]/card:block">30 derniers jours</span>);
         } else if (timeRange === "90d") {
             daysToSubtract = 90
-            content = (<span className="hidden @[540px]/card:block">3 derniers mois</span>);
         }
         const startDate = new Date(referenceDate)
         startDate.setDate(startDate.getDate() - daysToSubtract)
@@ -91,33 +89,38 @@ export function TransactionChart({transactions}:Props) {
     }, [filteredData]);
 
     return (
-        <Card className="@container/card mt-5">
+        <Card className="@container/card">
             <CardHeader>
-                <CardTitle>Résumé des transactions</CardTitle>
-                <CardDescription>
-                    {content}
-                    {/* <span className="@[540px]/card:hidden">3 derniers mois</span> */}
+                <CardTitle>Transactions</CardTitle>
+                <CardDescription className="mt-2">
+                    <Select value={timeRange} onValueChange={setTimeRange}>
+                        <SelectTrigger
+                            className="hidden *:data-[slot=toggle-group-item]:!px-4 @[767px]/card:flex"
+                            aria-label="Select a value"
+                        >
+                            <SelectValue placeholder="Last 3 months" />
+                        </SelectTrigger>
+                        <SelectContent className="rounded-xl">
+                            <SelectItem value="7d" className="rounded-lg">
+                                7 derniers jours
+                            </SelectItem>
+                            <SelectItem value="30d" className="rounded-lg">
+                                30 derniers jours
+                            </SelectItem>
+                            <SelectItem value="90d" className="rounded-lg">
+                                3 derniers mois
+                            </SelectItem>
+                        </SelectContent>
+                    </Select>
                 </CardDescription>
                 <CardAction>
-                <Select value={timeRange} onValueChange={setTimeRange}>
-                    <SelectTrigger
-                        className="hidden *:data-[slot=toggle-group-item]:!px-4 @[767px]/card:flex"
-                        aria-label="Select a value"
+                    <Link
+                        to='/dashboard/transactions'
+                        className="inline-flex items-center gap-3  text-gray-500"
                     >
-                        <SelectValue placeholder="Last 3 months" />
-                    </SelectTrigger>
-                    <SelectContent className="rounded-xl">
-                        <SelectItem value="7d" className="rounded-lg">
-                            7 derniers jours
-                        </SelectItem>
-                        <SelectItem value="30d" className="rounded-lg">
-                            30 derniers jours
-                        </SelectItem>
-                        <SelectItem value="90d" className="rounded-lg">
-                            3 derniers mois
-                        </SelectItem>
-                    </SelectContent>
-                </Select>
+                        <span className="text-preset-4">voir details</span>
+                        <IconCaretRightFilled />
+                    </Link>
                 </CardAction>
             </CardHeader>
             <CardContent className="">

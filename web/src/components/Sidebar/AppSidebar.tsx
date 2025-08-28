@@ -17,9 +17,7 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild className="hover:bg-neutral-950 hover:text-white">
-                            <a href="#">
-                                <span className="text-base font-semibold">FINANCE</span>
-                            </a>
+                            <span className="text-base font-semibold">FINANCE</span>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>

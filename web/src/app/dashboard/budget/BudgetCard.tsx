@@ -8,7 +8,7 @@ import {
 import EditBudgetModal from '@/components/Modals/Budget/EditBudgetModal';
 import DeleteBudgetModal from '@/components/Modals/Budget/DeleteBudgetModal';
 import { Button } from "@/components/ui/button";
-import { IconEye,IconDots } from "@tabler/icons-react";
+import { IconDots } from "@tabler/icons-react";
 import { useNavigate } from "react-router";
 import { Progress } from "@/components/ui/progress"
 import { TransactionsType,BudgetType } from "@/types";
@@ -36,9 +36,6 @@ const BudgetCard =({budgets}:BudgetProps) => {
     )
     const percentage = (tolalExpenses / budgets.montant_initial)*100;
     
-    const viewTransactions = ()=>{
-        navigate(`/dashboard/transactions?budget=${budgets.id_budget}`);
-    }
     return (
         <div className="flex flex-col gap-8 rounded-[12px] bg-white px-5 py-6">
             <header className="flex items-center justify-between">
@@ -102,9 +99,6 @@ const BudgetCard =({budgets}:BudgetProps) => {
                         </div>
                     </div> */}
                 </div>
-            </section>
-            <section className="">
-                <Button size="lg" className="w-full" onClick={viewTransactions}><IconEye/> Voir Transactions</Button>
             </section>
         </div>
     )

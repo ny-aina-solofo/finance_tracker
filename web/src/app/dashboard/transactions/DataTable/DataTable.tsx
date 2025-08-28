@@ -34,13 +34,11 @@ import { format } from "date-fns";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  id_budget:number | null;
 }
 
 export function DataTable<TData, TValue>({
     columns,
     data,
-    id_budget
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
@@ -83,18 +81,7 @@ export function DataTable<TData, TValue>({
             const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(cleanedData);
             const currentDate = new Date();
             const dateStr = currentDate.toISOString().slice(0, 10);
-            const nom_budget = table.getRowModel().rows.map(row => {
-                const originalRow = row.original as TransactionsType;
-                if(originalRow.id_budget === id_budget){
-                    return originalRow.nom_budget
-                }
-            });
-            let fileName;
-            if(id_budget !== null) {
-                fileName = `transactions_du budget_${nom_budget}_${dateStr}.xlsx`;
-            }else{
-                fileName = `transactions_${dateStr}.xlsx`;
-            }
+            const fileName = `transactions_${dateStr}.xlsx`;
             XLSX.utils.book_append_sheet(wb, ws, 'transactions');
             XLSX.writeFile(wb, fileName);
             toast.success('Le téléchargement a été lancé');
@@ -103,19 +90,19 @@ export function DataTable<TData, TValue>({
         }
     }  
     return (
-        <div className="mb-10 h-full w-full">
-            <div className="flex items-center justify-between mb-5">
+        <div className="flex flex-col gap-8">
+            <div className="flex items-center justify-between">
                 <Input
                     placeholder="Cherchez une transaction"
                     value={(table.getColumn('libelle')?.getFilterValue() as string) ?? ''}
                     onChange={(event) =>
                         table.getColumn('libelle')?.setFilterValue(event.target.value)
                     }
-                    className="max-w-sm h-10 bg-white border border-input focus-visible:border focus-visible:border-ring"
+                    className="max-w-sm h-10 bg-white"
                 />
                 <div className="flex gap-4">
                     <Button size="lg" variant="outline" onClick={exportToExcel}><IconDownload/> Exporter</Button>    
-                    <AddTransaction id_budget={id_budget}/>   
+                    <AddTransaction/>   
                 </div>
             </div>
             <div className="rounded-xl bg-white px-5 py-2 md:p-8 lg:py-6">
@@ -126,10 +113,7 @@ export function DataTable<TData, TValue>({
                             columnFilters={columnFilters}
                             setColumnFilters={setColumnFilters}
                         />
-                        <FilterTable
-                            setColumnFilters={setColumnFilters}
-                            id_budget={id_budget}
-                        />
+                        <FilterTable setColumnFilters={setColumnFilters}/>
                     </div>   
                 </div>
                 <Table>

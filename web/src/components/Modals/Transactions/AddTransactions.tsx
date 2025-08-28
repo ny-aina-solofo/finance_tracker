@@ -38,15 +38,11 @@ import { cn } from '@/lib/utils'
 import { format, formatISO } from 'date-fns'
 import { addTransaction } from "@/redux/transactionsSlice";
 import { BudgetType } from "@/types";
+import transactionService from "@/services/transactions/transaction.service";
 
-interface Props {
-    id_budget : number | null;
-};
-
-const AddTransaction = ({id_budget}:Props)=> {
+const AddTransaction = ()=> {
     const dispatch = useDispatch();
     const budgets = useSelector((state: RootState) => state.budgets.budgets);    
-    const budgetsToShow = id_budget ? budgets.filter((b: BudgetType) => b.id_budget === id_budget) : budgets;
     
     const [libelle,setLibelle]= React.useState<string>('')
     const [montant,setMontant]= React.useState<string>('')
@@ -92,24 +88,14 @@ const AddTransaction = ({id_budget}:Props)=> {
         
         if (isValid) {
             // console.log(libelle,montant_to_int,formattedDate,nom_budget,id_budget,typeTransactions);
-            if (id_budget) {
-                const selectedBudget = budgets.find((budget:BudgetType) => budget.id_budget === id_budget);
-                const nom_budget = selectedBudget ? selectedBudget.nom_budget : 'Inconnu';
-                dispatch(addTransaction({
-                    libelle: libelle, montant: montant_to_int, date_creation: formattedDate,
-                    nom_budget: nom_budget,type_transaction:typeTransactions
-                }));
-                // transactionService.addTransaction(libelle,montant_to_int,formattedDate,id_budget,typeTransactions).then(()=>{})
-                // dispatch(fetchTransactions() as any);
-            } else {
-                const selectedBudget = budgets.find((budget:BudgetType) => budget.id_budget === parseInt(budgetId));
-                const nom_budget = selectedBudget ? selectedBudget.nom_budget : 'Inconnu';
-                dispatch(addTransaction({
-                    libelle: libelle, montant: montant_to_int, date_creation: formattedDate,
-                    nom_budget: nom_budget,type_transaction:typeTransactions
-                }));
-                // transactionService.addTransaction(libelle,montant_to_int,formattedDate,parseInt(budgetId),typeTransactions).then(()=>{})    
-            }
+            const selectedBudget = budgets.find((budget:BudgetType) => budget.id_budget === parseInt(budgetId));
+            const nom_budget = selectedBudget ? selectedBudget.nom_budget : 'Inconnu';
+            dispatch(addTransaction({
+                libelle: libelle, montant: montant_to_int, date_creation: formattedDate,
+                nom_budget: nom_budget,type_transaction:typeTransactions
+            }));
+            transactionService.addTransaction(libelle,montant_to_int,formattedDate,parseInt(budgetId),typeTransactions).then(()=>{})    
+
             setLibelle('');
             setMontant('');
             setDate(undefined);
@@ -180,33 +166,23 @@ const AddTransaction = ({id_budget}:Props)=> {
                         </div>
                         <div className="grid gap-3 mb-3">
                             <Label htmlFor="budget">Budget</Label>
-                            {id_budget ? (
-                                <Select>
-                                    {budgetsToShow.map((item:BudgetType) => (
-                                        <SelectTrigger className="w-full" key={item.id_budget}>
-                                            <SelectValue placeholder={`${item.nom_budget}`} />
-                                        </SelectTrigger>    
+                            <Select 
+                                value={budgetId} 
+                                onValueChange={setBudgetId}
+                            >
+                                <SelectTrigger className="w-full">
+                                    <SelectValue placeholder="sélectionnez le budget correspondant" />
+                                </SelectTrigger>
+                                <SelectContent >
+                                    <SelectGroup>
+                                    {budgets.map((item:BudgetType) => (
+                                        <SelectItem key={item.id_budget} value={item.id_budget.toString()}>
+                                            {item.nom_budget}
+                                        </SelectItem>    
                                     ))}
-                                </Select>
-                            ) : (
-                                <Select 
-                                    value={budgetId} 
-                                    onValueChange={setBudgetId}
-                                >
-                                    <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="sélectionnez le budget correspondant" />
-                                    </SelectTrigger>
-                                    <SelectContent >
-                                        <SelectGroup>
-                                        {budgetsToShow.map((item:BudgetType) => (
-                                            <SelectItem key={item.id_budget} value={item.id_budget.toString()}>
-                                                {item.nom_budget}
-                                            </SelectItem>    
-                                        ))}
-                                        </SelectGroup>
-                                    </SelectContent>
-                                </Select>
-                            )}
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
                             
                         </div>
                         <div className="grid gap-3 mb-3">

@@ -46,36 +46,41 @@ const BudgetPage =()=>{
         content = <p>Error: {error}</p>;
     }
     return(
-        <main className="container flex flex-col gap-8">
+        <main className="flex flex-col gap-8">
             <div className="flex items-center justify-between">
-                <div className="max-w-sm">
-                    <form 
-                        autoComplete="off" 
-                        className="flex bg-white items-center justify-between  
-                            rounded-lg max-w-sm h-10 border border-input
-                        "
-                    >
-                        <IconSearch className="ms-4"/>                
-                        <Input
-                            className=""
-                            placeholder="rechercher un budget"
-                            value={searchText}
-                            onChange={searchBudgets}
-                            aria-label="rechercher un budget"
-                        />
-                        <div className="px-4">
-                            {searchText !== "" && (
-                                <button
-                                    type="button"
-                                    className="cursor-pointer"
-                                    onClick={handleResetSearch}
-                                >
-                                    <IconX/>
-                                </button>                    
-                            )}
-                        </div>
-                    </form>
-                </div>      
+                {/* <form 
+                    autoComplete="off" 
+                    className="flex bg-white items-center justify-between  
+                        rounded-lg max-w-sm h-10
+                    "
+                >
+                    <IconSearch className="ms-4"/>                
+                    <Input
+                        className="max-w-sm bg-white h-10"
+                        placeholder="rechercher un budget"
+                        value={searchText}
+                        onChange={searchBudgets}
+                        aria-label="rechercher un budget"
+                    />        
+                    <div className="px-4">
+                        {searchText !== "" && (
+                            <button
+                                type="button"
+                                className="cursor-pointer"
+                                onClick={handleResetSearch}
+                            >
+                                <IconX/>
+                            </button>                    
+                        )}
+                    </div>
+                </form> */}
+                <Input
+                    className="max-w-sm bg-white h-10"
+                    placeholder="rechercher un budget"
+                    value={searchText}
+                    onChange={searchBudgets}
+                    aria-label="rechercher un budget"
+                />      
                 <AddBudgetModal/>   
             </div>
             {content}

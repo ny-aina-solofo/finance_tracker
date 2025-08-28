@@ -42,15 +42,15 @@ export default function DashboardLayout() {
     return (
         <SidebarProvider >
             <AppSidebar />
-            <SidebarInset className="bg-Light-Mode-Background">
-                <div>
-                    <header className="bg-white flex h-12 shrink-0 items-center gap-2">
-                        <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
+            <SidebarInset >
+                <div className="bg-Light-Mode-Background relative h-full">
+                    <header className="bg-white h-[70px] fixed top-0 w-full flex items-center justify-between px-6">
+                        <div className="flex gap-4">
                             <SidebarTrigger className="-ml-1" />
-                            <h1 className="text-base font-medium">{displayPage}</h1>
+                            <span className="font-semibold">{displayPage}</span>
                         </div>
                     </header>
-                    <main className="p-4">
+                    <main className="px-6 pt-[70px] mt-6 overflow-y-scroll py-6">
                         <Outlet/>
                     </main>
                 </div>
