@@ -53,14 +53,13 @@ const LogOutModal = ({setIsDropdownOpen}:Props)=> {
                 </p>
                 <DialogFooter>
                     <Button 
-                        variant="default" 
                         type="button"
                         onClick={logout}
                     >
                         Se déconnecter
                     </Button>
                     <Button 
-                        variant="outline"
+                        variant="secondary"
                         type="button"
                         onClick={handleReset}
                     >

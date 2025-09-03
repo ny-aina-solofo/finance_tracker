@@ -61,7 +61,7 @@ const DeleteTransactions = ({selectedTransactions,setIsPopoverOpen}:TransactionP
                         Supprimer
                     </Button>
                     <Button 
-                        className=""
+                        className="secondary"
                         type="button"
                         onClick={handleReset}
                     >

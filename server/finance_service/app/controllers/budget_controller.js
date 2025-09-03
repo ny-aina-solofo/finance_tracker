@@ -51,7 +51,7 @@ const deleteBudget = async (req,res,next) =>{
 
         await Depense.destroy({where: { id_budget: id_budget }});
         await Revenu.destroy({where: { id_budget: id_budget }});
-        await Budget.destroy({where: { id_budget: id_budget , id_utilisateur:id_user}});
+        await Budget.destroy({where: { id_budget: id_budget , id_utilisateur:id_user.toString()}});
         res.status(200).send({success:true});
     } catch (error) {
         console.error("Error deleting budget data:", error);
@@ -70,7 +70,7 @@ const updateBudget = async (req,res,next) =>{
                 date_creation:date_creation
             },
             { 
-                where: { id_budget: id_budget, id_utilisateur:id_user } 
+                where: { id_budget: id_budget, id_utilisateur:id_user.toString() } 
             }
         );
         res.status(200).send({success:true});    

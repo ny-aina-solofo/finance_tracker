@@ -51,12 +51,11 @@ const BudgetCard =({budgets}:BudgetProps) => {
                         <IconDots className='h-5 w-5 cursor-pointer'/>
                     </PopoverTrigger>
                     <PopoverContent asChild>
-                        <div className="flex w-full flex-col gap-1 px-5 py-3">
+                        <div className="flex flex-col w-full gap-4">
                             <EditBudgetModal 
                                 id_budget={budgets.id_budget} 
                                 setIsPopoverOpen={setIsPopoverOpen}
                             />
-                            <hr />
                             <DeleteBudgetModal    
                                 id_budget={budgets.id_budget} 
                                 setIsPopoverOpen={setIsPopoverOpen}

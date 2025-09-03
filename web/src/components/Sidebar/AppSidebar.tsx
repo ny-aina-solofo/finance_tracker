@@ -8,24 +8,29 @@ import {
 } from "@/components/ui/sidebar"
 import NavMenu from "./NavMenu"
 import { NavUser } from "./NavUser"
+import { Link } from "react-router"
 
+export const appName = "finance-tracker";
 
 export function AppSidebar() {
+    
     return (
         <Sidebar collapsible="icon">
-            <SidebarHeader className="bg-neutral-950 text-white">
+            <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarMenuButton size="lg" asChild className="hover:bg-neutral-950 hover:text-white">
-                            <span className="text-base font-semibold">FINANCE</span>
+                        <SidebarMenuButton size="lg" asChild>
+                            <Link to="">
+                                <span className="text-base font-semibold cursor-pointer">{appName.toLocaleUpperCase()}</span>
+                            </Link>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarHeader>
-            <SidebarContent className="bg-neutral-950 text-white">
+            <SidebarContent>
                 <NavMenu/>                
             </SidebarContent>
-            <SidebarFooter className="bg-neutral-950 text-white">
+            <SidebarFooter>
                 <NavUser/>        
             </SidebarFooter>
         </Sidebar>

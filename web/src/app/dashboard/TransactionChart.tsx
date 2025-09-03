@@ -52,15 +52,18 @@ export function TransactionChart({transactions}:Props) {
     });
     // const lastDate = transactions[0].date_creation;
     // console.log(lastDate);
-    
+    let dateDescription = "7 derniers jours";
     const filteredData = sortedTransactions.filter((item:TransactionsType) => {
         const date = new Date(item.date_creation)
         const referenceDate = new Date("2024-06-30")
         let daysToSubtract = 7
+        
         if (timeRange === "30d") {
             daysToSubtract = 30
+            dateDescription = "30 derniers jours";
         } else if (timeRange === "90d") {
             daysToSubtract = 90
+            dateDescription = "3 derniers mois"
         }
         const startDate = new Date(referenceDate)
         startDate.setDate(startDate.getDate() - daysToSubtract)
@@ -91,11 +94,16 @@ export function TransactionChart({transactions}:Props) {
     return (
         <Card className="@container/card">
             <CardHeader>
-                <CardTitle>Transactions</CardTitle>
-                <CardDescription className="mt-2">
+                <CardTitle>
+                    <span  className="text-preset-2 font-bold text-grey-900">Transactions</span>
+                </CardTitle>
+                <CardDescription className="">
+                    <span>Transactions des {dateDescription}</span>
+                </CardDescription>
+                <CardAction>
                     <Select value={timeRange} onValueChange={setTimeRange}>
                         <SelectTrigger
-                            className="hidden *:data-[slot=toggle-group-item]:!px-4 @[767px]/card:flex"
+                            className=""
                             aria-label="Select a value"
                         >
                             <SelectValue placeholder="Last 3 months" />
@@ -112,8 +120,8 @@ export function TransactionChart({transactions}:Props) {
                             </SelectItem>
                         </SelectContent>
                     </Select>
-                </CardDescription>
-                <CardAction>
+                </CardAction>
+                {/* <CardAction>
                     <Link
                         to='/dashboard/transactions'
                         className="inline-flex items-center gap-3  text-gray-500"
@@ -121,7 +129,7 @@ export function TransactionChart({transactions}:Props) {
                         <span className="text-preset-4">voir details</span>
                         <IconCaretRightFilled />
                     </Link>
-                </CardAction>
+                </CardAction> */}
             </CardHeader>
             <CardContent className="">
                 <ChartContainer

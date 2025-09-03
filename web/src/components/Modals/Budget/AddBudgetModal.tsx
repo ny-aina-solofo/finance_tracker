@@ -149,7 +149,7 @@ const AddBudgetModal = ()=> {
                             <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                                 <PopoverTrigger asChild>
                                     <Button
-                                        variant={'secondary'}
+                                        variant={'outline'}
                                         className={cn(
                                             'w-full pl-3 text-left font-normal',
                                             !date ? 'text-muted-foreground' : ''
@@ -184,7 +184,7 @@ const AddBudgetModal = ()=> {
                             Enregistrer
                         </Button>
                         <Button 
-                            variant="outline" className="w-full mt-3"
+                            variant="secondary" className="w-full mt-3"
                             type="button"
                             onClick={handleReset}
                         >

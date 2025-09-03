@@ -245,7 +245,7 @@ const AddTransaction = ()=> {
                             Ajouter
                         </Button>
                         <Button 
-                            variant="outline" className="w-full mt-3"
+                            variant="secondary" className="w-full mt-3"
                             type="button"
                             onClick={handleReset}
                         >

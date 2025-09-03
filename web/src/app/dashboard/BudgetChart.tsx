@@ -26,8 +26,7 @@ interface Props {
 
 
 export function BudgetChart({budgets}:Props) {
-    let slicedBudgets = budgets.slice(0, 4)
-    
+    // let slicedBudgets = budgets.slice(0, 4)
     const budgetAmount = budgets.map(((budget:BudgetType)=> budget.montant_initial))
     const totalAmount = budgetAmount.reduce(
         (accumulator:number, currentValue:number) => accumulator + currentValue,0
@@ -55,10 +54,6 @@ export function BudgetChart({budgets}:Props) {
                             className="mx-auto aspect-square max-h-[250px]"
                         >
                             <PieChart>
-                                <ChartTooltip
-                                    cursor={false}
-                                    content={<ChartTooltipContent hideLabel />}
-                                />
                                 <Pie
                                     data={budgets}
                                     dataKey="montant_initial"
@@ -102,7 +97,7 @@ export function BudgetChart({budgets}:Props) {
                         <p className="text-preset-4 text-grey-300">No Data Provided.</p>
                     )}
                     <div className="flex flex-col gap-8 lg:w-[98px]">
-                        {slicedBudgets.map((budget: BudgetType) => (
+                        {budgets.map((budget: BudgetType) => (
                             <div
                                 key={budget.id_budget}
                                 className={`relative flex flex-col items-start pl-4`}
@@ -112,12 +107,12 @@ export function BudgetChart({budgets}:Props) {
                                 style={{ backgroundColor: item.fill }}
                             /> */}
             
-                            <h4 className="text-preset-4 truncate font-normal text-grey-500">
-                                {budget.nom_budget}
-                            </h4>
-                            <p className="text-preset-5 font-bold text-grey-900">
-                                ${Math.abs(budget.montant_initial)?.toFixed(2) ?? 'N/A'}
-                            </p>
+                                <h4 className="text-preset-4 truncate font-normal text-gray-500">
+                                    {budget.nom_budget}
+                                </h4>
+                                <p className="text-preset-5 font-bold text-gray-900">
+                                    {Math.abs(budget.montant_initial)?.toFixed(2) ?? 'N/A'}
+                                </p>
                             </div>
                         ))}
                     </div>

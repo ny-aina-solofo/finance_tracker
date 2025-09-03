@@ -44,7 +44,7 @@ const DeleteBudgetModal = ({id_budget,setIsPopoverOpen}:BudgetProps)=> {
         <Dialog  open={isModalOpen} onOpenChange={setIsModalOpen}>
             <DialogTrigger asChild>
                 <div
-                    className="cursor-pointer text-destructive font-bold py-2"
+                    className="cursor-pointer text-destructive "
                >
                     Supprimer
                 </div>
@@ -54,11 +54,11 @@ const DeleteBudgetModal = ({id_budget,setIsPopoverOpen}:BudgetProps)=> {
                     <DialogTitle className="mb-3 text-destructive">Supprimer {nom_budget}</DialogTitle>
                     <DialogDescription></DialogDescription>
                 </DialogHeader>
-                <p>
-                    Tu es sûr de vouloir supprimer {nom_budget} ? 
-                    Cette action supprimera le bugdet séléctionné
-                </p>
-                <DialogFooter>
+                    <p className="text-muted-foreground">
+                        Tu es sûr de vouloir supprimer {nom_budget} ? 
+                        Cette action supprimera le bugdet séléctionné
+                    </p>
+                <DialogFooter className="">
                     <Button 
                         variant="destructive" 
                         type="button"
@@ -67,6 +67,7 @@ const DeleteBudgetModal = ({id_budget,setIsPopoverOpen}:BudgetProps)=> {
                         Supprimer
                     </Button>
                     <Button 
+                        variant={`secondary`}
                         className=""
                         type="button"
                         onClick={handleReset}

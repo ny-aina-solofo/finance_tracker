@@ -87,9 +87,6 @@ const budgetSlice = createSlice({
                 budget.nom_budget.toLowerCase().includes(searchTerm)
             );
         },
-        resetSearch: (state) => {
-            state.filteredBudgets = state.budgets;
-        }
     }
 });
 
@@ -97,8 +94,7 @@ export const {
     addBudget,
     editBudget,
     deleteBudget,
-    searchBudget,
-    resetSearch
+    searchBudget
 } = budgetSlice.actions;
 
 export default budgetSlice.reducer;

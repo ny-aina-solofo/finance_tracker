@@ -88,7 +88,7 @@ const EditBudgetModal = ({id_budget,setIsPopoverOpen}:BudgetProps)=> {
         <Dialog  open={isModalOpen} onOpenChange={setIsModalOpen}>
             <DialogTrigger asChild>
                 <div
-                    className="cursor-pointer font-bold py-2"
+                    className="cursor-pointer text-muted-foreground"
                >
                     Modifier
                 </div>
@@ -122,7 +122,7 @@ const EditBudgetModal = ({id_budget,setIsPopoverOpen}:BudgetProps)=> {
                             <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                                 <PopoverTrigger asChild>
                                     <Button
-                                        variant={'secondary'}
+                                        variant={'outline'}
                                         className={cn(
                                             'w-full pl-3 text-left font-normal',
                                             !date ? 'text-muted-foreground' : ''
@@ -157,7 +157,7 @@ const EditBudgetModal = ({id_budget,setIsPopoverOpen}:BudgetProps)=> {
                             Enregistrer
                         </Button>
                         <Button 
-                            variant="outline" className="w-full mt-3"
+                            variant="secondary" className="w-full mt-3"
                             type="button"
                             onClick={handleReset}
                         >

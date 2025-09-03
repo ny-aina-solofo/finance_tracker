@@ -43,11 +43,11 @@ export default function DashboardLayout() {
         <SidebarProvider >
             <AppSidebar />
             <SidebarInset >
-                <div className="bg-Light-Mode-Background relative h-full">
+                <div className="bg-muted relative h-full">
                     <header className="bg-white h-[70px] fixed top-0 w-full flex items-center justify-between px-6">
-                        <div className="flex gap-4">
-                            <SidebarTrigger className="-ml-1" />
-                            <span className="font-semibold">{displayPage}</span>
+                        <div className="flex gap-6 items-center">
+                            <SidebarTrigger className="" />
+                            <span className="text-2xl">{displayPage.toLocaleUpperCase()}</span>
                         </div>
                     </header>
                     <main className="px-6 pt-[70px] mt-6 overflow-y-scroll py-6">

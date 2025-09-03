@@ -3,7 +3,7 @@ import RootLayout from "./app/layout";
 
 const App = () => {
     return (
-        <div className="bg-Light-Mode-Background">
+        <div className="bg-muted">
             <RootLayout/>
         </div>
         
