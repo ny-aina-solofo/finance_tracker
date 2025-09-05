@@ -43,15 +43,16 @@ const budgetSlice = createSlice({
     reducers: {
         addBudget: (state, action: PayloadAction<{
             nom_budget: string, montant: number, 
-            date_creation: string | undefined
+            date_creation: string | undefined,theme:string
         }>) => {
-            const { nom_budget, montant, date_creation } = action.payload;
+            const { nom_budget, montant, date_creation,theme } = action.payload;
             const newID = Date.now();
             const newBudget = {
                 id_budget: newID,
                 nom_budget: nom_budget,
                 montant: montant,
-                date_creation: date_creation
+                date_creation: date_creation,
+                theme:theme
             };
             // Ajoutez à la fois aux budgets originaux et filtrés
             state.budgets.push(newBudget);
@@ -65,19 +66,21 @@ const budgetSlice = createSlice({
             state.filteredBudgets = updatedBudget;
         },
         editBudget: (state, action: PayloadAction<{
-            id_budget: number, nom_budget: string, date_creation: string
+            id_budget: number, nom_budget: string, date_creation: string, theme:string
         }>) => {
-            const { id_budget, nom_budget, date_creation } = action.payload;
+            const { id_budget, nom_budget, date_creation,theme } = action.payload;
             const budgetToEdit = state.budgets.find((budget: BudgetType) => budget.id_budget === id_budget);
             if (budgetToEdit) {
                 budgetToEdit.nom_budget = nom_budget;
                 budgetToEdit.date_creation = date_creation;
+                budgetToEdit.theme = theme;
             }
             // Mettez à jour le tableau filtré également
             const filteredBudgetToEdit = state.filteredBudgets.find((budget: BudgetType) => budget.id_budget === id_budget);
             if (filteredBudgetToEdit) {
                 filteredBudgetToEdit.nom_budget = nom_budget;
                 filteredBudgetToEdit.date_creation = date_creation;
+                filteredBudgetToEdit.theme = theme;
             }
         },
         searchBudget: (state, action: PayloadAction<string>) => {

@@ -48,7 +48,7 @@ const DeleteTransactions = ({selectedTransactions,setIsPopoverOpen}:TransactionP
                     <DialogTitle className="mb-3 text-destructive">Supprimer {selectedTransactions.libelle}</DialogTitle>
                     <DialogDescription></DialogDescription>
                 </DialogHeader>
-                <p>
+                <p className="text-muted-foreground">
                     Tu es sûr de vouloir supprimer {selectedTransactions.libelle} ? 
                     Cette action supprimera la transaction séléctionnée
                 </p>
@@ -61,7 +61,7 @@ const DeleteTransactions = ({selectedTransactions,setIsPopoverOpen}:TransactionP
                         Supprimer
                     </Button>
                     <Button 
-                        className="secondary"
+                        variant="secondary"
                         type="button"
                         onClick={handleReset}
                     >

@@ -6,7 +6,7 @@ export type BudgetType = {
     date_creation: string;
     date_modification: string;
     id_utilisateur:string;
-
+    themes:string;
 }
 export type TransactionsType = {
     id_transaction: number;

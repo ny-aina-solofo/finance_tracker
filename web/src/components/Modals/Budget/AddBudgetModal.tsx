@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useDispatch } from "react-redux"
+import { useDispatch,useSelector } from "react-redux"
 import { addBudget } from '@/redux/budgetSlice';
 import {
     Popover,
@@ -21,23 +21,38 @@ import {
   } from "@/components/ui/popover"
 import { Calendar } from "@/components/ui/calendar"
 import { CalendarIcon, PlusIcon } from "lucide-react"
-import { cn } from '@/lib/utils'
+import { cn,themes } from '@/lib/utils'
 import { format, formatISO } from 'date-fns'
 import budgetService from "@/services/budget/budget.service";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select'
+import { RootState } from "@/redux/store";
+import { BudgetType } from "@/types";
 
 
 const AddBudgetModal = ()=> {
     const dispatch = useDispatch();
-    const [budgetName,setBudgetName]= React.useState<string>('')
-    const [montant,setMontant]= React.useState<string>('')
+    const { filteredBudgets, status, error } = useSelector((state: RootState) => state.budgets);
+    const [budgetName,setBudgetName]= React.useState<string>('');
+    const [montant,setMontant]= React.useState<string>('');
     const [date, setDate] = React.useState<Date | undefined>(undefined);
+    const [theme, setTheme] = React.useState<string>('');
     
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
     const [budgetNameError, setBudgetNameError] = useState<string | null>(null);
     const [montantError, setMontantError] = useState<string | null>(null);
-     
+    const [dateError, setDateError] = useState<string | null>(null);
+    const [themeError, setThemeError] = useState<string | null>(null);
+    
+    const usedThemes = filteredBudgets.map((b:BudgetType)=>b.themes)
+
     const handleAddBudget = (event:React.FormEvent)=>{
         event.preventDefault(); 
         let isValid = true;
@@ -68,20 +83,36 @@ const AddBudgetModal = ()=> {
             setMontantError(null);
         }
         
+        if(date === undefined){
+            setDateError("La date est obligatoire")
+        }else{
+            setDateError(null)
+        }
+
+        if(theme === ""){
+            setThemeError("Le theme est obligatoire")
+        }else{
+            setThemeError(null)
+        }
+
         if (isValid) {
             // console.log(budgetName, montant, formattedDate);
             dispatch(addBudget({
                 nom_budget: budgetName,
                 montant: montant_to_int,
-                date_creation: formattedDate || undefined
+                date_creation: formattedDate || undefined,
+                theme
             }));
-            budgetService.addBudget(budgetName,montant_to_int,formattedDate).then(()=>{})
+            budgetService.addBudget(budgetName,montant_to_int,formattedDate,theme).then(()=>{})
             setBudgetName('');
             setMontant('');
             setDate(undefined);
             setBudgetNameError(null);
             setMontantError(null);
-            setIsModalOpen(false);     
+            setIsModalOpen(false);    
+            setTheme(''); 
+            setDateError(null);
+            setThemeError(null);
         }
     }    
     const handleDateSelect = (selectedDate: Date | undefined) => {
@@ -95,7 +126,10 @@ const AddBudgetModal = ()=> {
         setDate(undefined)    
         setBudgetNameError(null);
         setMontantError(null);
-        setIsModalOpen(false); 
+        setIsModalOpen(false);
+        setTheme(''); 
+        setDateError(null);
+        setThemeError(null);
     }
     return (
         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
@@ -106,8 +140,8 @@ const AddBudgetModal = ()=> {
                 <DialogHeader>
                     <DialogTitle className="mb-3">Ajouter un budget à gérer</DialogTitle>
                     <DialogDescription className="mb-3">
-                        Ajoutez un nom, un montant et la date de la création de votre budget, 
-                        puis enregistrez 
+                        Ajoutez un nom, un montant, la date de la création de votre budget, 
+                        choisir un thème puis enregistrez 
                     </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleAddBudget}>
@@ -124,7 +158,7 @@ const AddBudgetModal = ()=> {
                                 className={budgetNameError ? 'border-red-500' : ''}
                             />
                             {budgetNameError && (
-                                <p className="text-red-500 text-sm mt-1">{budgetNameError}</p>
+                                <p className="text-red-500 text-sm">{budgetNameError}</p>
                             )}
                         </div>
                         <div className="grid gap-3 mb-3">
@@ -139,7 +173,7 @@ const AddBudgetModal = ()=> {
                                 className={montantError ? 'border-red-500' : ''}
                             />
                             {montantError && (
-                                <p className="text-red-500 text-sm mt-1">{montantError}</p>
+                                <p className="text-red-500 text-sm">{montantError}</p>
                             )}
                         </div>
                         <div className="grid gap-3 mb-3">
@@ -152,7 +186,8 @@ const AddBudgetModal = ()=> {
                                         variant={'outline'}
                                         className={cn(
                                             'w-full pl-3 text-left font-normal',
-                                            !date ? 'text-muted-foreground' : ''
+                                            !date ? 'text-muted-foreground' : '',
+                                            dateError ? 'border-red-500' : ''
                                         )}
                                     >
                                         {date ? (
@@ -174,6 +209,53 @@ const AddBudgetModal = ()=> {
                                     />
                                 </PopoverContent>
                             </Popover>
+                            {dateError && (
+                                <p className="text-red-500 text-sm">{dateError}</p>
+                            )}
+                        </div>
+                        <div className="grid gap-3 mb-3">
+                            <Label htmlFor="theme">
+                                Theme
+                            </Label>
+                            <Select value={theme} onValueChange={setTheme}>
+                                <SelectTrigger
+                                    className={cn(
+                                        'w-full cursor-pointer',
+                                        themeError ? 'border-red-500' : ''
+                                    )}
+                                    aria-label="Select a value"
+                                >
+                                    <SelectValue placeholder="Ajouter un thème" />
+                                </SelectTrigger>
+                                <SelectContent className="rounded-lg">
+                                    {themes.map((th)=>(
+                                        <SelectItem 
+                                            key={th.label} 
+                                            value={th.color} 
+                                            className="rounded-lg"
+                                            disabled={usedThemes.includes(th.color)}
+                                        >
+                                            <div className="flex w-full items-center justify-between">
+                                                <div className="flex items-center">
+                                                    <span
+                                                        className="mr-2 h-4 w-4 rounded-full"
+                                                        style={{backgroundColor:th.color}}
+                                                    />
+                                                    <p className="">{th.label}</p>
+                                                </div>
+                                                {usedThemes.includes(th.color) && (
+                                                    <p className="ml-4 text-right text-muted-foreground text-sm">
+                                                        (déjà utilisé)
+                                                    </p>
+                                                )}
+                                            </div>
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                            {themeError && (
+                                <p className="text-red-500 text-sm">{themeError}</p>
+                            )}
                         </div>
                     </div>
                     <footer className="mt-4">

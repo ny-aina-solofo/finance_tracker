@@ -42,13 +42,14 @@ describe("http budget service test", () => {
         const nom_budget:string = 'test';
         const montant:number = 333;
         const date_creation:string | undefined = '2024-03-15';
+        const themes:string = "#2563eb";
         const mockUser = { token: "fake-jwt-token-for-test" };
         sessionStorage.setItem("utilisateur connecté", JSON.stringify(mockUser));
         
         mockedHttp.post.mockResolvedValue({ data: { success: true } });
-        await budgetService.addBudget(nom_budget,montant,date_creation);
+        await budgetService.addBudget(nom_budget,montant,date_creation,themes);
         expect(mockedHttp.post).toHaveBeenCalledWith('/add-budget', 
-            { nom_budget:nom_budget, montant:montant, date_creation:date_creation },
+            { nom_budget:nom_budget, montant:montant, date_creation:date_creation,themes:themes },
             { headers: { Authorization: `Bearer ${mockUser.token}`} }
         );
     });
@@ -69,13 +70,14 @@ describe("http budget service test", () => {
         const id_budget:number = 44
         const nom_budget:string = 'test';
         const date_creation:string | undefined = '2024-03-15';
+        const themes:string = "#2563eb";
         const mockUser = { token: "fake-jwt-token-for-test" };
         sessionStorage.setItem("utilisateur connecté", JSON.stringify(mockUser));
         
         mockedHttp.put.mockResolvedValue({ data: { success: true } });
-        await budgetService.updateBudget(id_budget,nom_budget,date_creation);
+        await budgetService.updateBudget(id_budget,nom_budget,date_creation,themes);
         expect(mockedHttp.put).toHaveBeenCalledWith(`/update-budget/${id_budget}`,
-            {nom_budget:nom_budget,date_creation:date_creation},
+            {nom_budget:nom_budget,date_creation:date_creation,themes:themes},
             { headers: { Authorization: `Bearer ${mockUser.token}`} }
         );
     });

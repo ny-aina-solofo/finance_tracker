@@ -28,9 +28,6 @@ const BudgetCard =({budgets}:BudgetProps) => {
     const income = budgetTransactions.filter((tr:TransactionsType)=> tr.type_transaction === "revenu")
     const incomeAmount = income.map(((tr:TransactionsType)=> tr.montant)) 
     const expenseAmount = expenses.map(((tr:TransactionsType)=> tr.montant)) 
-    const tolalIncome = incomeAmount.reduce(
-        (accumulator:number, currentValue:number) => accumulator + currentValue,0
-    )
     const tolalExpenses = expenseAmount.reduce(
         (accumulator:number, currentValue:number) => accumulator + currentValue,0
     )
@@ -40,11 +37,11 @@ const BudgetCard =({budgets}:BudgetProps) => {
         <div className="flex flex-col gap-8 rounded-[12px] bg-white px-5 py-6">
             <header className="flex items-center justify-between">
                 <div className="flex items-center">
-                {/* <span
+                <span
                     className="mr-4 h-4 w-4 rounded-full"
-                    style={{ backgroundColor: getColorHexCode(pot.theme) }}
-                /> */}
-                <h3 className="text-preset-2 text-gray-900">{budgets.nom_budget}</h3>
+                    style={{ backgroundColor: `${budgets.themes}` }}
+                />
+                <h3 className="text-preset-2">{budgets.nom_budget}</h3>
                 </div>
                 <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
                     <PopoverTrigger>
@@ -66,37 +63,21 @@ const BudgetCard =({budgets}:BudgetProps) => {
             </header>
             <section className="flex h-full flex-col justify-center gap-4">
                 <div className="flex items-center justify-between">
-                    <h4 className="text-preset-4 text-gray-500">Montant Actuelle</h4>
+                    <h4 className="text-preset-4 text-muted-foreground">Montant Actuelle</h4>
                     <p className="text-preset-1">{budgets.montant_actuel}</p>
                 </div>
                 <div className="flex flex-col gap-3">
                     <Progress
                         className="h-2 mt-3"
                         value={percentage}
-                        // indicatorColor={getColorHexCode(pot.theme)}
+                        themes={`${budgets.themes}`}
                     />
                     <div className="flex justify-between">
-                        <p className="text-preset-5 text-grey-500">
+                        <p className="text-preset-5 text-muted-foreground">
                             {percentage.toFixed(2)}%
                         </p>
-                        <p className="text-preset-5 text-grey-500">{`${tolalExpenses}/${budgets.montant_initial}`}</p>
+                        <p className="text-preset-5 text-muted-foreground">{`${tolalExpenses} sur ${budgets.montant_initial}`}</p>
                     </div>
-                    {/* <div className="flex items-center mt-4 mb-4">
-                        <div className="relative flex flex-1 flex-col justify-between pl-5">
-                            <span className="absolute bottom-0 left-0 top-0 h-full w-1 rounded-lg bg-destructive" />
-                            <p className="text-preset-5 text-grey-500">Depense Total</p>
-                            <p className="text-preset-4 font-bold text-grey-900">
-                                {tolalExpenses}
-                            </p>
-                        </div>
-                        <div className="relative flex flex-1 flex-col justify-between pl-5">
-                            <span className="absolute bottom-0 left-0 top-0 h-full w-1 rounded-lg bg-green-500" />
-                            <p className="text-preset-5 text-grey-500">Revenu Total</p>
-                            <p className="text-preset-4 font-bold text-grey-900">
-                                {tolalIncome}
-                            </p>
-                        </div>
-                    </div> */}
                 </div>
             </section>
         </div>

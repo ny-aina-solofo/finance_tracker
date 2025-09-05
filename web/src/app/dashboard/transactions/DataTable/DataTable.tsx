@@ -21,8 +21,7 @@ import {
 } from "@/components/ui/table"
 import { Input } from "../../../../components/ui/input"
 import PaginationTable from "./PaginationTable";
-import FilterTable from "./FilterTable";
-import SortingTable from "./SortingTable";
+import Filter from "./Filter";
 import * as XLSX from 'xlsx';
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
@@ -101,19 +100,18 @@ export function DataTable<TData, TValue>({
                     className="max-w-sm h-10 bg-white"
                 />
                 <div className="flex gap-4">
-                    <Button size="lg" variant="outline" onClick={exportToExcel}><IconDownload/> Exporter</Button>    
+                    <Button size="lg" variant="secondary" onClick={exportToExcel}><IconDownload/> Exporter</Button>    
                     <AddTransaction/>   
                 </div>
             </div>
             <div className="rounded-xl bg-white px-5 py-2 md:p-8 lg:py-6">
                 <div className="flex items-center mb-6">    
                     <div className="hidden gap-2 lg:flex lg:gap-5">
-                        <SortingTable
+                        <Filter
                             setSorting={setSorting}
                             columnFilters={columnFilters}
                             setColumnFilters={setColumnFilters}
                         />
-                        <FilterTable setColumnFilters={setColumnFilters}/>
                     </div>   
                 </div>
                 <Table>

@@ -19,7 +19,7 @@ export const columns: ColumnDef<TransactionsType>[] = [
     {
         accessorKey: "libelle",
         header: () => (
-            <h6 className="text-preset-5 font-normal text-gray-500">
+            <h6 className="text-preset-5 font-normal text-muted-foreground">
                 Motif
             </h6>
         ),
@@ -37,19 +37,19 @@ export const columns: ColumnDef<TransactionsType>[] = [
     {
         accessorKey: "nom_budget",
         header: () => (
-            <h6 className="text-preset-5 font-normal text-gray-500">Bugdet</h6>
+            <h6 className="text-preset-5 font-normal text-muted-foreground">Bugdet</h6>
           ),
         cell: ({ row }) => {
             const nom_budget = row.original.nom_budget as string ;
             return (
-                <p className="text-preset-5 font-normal text-gray-500">{nom_budget}</p>
+                <p className="text-preset-5 font-normal text-muted-foreground">{nom_budget}</p>
             );
         },
     },
     {
         accessorKey: "date_creation",
         header: () => (
-            <h6 className="text-preset-5 font-normal text-gray-500">
+            <h6 className="text-preset-5 font-normal text-muted-foreground">
               Transaction Date
             </h6>
         ),
@@ -58,16 +58,34 @@ export const columns: ColumnDef<TransactionsType>[] = [
             let formattedDate = date_creation ? format(date_creation, 'yyyy-MM-dd') : undefined;
             
             return (
-                <p className="text-preset-5 font-normal text-gray-500">
+                <p className="text-preset-5 font-normal text-muted-foreground">
                    {formattedDate}
                 </p>
             );
         },
+        filterFn: (row, columnId, filterValue) => {
+            if (!filterValue) return true;
+          
+            const date_creation = new Date(row.original.date_creation);
+            const month = String(date_creation.getMonth() + 1).padStart(2, "0");
+            const year = String(date_creation.getFullYear());
+          
+            if (filterValue.month !== "all") {
+                return month === filterValue.month;
+            }
+          
+            if (filterValue.year !== "all") {
+                return year === filterValue.year;
+            }
+          
+            return true;
+        },
+          
     },
     {
         accessorKey: "montant",
         header: () => (
-            <h6 className="text-preset-5 text-right font-normal text-gray-500">
+            <h6 className="text-preset-5 text-right font-normal text-muted-foreground">
               Montant
             </h6>
         ),
@@ -79,7 +97,7 @@ export const columns: ColumnDef<TransactionsType>[] = [
             <div
                 className={cn("text-preset-4 text-right font-bold text-grey-900", {
                     "text-destructive": type_transaction === "depense",
-                    "text-green-500": type_transaction === "revenu",
+                    "text-green-600": type_transaction === "revenu",
                 })}
             >
                 { type_transaction === "revenu" ? "+" : "-"}
@@ -112,7 +130,7 @@ export const columns: ColumnDef<TransactionsType>[] = [
                             </Button>
                         </PopoverTrigger>
                         <PopoverContent asChild>
-                            <div className="flex w-[114px] flex-col gap-1 px-5 py-3">
+                            <div className="flex w-[114px] flex-col gap-2 px-5 py-3">
                                 <EditTransaction
                                     selectedTransactions={transactions}       
                                     setIsPopoverOpen={setIsPopoverOpen}

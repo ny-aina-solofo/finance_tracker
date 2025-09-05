@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Label, Pie, PieChart } from "recharts"
+import { Cell, Label, Pie, PieChart } from "recharts"
 import {
     ChartConfig,
     ChartContainer,
@@ -41,7 +41,7 @@ export function BudgetChart({budgets}:Props) {
                     </h5>
                     <Link
                         to='/dashboard/budget'
-                        className="inline-flex items-center gap-3  text-gray-500"
+                        className="inline-flex items-center gap-3 text-muted-foreground"
                     >
                         <span className="text-preset-4">voir details</span>
                         <IconCaretRightFilled />
@@ -61,58 +61,58 @@ export function BudgetChart({budgets}:Props) {
                                     innerRadius={60}
                                     strokeWidth={5}
                                 >
-                                <Label
-                                    content={({ viewBox }) => {
-                                        if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                                            return (
-                                            <text
-                                                x={viewBox.cx}
-                                                y={viewBox.cy}
-                                                textAnchor="middle"
-                                                dominantBaseline="middle"
-                                            >
-                                                <tspan
+                                    {budgets.map((budget: BudgetType) => (
+                                        <Cell key={`cell-${budget.id_budget}`} fill={budget.themes} />
+                                    ))}
+                                    <Label
+                                        content={({ viewBox }) => {
+                                            if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                                                return (
+                                                <text
                                                     x={viewBox.cx}
                                                     y={viewBox.cy}
-                                                    className="fill-foreground text-3xl font-bold"
+                                                    textAnchor="middle"
+                                                    dominantBaseline="middle"
                                                 >
-                                                    {totalAmount.toLocaleString()}
-                                                </tspan>
-                                                <tspan
-                                                    x={viewBox.cx}
-                                                    y={(viewBox.cy || 0) + 24}
-                                                    className="fill-muted-foreground"
-                                                >
-                                                    sur {limitAmount.toLocaleString()} 
-                                                </tspan>
-                                            </text>
-                                            )
-                                        }
-                                    }}
-                                />
+                                                    <tspan
+                                                        x={viewBox.cx}
+                                                        y={viewBox.cy}
+                                                        className="fill-foreground text-3xl font-bold"
+                                                    >
+                                                        {totalAmount.toLocaleString()}
+                                                    </tspan>
+                                                    <tspan
+                                                        x={viewBox.cx}
+                                                        y={(viewBox.cy || 0) + 24}
+                                                        className="fill-muted-foreground"
+                                                    >
+                                                        sur {limitAmount.toLocaleString()} 
+                                                    </tspan>
+                                                </text>
+                                                )
+                                            }
+                                        }}
+                                    />
                                 </Pie>
                             </PieChart>
                          </ChartContainer>
                     ) : (
-                        <p className="text-preset-4 text-grey-300">No Data Provided.</p>
+                        <p className="text-preset-4 text-muted-foreground">No Data Provided.</p>
                     )}
-                    <div className="flex flex-col gap-8 lg:w-[98px]">
+                    <div className="flex flex-col gap-4">
                         {budgets.map((budget: BudgetType) => (
                             <div
                                 key={budget.id_budget}
-                                className={`relative flex flex-col items-start pl-4`}
+                                className="flex gap-4 items-center"
                             >
-                            {/* <span
-                                className="absolute bottom-0 left-0 top-0 h-full w-1 rounded-full"
-                                style={{ backgroundColor: item.fill }}
-                            /> */}
+                                <span
+                                    className="h-2 w-2 shrink-0 rounded-[2px]"
+                                    style={{ backgroundColor: budget.themes }}
+                                />
             
-                                <h4 className="text-preset-4 truncate font-normal text-gray-500">
+                                <h4 className="text-preset-4 truncate font-normal text-muted-foreground">
                                     {budget.nom_budget}
                                 </h4>
-                                <p className="text-preset-5 font-bold text-gray-900">
-                                    {Math.abs(budget.montant_initial)?.toFixed(2) ?? 'N/A'}
-                                </p>
                             </div>
                         ))}
                     </div>

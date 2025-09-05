@@ -28,12 +28,13 @@ const addBudget = async (req,res,next) =>{
         const nom_budget = req.body.nom_budget;
         const montant = req.body.montant;
         const date_creation = req.body.date_creation;
+        const themes = req.body.themes;
         // Appel au service d'authentification pour valider l'utilisateur
         await axios.get(`${process.env.VITE_API_BASE_URL_USER}/validate/${id_user}`);
         
         await Budget.create({
             nom_budget:nom_budget,montant_initial:montant, 
-            date_creation:date_creation,montant_actuel:montant
+            date_creation:date_creation,montant_actuel:montant,themes:themes
         });
         res.status(200).send({success:true});    
     } catch (error) {
@@ -64,10 +65,12 @@ const updateBudget = async (req,res,next) =>{
         const id_budget = req.params.id_budget;
         const nom_budget = req.body.nom_budget;
         const date_creation = req.body.date_creation;
+        const themes = req.body.themes;
         await Budget.update(
             { 
                 nom_budget:nom_budget,
-                date_creation:date_creation
+                date_creation:date_creation,
+                themes:themes
             },
             { 
                 where: { id_budget: id_budget, id_utilisateur:id_user.toString() } 

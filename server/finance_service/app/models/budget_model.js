@@ -30,7 +30,11 @@ module.exports = (sequelize, Sequelize) =>{
         montant_actuel : {
             type : Sequelize.INTEGER,
             allowNull:false    
-        }
+        },
+        themes : {
+            type : Sequelize.STRING,
+            allowNull:false    
+        },
     },{
         freezeTableName: true ,// Désactive la pluralisation automatique
         schema: 'finance', // Spécifie le schéma

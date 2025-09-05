@@ -92,7 +92,7 @@ const EditTransaction = ({selectedTransactions,setIsPopoverOpen}:TransactionProp
     return (
         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
             <DialogTrigger asChild>
-                <div className="cursor-pointer">Modifier</div>
+                <div className="cursor-pointer text-muted-foreground">Modifier</div>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
