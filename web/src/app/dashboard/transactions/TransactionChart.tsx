@@ -24,8 +24,6 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { TransactionsType } from "@/types";
-import { Link } from "react-router";
-import { IconCaretRightFilled } from "@tabler/icons-react";
 
 export const description = "An interactive bar chart"
 
@@ -95,10 +93,10 @@ export function TransactionChart({transactions}:Props) {
         <Card className="@container/card">
             <CardHeader>
                 <CardTitle>
-                    <span  className="text-preset-2 font-bold text-grey-900">Transactions</span>
+                    <span  className="text-preset-2 font-bold text-grey-900">Transactions des {dateDescription}</span>
                 </CardTitle>
                 <CardDescription className="">
-                    <span>Transactions des {dateDescription}</span>
+                    <span></span>
                 </CardDescription>
                 <CardAction>
                     <Select value={timeRange} onValueChange={setTimeRange}>
@@ -121,15 +119,6 @@ export function TransactionChart({transactions}:Props) {
                         </SelectContent>
                     </Select>
                 </CardAction>
-                {/* <CardAction>
-                    <Link
-                        to='/dashboard/transactions'
-                        className="inline-flex items-center gap-3  text-gray-500"
-                    >
-                        <span className="text-preset-4">voir details</span>
-                        <IconCaretRightFilled />
-                    </Link>
-                </CardAction> */}
             </CardHeader>
             <CardContent className="">
                 <ChartContainer

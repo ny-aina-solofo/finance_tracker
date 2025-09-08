@@ -45,7 +45,7 @@ const BudgetCard =({budgets}:BudgetProps) => {
                 </div>
                 <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
                     <PopoverTrigger>
-                        <IconDots className='h-5 w-5 cursor-pointer'/>
+                        <IconDots className='h-6 w-6 size-8 cursor-pointer'/>
                     </PopoverTrigger>
                     <PopoverContent asChild>
                         <div className="flex flex-col w-full gap-4">

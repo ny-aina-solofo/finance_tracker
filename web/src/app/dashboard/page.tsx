@@ -17,8 +17,10 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/redux/store";
 import { TransactionsType } from "@/types";
-import { TransactionChart } from "./TransactionChart";
 import { BudgetChart } from "./BudgetChart";
+import { format } from "date-fns";
+import { Link } from "react-router";
+import { IconCaretRightFilled } from "@tabler/icons-react";
 
 const chartConfig = {
     depense: {
@@ -38,6 +40,8 @@ const Dashboard = () => {
     const sortedTransactions = [...transactions].sort((a, b) => {
         return new Date(a.date_creation).getTime() - new Date(b.date_creation).getTime();
     });
+    const slicedTransactions = transactions.slice(0, 4)
+  
     const expenses = sortedTransactions.filter((tr:TransactionsType)=> tr.type_transaction === "depense")
     const income = sortedTransactions.filter((tr:TransactionsType)=> tr.type_transaction === "revenu")
     const incomeAmount = income.map(((tr:TransactionsType)=> tr.montant)) 
@@ -174,8 +178,56 @@ const Dashboard = () => {
                     </CardContent>
                 </Card>
             </section>
+
             <BudgetChart budgets={budgets}/>
-            {/* <TransactionChart transactions={transactions}/> */}
+            
+            <section className="min-h-[200px] break-inside-avoid rounded-lg bg-white px-5 py-6 md:p-8">
+                <div className="flex flex-col gap-5">
+                    <div className="flex items-center justify-between">
+                        <h3 className="text-preset-2 font-bold ">
+                            Transactions Récents
+                        </h3>
+                        <Link
+                            to='/dashboard/transactions'
+                            className="inline-flex items-center gap-3 text-muted-foreground"
+                        >
+                            <span className="text-preset-4">voir détails</span>
+                            <IconCaretRightFilled />
+                        </Link>
+                    </div>
+                    <div>
+                        {transactions.length > 0 ? (
+                            slicedTransactions.map((transaction:TransactionsType) => (
+                                <div
+                                    key={transaction.id_transaction}
+                                    className="py-4 flex justify-between border-b border-input"
+                                >
+                                    <h4 className="">
+                                        {transaction.libelle}
+                                    </h4>
+                                    <div className="flex flex-col text-right">
+                                        <p
+                                            className="text-preset-4 font-bold"
+                                            style={{
+                                                color: transaction.type_transaction === "depense" ? '#dc2626' : '#16a34a',
+                                            }}  
+                                        >
+                                            { transaction.type_transaction === "revenu" ? "+" : "-"}
+                                            {Math.abs(transaction.montant).toFixed(2)}
+                                        </p>
+                                        <p className="text-preset-5 font-normal text-muted-foreground">
+                                            {format(new Date(transaction.date_creation), 'dd MMM yyyy')}
+                                        </p>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <p className="text-preset-4 text-grey-300">No Data Provided</p>
+                        )}
+                    </div>
+                    
+                </div>
+            </section>
         </main>    
     )
 }

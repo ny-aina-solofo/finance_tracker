@@ -31,146 +31,156 @@ const Filter = ({setSorting,columnFilters,setColumnFilters}:FilterProps)=> {
     return (
         <>
             <div className="flex items-center gap-2">
-                <label
-                    htmlFor="primary-sort-select"
-                    className="text-preset-5 font-normal"
-                >
-                    Triez par
-                </label>
-                <Select
-                    name="primary-sort-select"
-                    onValueChange={(value) => {
-                        let desc = false
-                        const currentFilters = columnFilters.filter((f:any) => f.id !== 'type_transaction');
-                        if (value === 'latest') {
-                            setSorting([{ id: 'date_creation', desc: true }]);
-                            setColumnFilters(currentFilters);
-                        } else if (value === 'oldest') {
-                            setSorting([{ id: 'date_creation', desc: false }]);
-                            setColumnFilters(currentFilters);
-                        } else if (value === 'atoz') {
-                            setSorting([{ id: 'libelle', desc: false }]);
-                            setColumnFilters(currentFilters);
-                        } else if (value === 'ztoa') {
-                            setSorting([{ id: 'libelle', desc: true }]);
-                            setColumnFilters(currentFilters);
-                        } else if (value === 'revenu') {
-                            setSorting([]);
-                            // Set a filter for 'type_transaction' to 'revenu'
-                            setColumnFilters([...currentFilters, { id: 'type_transaction', value: 'revenu' }]); 
-                        } else if (value === 'depense') {
-                            setSorting([]);
-                            setColumnFilters([...currentFilters, { id: 'type_transaction', value: 'depense' }]);
-                        } else {
-                            setSorting([])
-                            setColumnFilters(currentFilters)
-                        }
-                    }}
-                >
-                    <SelectTrigger className="w-44">
-                        <SelectValue placeholder="Toutes les transactions" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="all">Toutes les transactions</SelectItem>
-                        <SelectItem value="latest">Plus récent</SelectItem>
-                        <SelectItem value="oldest">Plus ancien</SelectItem>
-                        <SelectItem value="atoz">A à Z</SelectItem>
-                        <SelectItem value="ztoa">Z à A</SelectItem>
-                        <SelectItem value="revenu">Revenu</SelectItem>
-                        <SelectItem value="depense">Depense</SelectItem>
-                    </SelectContent>
-                </Select>
+                <div className="flex w-fit rounded-md shadow-sm border border-input overflow-hidden">
+                    <span className="px-3 flex items-center bg-muted text-sm text-muted-foreground">
+                        Triez par
+                    </span>
+                    <Select
+                        name="primary-sort-select"
+                        onValueChange={(value) => {
+                            let desc = false
+                            const currentFilters = columnFilters.filter((f:any) => f.id !== 'type_transaction');
+                            if (value === 'latest') {
+                                setSorting([{ id: 'date_creation', desc: true }]);
+                                setColumnFilters(currentFilters);
+                            } else if (value === 'oldest') {
+                                setSorting([{ id: 'date_creation', desc: false }]);
+                                setColumnFilters(currentFilters);
+                            } else if (value === 'atoz') {
+                                setSorting([{ id: 'libelle', desc: false }]);
+                                setColumnFilters(currentFilters);
+                            } else if (value === 'ztoa') {
+                                setSorting([{ id: 'libelle', desc: true }]);
+                                setColumnFilters(currentFilters);
+                            } else if (value === 'revenu') {
+                                setSorting([]);
+                                // Set a filter for 'type_transaction' to 'revenu'
+                                setColumnFilters([...currentFilters, { id: 'type_transaction', value: 'revenu' }]); 
+                            } else if (value === 'depense') {
+                                setSorting([]);
+                                setColumnFilters([...currentFilters, { id: 'type_transaction', value: 'depense' }]);
+                            } else {
+                                setSorting([])
+                                setColumnFilters(currentFilters)
+                            }
+                        }}
+                    >
+                        <SelectTrigger className="w-35 border-0 rounded-none focus:ring-0 focus:ring-offset-0 border-0 rounded-none focus:ring-0 focus:ring-offset-0">
+                            <SelectValue placeholder="Toutes les transactions" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="all">Toutes les transactions</SelectItem>
+                            <SelectItem value="latest">Plus récent</SelectItem>
+                            <SelectItem value="oldest">Plus ancien</SelectItem>
+                            <SelectItem value="atoz">A à Z</SelectItem>
+                            <SelectItem value="ztoa">Z à A</SelectItem>
+                            <SelectItem value="revenu">Revenu</SelectItem>
+                            <SelectItem value="depense">Depense</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
             </div>
+
             <div className="flex items-center gap-2">
-                <label
-                    htmlFor="primary-sort-select"
-                    className="text-preset-5 font-normal"
-                >
-                    Filtrez par
-                </label>
-                <Select
-                    name="secondary-sort-select"
-                    onValueChange={(value) => {
-                        if (value === 'all') {
-                            setColumnFilters([])
-                        } else {
-                            setColumnFilters([{ id: 'nom_budget', value }])
-                        }
-                    }}
-                >
-                    <SelectTrigger className="w-44">
-                        <SelectValue placeholder="Toutes les budgets" />
-                    </SelectTrigger>
-                    <SelectContent>    
-                        <SelectItem value="all">Toutes les budgets</SelectItem>
-                        {budgets.map((item:BudgetType) => (
-                            <SelectItem key={item.id_budget} value={item.nom_budget}>
-                                {item.nom_budget}
-                            </SelectItem>    
-                        ))}
+                <div className="flex w-fit rounded-md shadow-sm border border-input overflow-hidden">
+                    <span className="px-3 flex items-center bg-muted text-sm text-muted-foreground">
+                        Filtrez par
+                    </span>
+                    <Select
+                        name="secondary-sort-select"
+                        onValueChange={(value) => {
+                            if (value === 'all') {
+                                setColumnFilters([])
+                            } else {
+                                setColumnFilters([{ id: 'nom_budget', value }])
+                            }
+                        }}
+                    >
+                        <SelectTrigger className="w-35 border-0 rounded-none focus:ring-0 focus:ring-offset-0">
+                            <SelectValue placeholder="Toutes les budgets" />
+                        </SelectTrigger>
+                        <SelectContent>    
+                            <SelectItem value="all">Toutes les budgets</SelectItem>
+                            {budgets.map((item:BudgetType) => (
+                                <SelectItem key={item.id_budget} value={item.nom_budget}>
+                                    {item.nom_budget}
+                                </SelectItem>    
+                            ))}
+                            
+                        </SelectContent>
+                    </Select> 
+                </div>
+                         
+            </div>
+
+            <div className="flex items-center gap-2">
+                <div className="flex w-fit rounded-md shadow-sm border border-input overflow-hidden">
+                    <span className="px-3 flex items-center bg-muted text-sm text-muted-foreground">
+                        Mois
+                    </span>
+                    <Select
+                        onValueChange={(value) => {
+                            if (value === "all") {
+                                setColumnFilters([]);
+                            } else {
+                                setColumnFilters((filters: any) => {
+                                    const existing = filters.find((f: any) => f.id === "date_creation")?.value || {};
+                                    return [
+                                        ...filters.filter((f: any) => f.id !== "date_creation"),
+                                        { id: "date_creation", value: { ...existing, month: value } },
+                                    ];
+                                });
+                            }
+                        }}
+                        name="month-sort-select"
+                    >
+                        <SelectTrigger className="w-35 border-0 rounded-none focus:ring-0 focus:ring-offset-0">
+                            <SelectValue placeholder="Toutes les transactions" />
+                        </SelectTrigger>
+                        <SelectContent>    
+                            <SelectItem value="all">Toutes les transactions</SelectItem>
+                            {months.map((month)=>(
+                                <SelectItem key={month.numero} value={month.numero}>{month.mois}</SelectItem>    
+                            ))}
+                        </SelectContent>
+                    </Select>  
+                </div>
                         
-                    </SelectContent>
-                </Select>          
             </div>        
             <div className="flex items-center gap-2">
-                <label
-                    htmlFor="primary-sort-select"
-                    className="text-preset-5 font-normal"
-                >
-                    Mois :
-                </label>
-                <Select
-                    onValueChange={(value) => {
-                        setColumnFilters((filters: any) => {
-                        const existing = filters.find((f: any) => f.id === "date_creation")?.value || {};
-                        return [
-                            ...filters.filter((f: any) => f.id !== "date_creation"),
-                            { id: "date_creation", value: { ...existing, month: value } },
-                        ];
-                        });
-                    }}
-                    name="month-sort-select"
-                >
-                    <SelectTrigger className="w-44">
-                        <SelectValue placeholder="Toutes les transactions" />
-                    </SelectTrigger>
-                    <SelectContent>    
-                        <SelectItem value="all">Toutes les transactions</SelectItem>
-                        {months.map((month)=>(
-                            <SelectItem key={month.numero} value={month.numero}>{month.mois}</SelectItem>    
-                        ))}
-                    </SelectContent>
-                </Select>          
-            </div>        
-            <div className="flex items-center gap-2">
-                <label
-                    htmlFor="year-sort-select"
-                    className="text-preset-5 font-normal"
-                >
-                    Annee :
-                </label>
-                <Select
-                    onValueChange={(value) => {
-                        setColumnFilters((filters: any) => {
-                        const existing = filters.find((f: any) => f.id === "date_creation")?.value || {};
-                        return [
-                            ...filters.filter((f: any) => f.id !== "date_creation"),
-                            { id: "date_creation", value: { ...existing, year: value } },
-                        ];
-                        });
-                    }}
-                    name="month-sort-select"
-                >
-                    <SelectTrigger className="w-44">
-                        <SelectValue placeholder="Toutes les transactions" />
-                    </SelectTrigger>
-                    <SelectContent>    
-                        <SelectItem value="all">Toutes les transactions</SelectItem>
-                        {years.map((year:any)=>(
-                            <SelectItem key={year} value={String(year)}>{year}</SelectItem>    
-                        ))}
-                    </SelectContent>
-                </Select>          
+                <div className="flex w-fit rounded-md shadow-sm border border-input overflow-hidden">
+                    <span className="px-3 flex items-center bg-muted text-sm text-muted-foreground">
+                        Annee
+                    </span> 
+                    <Select
+                        onValueChange={(value) => {
+                            if (value === "all") {
+                                setColumnFilters([]);
+                            } else {
+                                setColumnFilters((filters: any) => {
+                                    const existing = filters.find((f: any) => f.id === "date_creation")?.value || {};
+                                    return [
+                                        ...filters.filter((f: any) => f.id !== "date_creation"),
+                                        { id: "date_creation", value: { ...existing, year: value } },
+                                    ];
+                                });
+                            }
+
+                        }}
+                        name="month-sort-select"
+                    >
+                        <SelectTrigger className="w-35 border-0 rounded-none focus:ring-0 focus:ring-offset-0">
+                            <SelectValue placeholder="Toutes les transactions" />
+                        </SelectTrigger>
+                        <SelectContent>    
+                            <SelectItem value="all">Toutes les transactions</SelectItem>
+                            {years.map((year:any)=>(
+                                <SelectItem key={year} value={String(year)}>{year}</SelectItem>    
+                            ))}
+                        </SelectContent>
+                    </Select> 
+                </div>
+                         
             </div>        
         </>
     )

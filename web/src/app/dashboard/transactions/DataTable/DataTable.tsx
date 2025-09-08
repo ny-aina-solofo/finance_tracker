@@ -19,6 +19,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from "@/components/ui/accordion"
 import { Input } from "../../../../components/ui/input"
 import PaginationTable from "./PaginationTable";
 import Filter from "./Filter";
@@ -29,6 +35,7 @@ import { IconDownload, IconSearch } from "@tabler/icons-react";
 import { AddTransaction} from "@/components";
 import { TransactionsType } from "@/types";
 import { format } from "date-fns";
+import { TransactionChart } from "../TransactionChart";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -89,7 +96,7 @@ export function DataTable<TData, TValue>({
         }
     }  
     return (
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-8 py-4">
             <div className="flex items-center justify-between">
                 <Input
                     placeholder="Cherchez une transaction"
@@ -104,7 +111,7 @@ export function DataTable<TData, TValue>({
                     <AddTransaction/>   
                 </div>
             </div>
-            <div className="rounded-xl bg-white px-5 py-2 md:p-8 lg:py-6">
+            <div className="rounded-xl bg-white px-7 py-2 lg:py-6">
                 <div className="flex items-center mb-6">    
                     <div className="hidden gap-2 lg:flex lg:gap-5">
                         <Filter
@@ -156,9 +163,18 @@ export function DataTable<TData, TValue>({
                         )}
                     </TableBody>
                 </Table>    
-                
                 <PaginationTable table={table} />
-            </div>    
+            </div>  
+            <Accordion type="single" collapsible>
+                <AccordionItem value="item-1" >
+                    <AccordionTrigger className="bg-stone-200 text-primary shadow-xs hover:bg-stone-300 cursor-pointer mb-5">
+                        <span className="ms-5 ">Voir la représentation graphique</span>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                        <TransactionChart transactions={data}/>
+                    </AccordionContent>
+                </AccordionItem>
+            </Accordion>            
         </div>
     )
 }

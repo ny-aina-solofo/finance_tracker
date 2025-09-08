@@ -69,12 +69,12 @@ export const columns: ColumnDef<TransactionsType>[] = [
             const date_creation = new Date(row.original.date_creation);
             const month = String(date_creation.getMonth() + 1).padStart(2, "0");
             const year = String(date_creation.getFullYear());
-          
+            
             if (filterValue.month !== "all") {
                 return month === filterValue.month;
             }
           
-            if (filterValue.year !== "all") {
+            if (filterValue.year !== "all") {                
                 return year === filterValue.year;
             }
           
@@ -126,7 +126,7 @@ export const columns: ColumnDef<TransactionsType>[] = [
                     <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
                         <PopoverTrigger asChild>
                             <Button variant="ghost" className="h-8 w-8 p-0">
-                                <IconDots/>
+                                <IconDots className='h-5 w-5 size-8'/>
                             </Button>
                         </PopoverTrigger>
                         <PopoverContent asChild>
