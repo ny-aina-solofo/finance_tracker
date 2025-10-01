@@ -46,7 +46,7 @@ export function NavUser() {
                             className="flex items-center justify-between w-full gap-4 cursor-pointer p-2
                             rounded-md hover:bg-[var(--color-bg-hover)] hover:text-primary 
                             group-data-[collapsible=icon]:p-0!
-                            data-[state=open]:bg-[var(--color-bg-hover)] data-[state=open]:text-primary 
+                            data-[state=open]:bg-primary data-[state=open]:text-white 
                             "
                         >
                             <Avatar className="h-8 w-8 rounded-lg">

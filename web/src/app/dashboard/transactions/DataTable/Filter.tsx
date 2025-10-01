@@ -33,7 +33,7 @@ const Filter = ({setSorting,columnFilters,setColumnFilters}:FilterProps)=> {
             <div className="flex items-center gap-2">
                 <div className="flex w-fit rounded-md shadow-sm border border-input overflow-hidden">
                     <span className="px-3 flex items-center bg-muted text-sm text-muted-foreground">
-                        Triez par
+                        Triez
                     </span>
                     <Select
                         name="primary-sort-select"
@@ -60,16 +60,15 @@ const Filter = ({setSorting,columnFilters,setColumnFilters}:FilterProps)=> {
                                 setSorting([]);
                                 setColumnFilters([...currentFilters, { id: 'type_transaction', value: 'depense' }]);
                             } else {
-                                setSorting([])
+                                setSorting([{ id: 'date_creation', desc: true }]);
                                 setColumnFilters(currentFilters)
                             }
                         }}
                     >
                         <SelectTrigger className="w-35 border-0 rounded-none focus:ring-0 focus:ring-offset-0 border-0 rounded-none focus:ring-0 focus:ring-offset-0">
-                            <SelectValue placeholder="Toutes les transactions" />
+                            <SelectValue placeholder="Plus récent" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="all">Toutes les transactions</SelectItem>
                             <SelectItem value="latest">Plus récent</SelectItem>
                             <SelectItem value="oldest">Plus ancien</SelectItem>
                             <SelectItem value="atoz">A à Z</SelectItem>
@@ -84,7 +83,7 @@ const Filter = ({setSorting,columnFilters,setColumnFilters}:FilterProps)=> {
             <div className="flex items-center gap-2">
                 <div className="flex w-fit rounded-md shadow-sm border border-input overflow-hidden">
                     <span className="px-3 flex items-center bg-muted text-sm text-muted-foreground">
-                        Filtrez par
+                        Filtrez
                     </span>
                     <Select
                         name="secondary-sort-select"
@@ -120,17 +119,13 @@ const Filter = ({setSorting,columnFilters,setColumnFilters}:FilterProps)=> {
                     </span>
                     <Select
                         onValueChange={(value) => {
-                            if (value === "all") {
-                                setColumnFilters([]);
-                            } else {
-                                setColumnFilters((filters: any) => {
-                                    const existing = filters.find((f: any) => f.id === "date_creation")?.value || {};
-                                    return [
-                                        ...filters.filter((f: any) => f.id !== "date_creation"),
-                                        { id: "date_creation", value: { ...existing, month: value } },
-                                    ];
-                                });
-                            }
+                            setColumnFilters((filters: any) => {
+                                const existing = filters.find((f: any) => f.id === "date_creation")?.value || {};
+                                return [
+                                    ...filters.filter((f: any) => f.id !== "date_creation"),
+                                    { id: "date_creation", value: { ...existing, month: value } },
+                                ];
+                            });
                         }}
                         name="month-sort-select"
                     >
@@ -154,17 +149,13 @@ const Filter = ({setSorting,columnFilters,setColumnFilters}:FilterProps)=> {
                     </span> 
                     <Select
                         onValueChange={(value) => {
-                            if (value === "all") {
-                                setColumnFilters([]);
-                            } else {
-                                setColumnFilters((filters: any) => {
-                                    const existing = filters.find((f: any) => f.id === "date_creation")?.value || {};
-                                    return [
-                                        ...filters.filter((f: any) => f.id !== "date_creation"),
-                                        { id: "date_creation", value: { ...existing, year: value } },
-                                    ];
-                                });
-                            }
+                            setColumnFilters((filters: any) => {
+                                const existing = filters.find((f: any) => f.id === "date_creation")?.value || {};
+                                return [
+                                    ...filters.filter((f: any) => f.id !== "date_creation"),
+                                    { id: "date_creation", value: { ...existing, year: value } },
+                                ];
+                            });
 
                         }}
                         name="month-sort-select"

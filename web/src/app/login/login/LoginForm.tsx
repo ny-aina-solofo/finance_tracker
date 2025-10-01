@@ -128,11 +128,11 @@ const LoginForm = () => {
                 <CardFooter className="flex-col gap-2">        
                     <div
                         className="text-center text-sm text-preset-4 inline-flex 
-                        items-center gap-2 truncate text-center font-normal text-grey-500"
+                        items-center gap-2 truncate font-normal"
                     >
                         vous n'avez pas de compte?{' '}
                         <span 
-                            className="cursor-pointer font-bold text-grey-900 underline"
+                            className="cursor-pointer font-bold underline"
                             onClick={()=>navigate('/signup')}
                         >
                             S'inscrire

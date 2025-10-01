@@ -36,6 +36,8 @@ import { AddTransaction} from "@/components";
 import { TransactionsType } from "@/types";
 import { format } from "date-fns";
 import { TransactionChart } from "../TransactionChart";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -53,7 +55,6 @@ export function DataTable<TData, TValue>({
         pageSize: 10, // initial page size
     });
 
-    
     const table = useReactTable({
         data,
         columns,
@@ -95,32 +96,14 @@ export function DataTable<TData, TValue>({
             toast.error('Le téléchargement a échoué : '+error);
         }
     }  
-    return (
-        <div className="flex flex-col gap-8 py-4">
-            <div className="flex items-center justify-between">
-                <Input
-                    placeholder="Cherchez une transaction"
-                    value={(table.getColumn('libelle')?.getFilterValue() as string) ?? ''}
-                    onChange={(event) =>
-                        table.getColumn('libelle')?.setFilterValue(event.target.value)
-                    }
-                    className="max-w-sm h-10 bg-white"
-                />
-                <div className="flex gap-4">
-                    <Button size="lg" variant="secondary" onClick={exportToExcel}><IconDownload/> Exporter</Button>    
-                    <AddTransaction/>   
-                </div>
-            </div>
-            <div className="rounded-xl bg-white px-7 py-2 lg:py-6">
-                <div className="flex items-center mb-6">    
-                    <div className="hidden gap-2 lg:flex lg:gap-5">
-                        <Filter
-                            setSorting={setSorting}
-                            columnFilters={columnFilters}
-                            setColumnFilters={setColumnFilters}
-                        />
-                    </div>   
-                </div>
+    const { status, error } = useSelector((state: RootState) => state.transactions);
+    let content;
+
+    if (status === 'loading') {
+        content = <p>Loading Transactions...</p>;
+    } else if (status === 'received') {
+        if (Array.isArray(data) && data.length > 0) {
+            content = (
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
@@ -157,15 +140,55 @@ export function DataTable<TData, TValue>({
                         ) : (
                             <TableRow>
                                 <TableCell colSpan={columns.length} className="h-24 text-center">
-                                    No results.
+                                    Pas de résultats
                                 </TableCell>
                             </TableRow>
                         )}
                     </TableBody>
-                </Table>    
+                </Table> 
+            );
+        } else {
+            content = (
+                <p className="text-start text-sm text-muted-foreground">
+                    Aucune Transactions à afficher. 
+                    Cliquez sur <strong>+ Ajouter</strong> pour en ajouter une.
+                </p>
+            );
+        }
+    } else if (status === 'rejected') {
+        content = <p>Error: {error}</p>;
+    }
+
+    return (
+        <div className="flex flex-col gap-8">
+            <div className="flex items-center justify-between">
+                <Input
+                    placeholder="Cherchez une transaction"
+                    value={(table.getColumn('libelle')?.getFilterValue() as string) ?? ''}
+                    onChange={(event) =>
+                        table.getColumn('libelle')?.setFilterValue(event.target.value)
+                    }
+                    className="max-w-sm h-10 bg-white"
+                />
+                <div className="flex gap-4">
+                    <Button size="lg" variant="secondary" onClick={exportToExcel}><IconDownload/> Exporter</Button>    
+                    <AddTransaction/>   
+                </div>
+            </div>
+            <div className="rounded-xl bg-white px-7 py-2 lg:py-6">
+                <div className="flex items-center mb-6">    
+                    <div className="hidden gap-2 lg:flex lg:gap-5">
+                        <Filter
+                            setSorting={setSorting}
+                            columnFilters={columnFilters}
+                            setColumnFilters={setColumnFilters}
+                        />
+                    </div>   
+                </div>
+                {content}
                 <PaginationTable table={table} />
             </div>  
-            <Accordion type="single" collapsible>
+            {/* <Accordion type="single" collapsible>
                 <AccordionItem value="item-1" >
                     <AccordionTrigger className="bg-stone-200 text-primary shadow-xs hover:bg-stone-300 cursor-pointer mb-5">
                         <span className="ms-5 ">Voir la représentation graphique</span>
@@ -174,7 +197,7 @@ export function DataTable<TData, TValue>({
                         <TransactionChart transactions={data}/>
                     </AccordionContent>
                 </AccordionItem>
-            </Accordion>            
+            </Accordion>             */}
         </div>
     )
 }

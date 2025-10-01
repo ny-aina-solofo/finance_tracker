@@ -34,7 +34,8 @@ const addBudget = async (req,res,next) =>{
         
         await Budget.create({
             nom_budget:nom_budget,montant_initial:montant, 
-            date_creation:date_creation,montant_actuel:montant,themes:themes
+            date_creation:date_creation,montant_actuel:montant,themes:themes,
+            id_utilisateur:id_user.toString()
         });
         res.status(200).send({success:true});    
     } catch (error) {

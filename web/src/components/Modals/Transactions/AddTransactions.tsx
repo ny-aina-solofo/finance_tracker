@@ -39,6 +39,7 @@ import { format, formatISO } from 'date-fns'
 import { addTransaction } from "@/redux/transactionsSlice";
 import { BudgetType } from "@/types";
 import transactionService from "@/services/transactions/transaction.service";
+import { updateMontantActuel } from "@/redux/budgetSlice";
 
 const AddTransaction = ()=> {
     const dispatch = useDispatch();
@@ -90,9 +91,26 @@ const AddTransaction = ()=> {
             // console.log(libelle,montant_to_int,formattedDate,nom_budget,id_budget,typeTransactions);
             const selectedBudget = budgets.find((budget:BudgetType) => budget.id_budget === parseInt(budgetId));
             const nom_budget = selectedBudget ? selectedBudget.nom_budget : 'Inconnu';
+            
+            const oldAmount = selectedBudget.montant_actuel;
+            
+            if (typeTransactions === "depense") {
+                const newAmount = oldAmount - montant_to_int;
+                dispatch(updateMontantActuel({
+                    id_budget: parseInt(budgetId),
+                    montant_actuel: newAmount
+                }));
+            } else {
+                const newAmount = oldAmount + montant_to_int;
+                dispatch(updateMontantActuel({
+                    id_budget: parseInt(budgetId),
+                    montant_actuel: newAmount
+                }));
+            }
             dispatch(addTransaction({
                 libelle: libelle, montant: montant_to_int, date_creation: formattedDate,
-                nom_budget: nom_budget,type_transaction:typeTransactions
+                nom_budget: nom_budget,type_transaction:typeTransactions,
+                id_budget:parseInt(budgetId)
             }));
             transactionService.addTransaction(libelle,montant_to_int,formattedDate,parseInt(budgetId),typeTransactions).then(()=>{})    
 
@@ -170,7 +188,7 @@ const AddTransaction = ()=> {
                                 value={budgetId} 
                                 onValueChange={setBudgetId}
                             >
-                                <SelectTrigger className="w-full">
+                                <SelectTrigger className="w-full text-muted-foreground">
                                     <SelectValue placeholder="sélectionnez le budget correspondant" />
                                 </SelectTrigger>
                                 <SelectContent >
@@ -192,7 +210,7 @@ const AddTransaction = ()=> {
                             <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                                 <PopoverTrigger asChild>
                                     <Button
-                                        variant={'secondary'}
+                                        variant={'outline'}
                                         className={cn(
                                             'w-full pl-3 text-left font-normal',
                                             !date ? 'text-muted-foreground' : ''
@@ -219,22 +237,22 @@ const AddTransaction = ()=> {
                             </Popover>
                         </div>
                         <div className="grid gap-3 mb-3">
-                            <Label htmlFor="type">Type transaction</Label>
-                            <RadioGroup 
-                                value={typeTransactions}
+                            <Label htmlFor="type">Type de transaction</Label>
+                            <Select 
+                                value={typeTransactions} 
                                 onValueChange={setTypeTransactions}
-                                defaultValue="depense"
-                                className="flex flex-row"
                             >
-                                <div className="flex items-center gap-3">
-                                    <RadioGroupItem value="depense" id="r1" />
-                                    <Label htmlFor="r1">dépense</Label>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                    <RadioGroupItem value="revenu" id="r2" />
-                                    <Label htmlFor="r2">revenu</Label>
-                                </div>
-                            </RadioGroup>
+                                <SelectTrigger className="w-full text-muted-foreground">
+                                    <SelectValue placeholder="sélectionnez le type de transaction" />
+                                </SelectTrigger>
+                                <SelectContent >
+                                    <SelectGroup>
+                                        <SelectItem value="depense">dépense</SelectItem>
+                                        <SelectItem value="revenu">revenu</SelectItem>
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                            
                         </div>
                     </div>
                     <footer className="mt-4">

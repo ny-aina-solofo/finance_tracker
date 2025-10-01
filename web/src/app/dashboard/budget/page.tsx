@@ -32,7 +32,7 @@ const BudgetPage =()=>{
             );
         } else {
             content =  (
-                <p className="text-start text-grey-300">
+                <p className="text-start text-sm text-muted-foreground">
                     Aucun budget à afficher. 
                     Cliquez sur <strong>+ Ajouter</strong> pour en ajouter une.
                 </p>

@@ -24,7 +24,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { IconChevronLeft, IconChevronsLeft, IconChevronsRight } from "@tabler/icons-react"
+import { IconChevronLeft, IconChevronsLeft, IconChevronsRight, IconMenu, IconMenu2, IconMenu3, IconX } from "@tabler/icons-react"
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
@@ -259,7 +259,7 @@ function SidebarTrigger({
   onClick,
   ...props
 }: React.ComponentProps<typeof Button>) {
-  const { toggleSidebar,open } = useSidebar()
+  const { toggleSidebar,open,isMobile } = useSidebar()
 
   return (
     <Button
@@ -273,7 +273,11 @@ function SidebarTrigger({
       }}
       {...props}
     >
-      {open === true ? (<IconChevronsLeft/>):(<IconChevronsRight/>)}
+      {/* Desktop */}
+      {!isMobile && (open ? <IconChevronsLeft /> : <IconChevronsRight />)}
+
+      {/* Mobile */}
+      {isMobile && (open ? <IconMenu2 /> : <></>)}
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   )

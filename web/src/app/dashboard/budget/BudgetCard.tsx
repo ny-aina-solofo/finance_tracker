@@ -31,8 +31,14 @@ const BudgetCard =({budgets}:BudgetProps) => {
     const tolalExpenses = expenseAmount.reduce(
         (accumulator:number, currentValue:number) => accumulator + currentValue,0
     )
+    const tolalIncome = incomeAmount.reduce(
+        (accumulator:number, currentValue:number) => accumulator + currentValue,0
+    )
     const percentage = (tolalExpenses / budgets.montant_initial)*100;
-    
+    const netExpenses = tolalExpenses - tolalIncome;
+    const percentageNet = (netExpenses / budgets.montant_initial) * 100;
+
+
     return (
         <div className="flex flex-col gap-8 rounded-[12px] bg-white px-5 py-6">
             <header className="flex items-center justify-between">
@@ -45,7 +51,7 @@ const BudgetCard =({budgets}:BudgetProps) => {
                 </div>
                 <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
                     <PopoverTrigger>
-                        <IconDots className='h-6 w-6 size-8 cursor-pointer'/>
+                        <IconDots className='h-5 w-5 size-8 cursor-pointer'/>
                     </PopoverTrigger>
                     <PopoverContent asChild>
                         <div className="flex flex-col w-full gap-4">
@@ -66,19 +72,19 @@ const BudgetCard =({budgets}:BudgetProps) => {
                     <h4 className="text-preset-4 text-muted-foreground">Montant Actuelle</h4>
                     <p className="text-preset-1">{budgets.montant_actuel}</p>
                 </div>
-                <div className="flex flex-col gap-3">
+                {/* <div className="flex flex-col gap-2">
                     <Progress
                         className="h-2 mt-3"
-                        value={percentage}
+                        value={percentageNet}
                         themes={`${budgets.themes}`}
                     />
                     <div className="flex justify-between">
                         <p className="text-preset-5 text-muted-foreground">
-                            {percentage.toFixed(2)}%
+                            {percentageNet.toFixed(2)}%
                         </p>
                         <p className="text-preset-5 text-muted-foreground">{`${tolalExpenses} sur ${budgets.montant_initial}`}</p>
                     </div>
-                </div>
+                </div> */}
             </section>
         </div>
     )

@@ -31,22 +31,22 @@ const addTransaction = async (req,res,next) =>{
         const oldAmount = budget.montant_actuel;
         
         if (type_transaction === 'depense') {
-            await Depense.create({id_depense:44,libelle:libelle,montant:montant, date_creation:date_creation, 
-                id_budget:id_budget
-            });
-            // await Depense.create({libelle:libelle,montant:montant, date_creation:date_creation, 
+            // await Depense.create({id_depense:44,libelle:libelle,montant:montant, date_creation:date_creation, 
             //     id_budget:id_budget
             // });
+            await Depense.create({libelle:libelle,montant:montant, date_creation:date_creation, 
+                id_budget:id_budget
+            });
             const newAmount = oldAmount - montant;
             await Budget.update({ montant_actuel: newAmount},{ where: { id_budget: id_budget }});
             res.status(200).send({success:true});
         } else {
-            await Revenu.create({id_revenu:44,libelle:libelle,montant:montant, date_creation:date_creation, 
-                id_budget:id_budget
-            });
-            // await Revenu.create({libelle:libelle,montant:montant, date_creation:date_creation, 
+            // await Revenu.create({id_revenu:44,libelle:libelle,montant:montant, date_creation:date_creation, 
             //     id_budget:id_budget
             // });
+            await Revenu.create({libelle:libelle,montant:montant, date_creation:date_creation, 
+                id_budget:id_budget
+            });
             const newAmount = oldAmount + montant
             await Budget.update({ montant_actuel: newAmount},{ where: { id_budget: id_budget }});
             res.status(200).send({success:true});

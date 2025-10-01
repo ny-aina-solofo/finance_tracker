@@ -19,17 +19,19 @@ import { RootState } from "@/redux/store";
 import { TransactionsType } from "@/types";
 import { BudgetChart } from "./BudgetChart";
 import { format } from "date-fns";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { IconCaretRightFilled } from "@tabler/icons-react";
 
 const chartConfig = {
     depense: {
         label: "Depense",
-        color: "#dc2626",
+        color: "#0a0a0a",
+        // color: "#dc2626",
     },
     revenu: {
         label: "Revenu",
-        color: "#16a34a",
+        color: "#0a0a0a",
+        // color: "#16a34a",
     },
 } satisfies ChartConfig
 
@@ -107,6 +109,7 @@ const Dashboard = () => {
             expensePct,
         };
     });
+    const navigate = useNavigate();
 
     return (
         <main className="flex flex-col gap-8">
@@ -119,7 +122,7 @@ const Dashboard = () => {
                         <div className="text-4xl">{tolalExpenses}</div>
                         <p className="text-sm mt-2 text-muted-foreground">
                             {monthlyWithDiff[monthlyWithDiff.length - 1]?.expensePct > 0 ? "+" : ""}
-                            {monthlyWithDiff[monthlyWithDiff.length - 1]?.expensePct.toFixed(2)}% 
+                            {monthlyWithDiff[monthlyWithDiff.length - 1]?.expensePct.toFixed(2) || 0}% 
                             par rapport au mois dernier
                         </p>
                         <ChartContainer config={chartConfig} className="h-[80px] w-full mt-8">
@@ -137,7 +140,7 @@ const Dashboard = () => {
                                     strokeWidth={2}
                                     dataKey="expense"
                                     stroke="var(--color-depense)"
-                                    dot={{fill: "var(--color-depense)",}}
+                                    // dot={{fill: "var(--color-depense)",}}
                                     activeDot={{r: 6,}}
                                 />
                             </LineChart>
@@ -152,7 +155,7 @@ const Dashboard = () => {
                         <div className="text-4xl">{tolalIncome}</div>
                         <p className="text-sm mt-2 text-muted-foreground">
                             {monthlyWithDiff[monthlyWithDiff.length - 1]?.incomePct > 0 ? "+" : ""}
-                            {monthlyWithDiff[monthlyWithDiff.length - 1]?.incomePct.toFixed(2)}% 
+                            {monthlyWithDiff[monthlyWithDiff.length - 1]?.incomePct.toFixed(2) || 0}% 
                             par rapport au mois dernier 
                         </p>
                         <ChartContainer config={chartConfig} className="h-[80px] w-full mt-8">
@@ -170,7 +173,7 @@ const Dashboard = () => {
                                 strokeWidth={2}
                                 dataKey="income"
                                 stroke="var(--color-revenu)"
-                                dot={{fill: "var(--color-revenu)",}}
+                                // dot={{fill: "var(--color-revenu)",}}
                                 activeDot={{r: 6,}}
                             />
                             </LineChart>
@@ -179,7 +182,7 @@ const Dashboard = () => {
                 </Card>
             </section>
 
-            <BudgetChart budgets={budgets}/>
+            {/* <BudgetChart budgets={budgets}/> */}
             
             <section className="min-h-[200px] break-inside-avoid rounded-lg bg-white px-5 py-6 md:p-8">
                 <div className="flex flex-col gap-5">
@@ -199,7 +202,7 @@ const Dashboard = () => {
                         {transactions.length > 0 ? (
                             slicedTransactions.map((transaction:TransactionsType) => (
                                 <div
-                                    key={transaction.id_transaction}
+                                    key={transaction.libelle}
                                     className="py-4 flex justify-between border-b border-input"
                                 >
                                     <h4 className="">
@@ -222,7 +225,16 @@ const Dashboard = () => {
                                 </div>
                             ))
                         ) : (
-                            <p className="text-preset-4 text-grey-300">No Data Provided</p>
+                            <p className="text-start inline-flex items-center gap-1 truncate font-normal text-sm text-muted-foreground">
+                                Aucune Transactions à afficher. 
+                                <span 
+                                    className="cursor-pointer font-bold text-grey-900 underline"
+                                    onClick={()=>navigate('/dashboard/transactions')}
+                                >
+                                    Cliquez ici    
+                                </span> 
+                                pour en ajouter une.
+                            </p>
                         )}
                     </div>
                     

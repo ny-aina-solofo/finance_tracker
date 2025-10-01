@@ -12,6 +12,9 @@ import {
 import { useDispatch,useSelector } from "react-redux"
 import { deleteTransaction } from "@/redux/transactionsSlice";
 import transactionService from "@/services/transactions/transaction.service";
+import { RootState } from "@/redux/store";
+import { BudgetType } from "@/types";
+import { updateMontantActuel } from "@/redux/budgetSlice";
 
 interface TransactionProps {
     selectedTransactions:any;
@@ -19,13 +22,30 @@ interface TransactionProps {
 }
 const DeleteTransactions = ({selectedTransactions,setIsPopoverOpen}:TransactionProps)=> {
     const dispatch = useDispatch();
-
+    const budgets = useSelector((state: RootState) => state.budgets.budgets);    
+        
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const libelle = selectedTransactions.libelle;
     const id_transaction = selectedTransactions.id_transaction;
     const type_transaction = selectedTransactions.type_transaction;
+    
     const handleDelete = ()=>{
-        console.log(libelle);
+        const selectedBudget = budgets.find((budget:BudgetType) => budget.nom_budget === selectedTransactions.nom_budget);
+        const oldAmount = selectedBudget.montant_actuel;
+        
+        if (type_transaction === "depense") {
+            const newAmount = oldAmount + selectedTransactions.montant;
+            dispatch(updateMontantActuel({
+                id_budget: selectedBudget.id_budget,
+                montant_actuel: newAmount
+            }));
+        } else {
+            const newAmount = oldAmount - selectedTransactions.montant;
+            dispatch(updateMontantActuel({
+                id_budget: selectedBudget.id_budget,
+                montant_actuel: newAmount
+            }));
+        }
+        
         dispatch(deleteTransaction({id_transaction,type_transaction}));
         transactionService.deleteTransaction(id_transaction,type_transaction).then(()=>{})
         setIsModalOpen(false);

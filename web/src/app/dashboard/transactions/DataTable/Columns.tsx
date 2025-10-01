@@ -19,7 +19,7 @@ export const columns: ColumnDef<TransactionsType>[] = [
     {
         accessorKey: "libelle",
         header: () => (
-            <h6 className="text-preset-5 font-normal text-muted-foreground">
+            <h6 className="text-preset-5 ml-2 font-normal text-muted-foreground">
                 Motif
             </h6>
         ),
@@ -27,7 +27,7 @@ export const columns: ColumnDef<TransactionsType>[] = [
             const libelle = row.getValue("libelle") as string;     
             return (
               <div className="flex items-center">
-                <p className="text-preset-4 ml-2 font-bold capitalize text-grey-900">
+                <p className="text-preset-4 ml-2 font-bold capitalize">
                   {libelle}
                 </p>
               </div>
@@ -70,14 +70,14 @@ export const columns: ColumnDef<TransactionsType>[] = [
             const month = String(date_creation.getMonth() + 1).padStart(2, "0");
             const year = String(date_creation.getFullYear());
             
-            if (filterValue.month !== "all") {
-                return month === filterValue.month;
+            if (filterValue.year && filterValue.year !== "all" && year !== filterValue.year) {
+                return false;
             }
-          
-            if (filterValue.year !== "all") {                
-                return year === filterValue.year;
+
+            if (filterValue.month && filterValue.month !== "all" && month !== filterValue.month) {
+                return false;
             }
-          
+            
             return true;
         },
           

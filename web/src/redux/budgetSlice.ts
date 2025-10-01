@@ -50,13 +50,26 @@ const budgetSlice = createSlice({
             const newBudget = {
                 id_budget: newID,
                 nom_budget: nom_budget,
-                montant: montant,
+                montant_actuel: montant,
                 date_creation: date_creation,
-                theme:theme
+                themes: theme,
+                montant_initial: montant,
+                date_modification: new Date().toISOString()
             };
             // Ajoutez à la fois aux budgets originaux et filtrés
-            state.budgets.push(newBudget);
-            state.filteredBudgets.push(newBudget);
+            // state.budgets.push(newBudget);
+            // state.filteredBudgets.push(newBudget);
+
+            state.budgets = [newBudget, ...state.budgets].sort((a, b) => {
+                const dateA = a.date_modification ? new Date(a.date_modification).getTime() : 0;
+                const dateB = b.date_modification ? new Date(b.date_modification).getTime() : 0;
+                return dateB - dateA;
+            });
+            state.filteredBudgets = [newBudget, ...state.filteredBudgets].sort((a, b) => {
+                const dateA = a.date_modification ? new Date(a.date_modification).getTime() : 0;
+                const dateB = b.date_modification ? new Date(b.date_modification).getTime() : 0;
+                return dateB - dateA;
+            });
         },
         deleteBudget: (state, action: PayloadAction<number>) => {
             const id_budget = action.payload;
@@ -73,14 +86,14 @@ const budgetSlice = createSlice({
             if (budgetToEdit) {
                 budgetToEdit.nom_budget = nom_budget;
                 budgetToEdit.date_creation = date_creation;
-                budgetToEdit.theme = theme;
+                budgetToEdit.themes = theme;
             }
             // Mettez à jour le tableau filtré également
             const filteredBudgetToEdit = state.filteredBudgets.find((budget: BudgetType) => budget.id_budget === id_budget);
             if (filteredBudgetToEdit) {
                 filteredBudgetToEdit.nom_budget = nom_budget;
                 filteredBudgetToEdit.date_creation = date_creation;
-                filteredBudgetToEdit.theme = theme;
+                filteredBudgetToEdit.themes = theme;
             }
         },
         searchBudget: (state, action: PayloadAction<string>) => {
@@ -90,6 +103,17 @@ const budgetSlice = createSlice({
                 budget.nom_budget.toLowerCase().includes(searchTerm)
             );
         },
+        updateMontantActuel: (state, action: PayloadAction<{id_budget:number, montant_actuel:number}>) => {
+            const {id_budget,montant_actuel} = action.payload;
+            const budgetToEdit = state.budgets.find((budget: BudgetType) => budget.id_budget === id_budget);
+            if (budgetToEdit) {
+                budgetToEdit.montant_actuel = montant_actuel;
+            }
+            const filteredBudgetToEdit = state.filteredBudgets.find((budget: BudgetType) => budget.id_budget === id_budget);
+            if (filteredBudgetToEdit) {
+                filteredBudgetToEdit.montant_actuel = montant_actuel;
+            }
+        }, 
     }
 });
 
@@ -97,7 +121,8 @@ export const {
     addBudget,
     editBudget,
     deleteBudget,
-    searchBudget
+    searchBudget,
+    updateMontantActuel,
 } = budgetSlice.actions;
 
 export default budgetSlice.reducer;
