@@ -10,7 +10,10 @@ const getBudget = async (req,res,next) => {
     try {
         const id_user = req.id_user;
         
-        const result = await Budget.findAll({where: { id_utilisateur: id_user.toString() }});
+        const result = await Budget.findAll({
+            where: { id_utilisateur: id_user.toString() },
+            order: [['date_creation', 'DESC']]
+        });
         if (result.length > 0) {
             res.status(200).send(result);
         } else {

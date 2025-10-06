@@ -33,7 +33,7 @@ const Filter = ({setSorting,columnFilters,setColumnFilters}:FilterProps)=> {
             <div className="flex items-center gap-2">
                 <div className="flex w-fit rounded-md shadow-sm border border-input overflow-hidden">
                     <span className="px-3 flex items-center bg-muted text-sm text-muted-foreground">
-                        Triez
+                        Tri
                     </span>
                     <Select
                         name="primary-sort-select"
@@ -83,7 +83,7 @@ const Filter = ({setSorting,columnFilters,setColumnFilters}:FilterProps)=> {
             <div className="flex items-center gap-2">
                 <div className="flex w-fit rounded-md shadow-sm border border-input overflow-hidden">
                     <span className="px-3 flex items-center bg-muted text-sm text-muted-foreground">
-                        Filtrez
+                        Bugdet  
                     </span>
                     <Select
                         name="secondary-sort-select"

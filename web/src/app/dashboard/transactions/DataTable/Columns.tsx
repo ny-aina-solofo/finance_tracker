@@ -9,7 +9,7 @@ import {
     Popover,
     PopoverContent,
     PopoverTrigger,
-  } from '@/components/ui/popover'
+} from '@/components/ui/popover'
 import { Button } from "@/components/ui/button"
 import EditTransaction from "../../../../components/Modals/Transactions/EditTransactions";
 import DeleteTransactions from "../../../../components/Modals/Transactions/DeleteTransactions";
@@ -50,7 +50,7 @@ export const columns: ColumnDef<TransactionsType>[] = [
         accessorKey: "date_creation",
         header: () => (
             <h6 className="text-preset-5 font-normal text-muted-foreground">
-              Transaction Date
+              Date
             </h6>
         ),
         cell: ({ row }) => {
@@ -125,8 +125,8 @@ export const columns: ColumnDef<TransactionsType>[] = [
                 <div className="text-right">
                     <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
                         <PopoverTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                                <IconDots className='h-5 w-5 size-8'/>
+                            <Button variant="ghost">
+                                <IconDots className='size-5'/>
                             </Button>
                         </PopoverTrigger>
                         <PopoverContent asChild>

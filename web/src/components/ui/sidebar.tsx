@@ -25,34 +25,36 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { IconChevronLeft, IconChevronsLeft, IconChevronsRight, IconMenu, IconMenu2, IconMenu3, IconX } from "@tabler/icons-react"
+import { appName } from "../Sidebar/AppSidebar"
+import { SidebarContextProps, useSidebar,SidebarContext } from "@/hooks/use-sidebar"
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
 const SIDEBAR_WIDTH = "16rem"
-const SIDEBAR_WIDTH_MOBILE = "18rem"
-const SIDEBAR_WIDTH_ICON = "3rem"
+const SIDEBAR_WIDTH_MOBILE = "16rem"
+const SIDEBAR_WIDTH_ICON = "4rem"
 const SIDEBAR_KEYBOARD_SHORTCUT = "b"
 
-type SidebarContextProps = {
-  state: "expanded" | "collapsed"
-  open: boolean
-  setOpen: (open: boolean) => void
-  openMobile: boolean
-  setOpenMobile: (open: boolean) => void
-  isMobile: boolean
-  toggleSidebar: () => void
-}
+// type SidebarContextProps = {
+//   state: "expanded" | "collapsed"
+//   open: boolean
+//   setOpen: (open: boolean) => void
+//   openMobile: boolean
+//   setOpenMobile: (open: boolean) => void
+//   isMobile: boolean
+//   toggleSidebar: () => void
+// }
 
-const SidebarContext = React.createContext<SidebarContextProps | null>(null)
+// const SidebarContext = React.createContext<SidebarContextProps | null>(null)
 
-function useSidebar() {
-  const context = React.useContext(SidebarContext)
-  if (!context) {
-    throw new Error("useSidebar must be used within a SidebarProvider.")
-  }
+// function useSidebar() {
+//   const context = React.useContext(SidebarContext)
+//   if (!context) {
+//     throw new Error("useSidebar must be used within a SidebarProvider.")
+//   }
 
-  return context
-}
+//   return context
+// }
 
 function SidebarProvider({
   defaultOpen = true,
@@ -180,7 +182,6 @@ function Sidebar({
       </div>
     )
   }
-
   if (isMobile) {
     return (
       <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
@@ -188,7 +189,7 @@ function Sidebar({
           data-sidebar="sidebar"
           data-slot="sidebar"
           data-mobile="true"
-          className="bg-sidebar text-sidebar-foreground w-(--sidebar-width) p-0 [&>button]:hidden"
+          className="bg-sidebar border-none text-sidebar-foreground w-(--sidebar-width) p-0 [&>button]:hidden"
           style={
             {
               "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
@@ -196,16 +197,31 @@ function Sidebar({
           }
           side={side}
         >
-          <SheetHeader className="sr-only">
-            <SheetTitle>Sidebar</SheetTitle>
-            <SheetDescription>Displays the mobile sidebar.</SheetDescription>
+          <SheetHeader className="p-0">
+            <div className="flex items-center justify-between px-4 py-3">
+              <SheetTitle className="text-white text-base font-semibold">
+                {appName.toUpperCase()}
+              </SheetTitle>
+              <button
+                type="button"
+                className="cursor-pointer"
+                onClick={() => setOpenMobile(false)}
+
+              >
+                <IconX className="size-5" />
+              </button>
+            </div>
+            <SheetDescription></SheetDescription>
           </SheetHeader>
-          <div className="flex h-full w-full flex-col">{children}</div>
+          {/* Contenu du sidebar */}
+          <div className="flex h-full w-full flex-col">
+            {children}
+          </div>
         </SheetContent>
       </Sheet>
     )
   }
-
+  
   return (
     <div
       className="group peer text-sidebar-foreground hidden md:block"
@@ -266,6 +282,7 @@ function SidebarTrigger({
       data-sidebar="trigger"
       data-slot="sidebar-trigger"
       size={`sm`}
+      variant={'ghost'}
       className={cn("", className)}
       onClick={(event) => {
         onClick?.(event)
@@ -274,11 +291,10 @@ function SidebarTrigger({
       {...props}
     >
       {/* Desktop */}
-      {!isMobile && (open ? <IconChevronsLeft /> : <IconChevronsRight />)}
+      {!isMobile && (open ? <IconChevronsLeft className="size-8" /> : <IconChevronsRight className="size-8" />)}
 
       {/* Mobile */}
-      {isMobile && (open ? <IconMenu2 /> : <></>)}
-      <span className="sr-only">Toggle Sidebar</span>
+      {isMobile && (open ? <IconMenu2 className="size-8" /> : <></>)}
     </Button>
   )
 }
@@ -478,7 +494,8 @@ function SidebarMenuItem({ className, ...props }: React.ComponentProps<"li">) {
 }
 
 const sidebarMenuButtonVariants = cva(
-  "peer/menu-button flex w-full items-center gap-4 overflow-hidden rounded-md p-2 font-bold text-left text-sm outline-hidden ring-sidebar-ring transition-[width,height,padding] hover:bg-[var(--color-bg-hover)] hover:text-primary  focus-visible:ring-2 active:bg-[var(--color-bg-hover)] active:text-primary disabled:pointer-events-none disabled:opacity-50 group-has-data-[sidebar=menu-action]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-[var(--color-bg-hover)] data-[active=true]:font-medium data-[active=true]:text-primary data-[state=open]:hover:bg-[var(--color-bg-hover)] data-[state=open]:hover:text-primary  group-data-[collapsible=icon]:size-7! group-data-[collapsible=icon]:p-1! [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0",
+  "peer/menu-button flex w-full items-center gap-4 overflow-hidden rounded-md p-2 font-bold text-left text-sm outline-hidden ring-sidebar-ring transition-[width,height,padding] hover:bg-[var(--color-bg-hover)] hover:text-primary  focus-visible:ring-2 active:bg-[var(--color-bg-hover)] active:text-primary disabled:pointer-events-none disabled:opacity-50 group-has-data-[sidebar=menu-action]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-[var(--color-bg-hover)] data-[active=true]:font-medium data-[active=true]:text-primary data-[state=open]:hover:bg-[var(--color-bg-hover)] data-[state=open]:hover:text-primary"+  
+  "group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-3! [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0",
   {
     variants: {
       variant: {
@@ -499,6 +516,7 @@ const sidebarMenuButtonVariants = cva(
   }
 )
 
+
 function SidebarMenuButton({
   asChild = false,
   isActive = false,
@@ -513,7 +531,7 @@ function SidebarMenuButton({
   tooltip?: string | React.ComponentProps<typeof TooltipContent>
 } & VariantProps<typeof sidebarMenuButtonVariants>) {
   const Comp = asChild ? Slot : "button"
-  const { isMobile, state } = useSidebar()
+  const { isMobile,setOpenMobile, state } = useSidebar()
 
   const button = (
     <Comp
@@ -523,6 +541,10 @@ function SidebarMenuButton({
       data-active={isActive}
       className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
       {...props}
+      onClick={(e) => {
+        props.onClick?.(e)
+        if (isMobile) setOpenMobile(false)  // 🔥 ferme le sheet automatiquement
+      }}
     />
   )
 

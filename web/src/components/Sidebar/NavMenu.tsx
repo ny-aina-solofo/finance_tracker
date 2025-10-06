@@ -35,7 +35,7 @@ const NavMenu = () => {
                                 }
                             >
                                 <Link to={item.url}>
-                                    <item.icon className="!size-5" />
+                                    <item.icon className="!size-6" />
                                     <span>{item.title}</span>
                                 </Link>
                             </SidebarMenuButton>

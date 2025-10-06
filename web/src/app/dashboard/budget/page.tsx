@@ -43,9 +43,9 @@ const BudgetPage =()=>{
     }
     return(
         <main className="flex flex-col gap-8">
-            <div className="flex items-center justify-between">
+            <div className="flex gap-4 items-center justify-between">
                 <Input
-                    className="max-w-sm bg-white h-10"
+                    className="w-full sm:max-w-sm bg-white h-10"
                     placeholder="rechercher un budget"
                     value={searchText}
                     onChange={searchBudgets}

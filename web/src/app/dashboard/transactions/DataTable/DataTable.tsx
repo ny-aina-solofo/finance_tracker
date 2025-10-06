@@ -20,6 +20,23 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from '@/components/ui/popover'
+import {
+    Sheet,
+    SheetClose,
+    SheetContent,
+    SheetDescription,
+    SheetFooter,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+  } from "@/components/ui/sheet"
+import EditTransaction from "../../../../components/Modals/Transactions/EditTransactions";
+import DeleteTransactions from "../../../../components/Modals/Transactions/DeleteTransactions";
+import {
     Accordion,
     AccordionContent,
     AccordionItem,
@@ -31,20 +48,21 @@ import Filter from "./Filter";
 import * as XLSX from 'xlsx';
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
-import { IconDownload, IconSearch } from "@tabler/icons-react";
+import { IconDownload, IconSearch,IconDots } from "@tabler/icons-react";
 import { AddTransaction} from "@/components";
 import { TransactionsType } from "@/types";
 import { format } from "date-fns";
 import { TransactionChart } from "../TransactionChart";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import FilterMobile from "./FilterMobile";
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+interface DataTableProps<TData extends TransactionsType, TValue> {
+    columns: ColumnDef<TData, TValue>[];
+    data: TData[];
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData extends TransactionsType, TValue>({
     columns,
     data,
 }: DataTableProps<TData, TValue>) {
@@ -54,7 +72,8 @@ export function DataTable<TData, TValue>({
         pageIndex: 0, // initial page index
         pageSize: 10, // initial page size
     });
-
+    const [openPopoverId, setOpenPopoverId] = useState<string | null>(null);
+   
     const table = useReactTable({
         data,
         columns,
@@ -72,6 +91,15 @@ export function DataTable<TData, TValue>({
         onPaginationChange: setPagination
     })
     
+    // valeur pratique : pageIndex courant
+    const pageIndex = table.getState().pagination.pageIndex
+    const pageSize = table.getState().pagination.pageSize
+
+    // fermer popover si on change de page (utile UX)
+    useEffect(() => {
+        setOpenPopoverId(null)
+    }, [pageIndex, pageSize])
+
     const exportToExcel = () => {
         try {
             const cleanedData = table.getRowModel().rows.map(row => {
@@ -158,34 +186,112 @@ export function DataTable<TData, TValue>({
     } else if (status === 'rejected') {
         content = <p>Error: {error}</p>;
     }
-
+    
     return (
         <div className="flex flex-col gap-8">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col gap-4 lg:flex-row md:flex-row lg:items-center md:items-center 
+                lg:justify-between md:justify-between"
+            >
                 <Input
                     placeholder="Cherchez une transaction"
                     value={(table.getColumn('libelle')?.getFilterValue() as string) ?? ''}
                     onChange={(event) =>
-                        table.getColumn('libelle')?.setFilterValue(event.target.value)
+                    table.getColumn('libelle')?.setFilterValue(event.target.value)
                     }
-                    className="max-w-sm h-10 bg-white"
+                    className="w-full sm:max-w-sm h-10 bg-white"
                 />
                 <div className="flex gap-4">
-                    <Button size="lg" variant="secondary" onClick={exportToExcel}><IconDownload/> Exporter</Button>    
+                    <Button size="lg" variant="secondary" onClick={exportToExcel}>
+                        <IconDownload/> Exporter
+                    </Button>    
                     <AddTransaction/>   
                 </div>
             </div>
-            <div className="rounded-xl bg-white px-7 py-2 lg:py-6">
+            <div className="rounded-xl bg-white px-4 lg:px-7 py-2 lg:py-6">
                 <div className="flex items-center mb-6">    
-                    <div className="hidden gap-2 lg:flex lg:gap-5">
-                        <Filter
+                    <div className="hidden lg:block md:block md:flex lg:flex md:gap-5 lg:gap-5">
+                        <Filter 
                             setSorting={setSorting}
                             columnFilters={columnFilters}
                             setColumnFilters={setColumnFilters}
                         />
-                    </div>   
+                    </div>  
+                    <div className="block lg:hidden md:hidden grid gap-4 grid-cols-2 ">
+                        <FilterMobile
+                            setSorting={setSorting}
+                            columnFilters={columnFilters}
+                            setColumnFilters={setColumnFilters}
+                        />
+                    </div>  
                 </div>
-                {content}
+                
+                {/* Desktop */}
+                <div className="hidden lg:block">
+                    {content}
+                </div>
+
+                {/* Mobile / Tablet List */}
+                <div className="lg:hidden divide-y divide-input">
+                    {table.getPaginationRowModel().rows.map((row)=> {
+                        const tr = row.original as TransactionsType;
+                        const popoverKey = row.id; // unique et stable pour la ligne
+            
+                        return (
+                            <div
+                                key={popoverKey}
+                                className="flex items-center justify-between py-3"
+                            >
+                                {/* Bloc gauche : libellé + budget */}
+                                <div className="flex flex-col flex-1">
+                                    <p className="font-bold text-sm">{tr.libelle}</p>
+                                    <p className="text-xs text-muted-foreground">{tr.nom_budget}</p>
+                                </div>
+
+                                {/* Bloc montant + date */}
+                                <div className="flex flex-col text-right mr-2 min-w-[90px]">
+                                    <p
+                                        className="text-sm font-bold"
+                                        style={{
+                                        color: tr.type_transaction === "depense" ? "#dc2626" : "#16a34a",
+                                        }}
+                                    >
+                                        {tr.type_transaction === "revenu" ? "+" : "-"}
+                                        {Math.abs(tr.montant).toFixed(2)}
+                                    </p>
+                                    <p className="text-xs text-muted-foreground">
+                                        {format(new Date(tr.date_creation), "dd MMM yyyy")}
+                                    </p>
+                                </div>
+
+                                {/* Actions Popover */}
+                                <div className="flex-shrink-0">
+                                    <Popover
+                                        open={openPopoverId === popoverKey}
+                                        onOpenChange={(isOpen) =>
+                                            setOpenPopoverId(isOpen ? popoverKey : null)
+                                        }
+                                    >
+                                        <PopoverTrigger asChild>
+                                            <Button variant="ghost" >
+                                                <IconDots className="size-5"/>
+                                            </Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-[120px] p-4 flex flex-col gap-2">
+                                            <EditTransaction
+                                                selectedTransactions={tr}
+                                                setIsPopoverOpen={() => setOpenPopoverId(null)}
+                                            />
+                                            <DeleteTransactions
+                                                selectedTransactions={tr}
+                                                setIsPopoverOpen={() => setOpenPopoverId(null)}
+                                            />
+                                        </PopoverContent>
+                                    </Popover>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
                 <PaginationTable table={table} />
             </div>  
             {/* <Accordion type="single" collapsible>

@@ -16,14 +16,7 @@ const TransactionSlice = createSlice({
         setTransactions:(state, action: PayloadAction<{data:any[]}>)=>{
             const {data} = action.payload;
             state.status = "received";
-            state.transactions = data.map((t: TransactionsType) => ({
-                ...t,
-                date_modification: t.date_modification || new Date().toISOString()
-            })).sort((a: TransactionsType, b: TransactionsType) => {
-                const dateA = a.date_modification ? new Date(a.date_modification).getTime() : 0;
-                const dateB = b.date_modification ? new Date(b.date_modification).getTime() : 0;
-                return dateB - dateA; // Sort in descending order (latest first)
-            });
+            state.transactions = data;
         },
         addTransaction: (state, action: PayloadAction<{
             libelle: string, montant: number, date_creation: string | undefined,

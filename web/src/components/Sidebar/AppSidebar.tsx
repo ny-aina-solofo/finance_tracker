@@ -12,11 +12,11 @@ import { Link } from "react-router"
 
 export const appName = "finance-tracker";
 
-export function AppSidebar() {
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     
     return (
-        <Sidebar collapsible="icon">
-            <SidebarHeader>
+        <Sidebar collapsible="icon" {...props}>
+            <SidebarHeader className="hidden lg:flex">
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild className="hover:bg-sidebar hover:text-sidebar-foreground">

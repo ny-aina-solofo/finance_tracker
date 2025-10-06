@@ -22,18 +22,8 @@ const budgetSlice = createSlice({
             })
             .addCase(fetchBudgets.fulfilled, (state, action) => {
                 state.status = "received";
-                // Stockez les données originales ici
-                const sortedBudgets = action.payload.map((b: BudgetType) => ({
-                    ...b,
-                    date_modification: b.date_modification || new Date().toISOString()
-                })).sort((a: BudgetType, b: BudgetType) => {
-                    const dateA = a.date_modification ? new Date(a.date_modification).getTime() : 0;
-                    const dateB = b.date_modification ? new Date(b.date_modification).getTime() : 0;
-                    return dateB - dateA;
-                });
-                state.budgets = sortedBudgets;
-                // Stockez également les données non filtrées pour l'affichage initial
-                state.filteredBudgets = sortedBudgets; 
+                state.budgets = action.payload;
+                state.filteredBudgets = action.payload; 
             })
             .addCase(fetchBudgets.rejected, (state, action) => {
                 state.status = "rejected";
@@ -56,10 +46,6 @@ const budgetSlice = createSlice({
                 montant_initial: montant,
                 date_modification: new Date().toISOString()
             };
-            // Ajoutez à la fois aux budgets originaux et filtrés
-            // state.budgets.push(newBudget);
-            // state.filteredBudgets.push(newBudget);
-
             state.budgets = [newBudget, ...state.budgets].sort((a, b) => {
                 const dateA = a.date_modification ? new Date(a.date_modification).getTime() : 0;
                 const dateB = b.date_modification ? new Date(b.date_modification).getTime() : 0;

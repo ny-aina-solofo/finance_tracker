@@ -43,10 +43,9 @@ export function NavUser() {
                 <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
                     <DropdownMenuTrigger asChild>
                         <button
-                            className="flex items-center justify-between w-full gap-4 cursor-pointer p-2
+                            className="flex items-center justify-between w-full z-50 gap-4 cursor-pointer p-2
                             rounded-md hover:bg-[var(--color-bg-hover)] hover:text-primary 
-                            group-data-[collapsible=icon]:p-0!
-                            data-[state=open]:bg-primary data-[state=open]:text-white 
+                            group-data-[collapsible=icon]:p-2!
                             "
                         >
                             <Avatar className="h-8 w-8 rounded-lg">

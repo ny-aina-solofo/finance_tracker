@@ -113,7 +113,7 @@ const Dashboard = () => {
 
     return (
         <main className="flex flex-col gap-8">
-            <section className="grid gap-8 sm:grid-cols-2 xl:grid-cols-2">
+            <section className="grid gap-8 md:grid-cols-2 lg:grid-cols-2">
                 <Card className="gap-2">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0">
                         <CardTitle className="text-sm text-muted-foreground font-normal">Depense Total</CardTitle>
@@ -184,18 +184,17 @@ const Dashboard = () => {
 
             {/* <BudgetChart budgets={budgets}/> */}
             
-            <section className="min-h-[200px] break-inside-avoid rounded-lg bg-white px-5 py-6 md:p-8">
+            <section className="min-h-[200px] rounded-xl bg-white px-5 py-6">
                 <div className="flex flex-col gap-5">
                     <div className="flex items-center justify-between">
-                        <h3 className="text-preset-2 font-bold ">
+                        <div className="text-lg font-bold">
                             Transactions Récents
-                        </h3>
-                        <Link
-                            to='/dashboard/transactions'
-                            className="inline-flex items-center gap-3 text-muted-foreground"
-                        >
-                            <span className="text-preset-4">voir détails</span>
-                            <IconCaretRightFilled />
+                        </div>
+                        <Link to='/dashboard/transactions'>
+                            <div className="flex gap-2 lg:gap-3 text-muted-foreground text-sm">
+                                <span>voir détails</span>
+                                <IconCaretRightFilled className="size-5"/>    
+                            </div>
                         </Link>
                     </div>
                     <div>
@@ -205,9 +204,12 @@ const Dashboard = () => {
                                     key={transaction.libelle}
                                     className="py-4 flex justify-between border-b border-input"
                                 >
-                                    <h4 className="">
-                                        {transaction.libelle}
-                                    </h4>
+                                    <div>
+                                        <p className="font-bold text-sm">{transaction.libelle}</p>
+                                        <p className="text-preset-5 text-muted-foreground">
+                                            {transaction.nom_budget}
+                                        </p>
+                                    </div>
                                     <div className="flex flex-col text-right">
                                         <p
                                             className="text-preset-4 font-bold"
