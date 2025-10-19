@@ -4,37 +4,18 @@ import {
     CardAction,
     CardContent,
     CardDescription,
+    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"  
-import { LineChart, Line } from "recharts"
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart"
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/redux/store";
 import { TransactionsType } from "@/types";
 import { BudgetChart } from "./BudgetChart";
 import { format } from "date-fns";
 import { Link, useNavigate } from "react-router";
-import { IconCaretRightFilled } from "@tabler/icons-react";
-
-const chartConfig = {
-    depense: {
-        label: "Depense",
-        color: "#0a0a0a",
-        // color: "#dc2626",
-    },
-    revenu: {
-        label: "Revenu",
-        color: "#0a0a0a",
-        // color: "#16a34a",
-    },
-} satisfies ChartConfig
-
+import { IconCaretRightFilled, IconTrendingDown, IconTrendingUp } from "@tabler/icons-react";
+import { Badge } from "@/components/ui/badge"
   
 const Dashboard = () => {
     const budgets = useSelector((state: RootState) => state.budgets.budgets);
@@ -111,75 +92,81 @@ const Dashboard = () => {
     });
     const navigate = useNavigate();
 
+    const getVariationMessage = (percent: number, type: "revenu" | "depense") => {
+        if (percent > 0) {
+            return {
+                message: `augmentation par rapport au mois dernier`,
+                icon: <IconTrendingUp className="size-4" />,
+                advice : type === "depense" ? "Surveillez vos dépenses" : "Bonne nouvelle, vos revenus progressent !"
+            };
+        } else if (percent < 0) {
+            return {
+                message: `baisse par rapport au mois dernier`,
+                icon: <IconTrendingDown className="size-4" />,
+                advice : type === "depense" ? "Bonne nouvelle ! Vos dépenses sont en baisse" : "Surveillez vos dépenses"
+            };
+        } else {
+            return {
+                message: `aucun changement`,
+                icon: null,
+                advice : `Rien à signaler`
+            };
+        }
+    };
+    const lastMonthData = monthlyWithDiff[monthlyWithDiff.length - 1];
+    const expenseMsg = getVariationMessage(lastMonthData?.expensePct || 0, "depense");
+    const incomeMsg = getVariationMessage(lastMonthData?.incomePct || 0, "revenu");
+
     return (
         <main className="flex flex-col gap-8">
             <section className="grid gap-8 md:grid-cols-2 lg:grid-cols-2">
-                <Card className="gap-2">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0">
-                        <CardTitle className="text-sm text-muted-foreground font-normal">Depense Total</CardTitle>
+                <Card className="@container/card">
+                    <CardHeader>
+                        <CardDescription>Total des dépenses</CardDescription>
+                        <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
+                            {tolalExpenses.toFixed(2)}
+                        </CardTitle>
+                        <CardAction>
+                            <Badge variant="outline">
+                                {expenseMsg.icon}
+                                {monthlyWithDiff[monthlyWithDiff.length - 1]?.expensePct > 0 ? "+" : ""}
+                                {monthlyWithDiff[monthlyWithDiff.length - 1]?.expensePct.toFixed(2) || 0}% 
+                            </Badge>
+                        </CardAction>
                     </CardHeader>
-                    <CardContent>
-                        <div className="text-4xl">{tolalExpenses}</div>
-                        <p className="text-sm mt-2 text-muted-foreground">
-                            {monthlyWithDiff[monthlyWithDiff.length - 1]?.expensePct > 0 ? "+" : ""}
-                            {monthlyWithDiff[monthlyWithDiff.length - 1]?.expensePct.toFixed(2) || 0}% 
-                            par rapport au mois dernier
-                        </p>
-                        <ChartContainer config={chartConfig} className="h-[80px] w-full mt-8">
-                            <LineChart
-                                data={monthlyTotalTransactions}
-                                margin={{
-                                    top: 10,
-                                    right: 10,
-                                    left: 10,
-                                    bottom: 10,
-                                }}
-                            >
-                                <Line
-                                    type="monotone"
-                                    strokeWidth={2}
-                                    dataKey="expense"
-                                    stroke="var(--color-depense)"
-                                    // dot={{fill: "var(--color-depense)",}}
-                                    activeDot={{r: 6,}}
-                                />
-                            </LineChart>
-                        </ChartContainer>
-                    </CardContent>
+                    <CardFooter className="flex-col items-start gap-1.5 text-sm">
+                        <div className="line-clamp-1 flex gap-2 font-medium">
+                            {expenseMsg.message} {expenseMsg.icon}
+                        </div>
+                        <div className="text-muted-foreground">
+                            {expenseMsg.advice}
+                        </div>
+                    </CardFooter>
                 </Card>
-                <Card className="gap-2">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0">
-                        <CardTitle className="text-sm text-muted-foreground font-normal">Revenu Total</CardTitle>
+                <Card className="@container/card">
+                    <CardHeader>
+                        <CardDescription>Total des revenus</CardDescription>
+                        <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
+                            {tolalIncome.toFixed(2)}
+                        </CardTitle>
+                        <CardAction>
+                            <Badge variant="outline">
+                                {incomeMsg.icon}
+                                {monthlyWithDiff[monthlyWithDiff.length - 1]?.incomePct > 0 ? "+" : ""}
+                                {monthlyWithDiff[monthlyWithDiff.length - 1]?.incomePct.toFixed(2) || 0}% 
+                            </Badge>
+                        </CardAction>
                     </CardHeader>
-                    <CardContent>
-                        <div className="text-4xl">{tolalIncome}</div>
-                        <p className="text-sm mt-2 text-muted-foreground">
-                            {monthlyWithDiff[monthlyWithDiff.length - 1]?.incomePct > 0 ? "+" : ""}
-                            {monthlyWithDiff[monthlyWithDiff.length - 1]?.incomePct.toFixed(2) || 0}% 
-                            par rapport au mois dernier 
-                        </p>
-                        <ChartContainer config={chartConfig} className="h-[80px] w-full mt-8">
-                            <LineChart
-                                data={monthlyTotalTransactions}
-                                margin={{
-                                    top: 10,
-                                    right: 10,
-                                    left: 10,
-                                    bottom: 10,
-                                }}
-                            >
-                            <Line
-                                type="monotone"
-                                strokeWidth={2}
-                                dataKey="income"
-                                stroke="var(--color-revenu)"
-                                // dot={{fill: "var(--color-revenu)",}}
-                                activeDot={{r: 6,}}
-                            />
-                            </LineChart>
-                        </ChartContainer>
-                    </CardContent>
+                    <CardFooter className="flex-col items-start gap-1.5 text-sm">
+                        <div className="line-clamp-1 flex gap-2 font-medium">
+                            {incomeMsg.message} {incomeMsg.icon}
+                        </div>
+                        <div className="text-muted-foreground">
+                            {incomeMsg.advice}
+                        </div>
+                    </CardFooter>
                 </Card>
+                
             </section>
 
             {/* <BudgetChart budgets={budgets}/> */}

@@ -1,22 +1,53 @@
 import React, { useState,useEffect } from "react";
 import { useDispatch,useSelector } from 'react-redux';
 import {
+    Card,
+    CardAction,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card"
+import {
     Popover,
     PopoverContent,
     PopoverTrigger,
-  } from '@/components/ui/popover'
+} from '@/components/ui/popover'
+import {Label, Cell, Pie, PieChart } from "recharts"
+
+import {
+    ChartConfig,
+    ChartContainer,
+    ChartLegend,
+    ChartLegendContent,
+    ChartTooltip,
+    ChartTooltipContent,
+} from "@/components/ui/chart"
 import EditBudgetModal from '@/components/Modals/Budget/EditBudgetModal';
 import DeleteBudgetModal from '@/components/Modals/Budget/DeleteBudgetModal';
 import { Button } from "@/components/ui/button";
 import { IconDots } from "@tabler/icons-react";
 import { useNavigate } from "react-router";
-import { Progress } from "@/components/ui/progress"
 import { TransactionsType,BudgetType } from "@/types";
 import { RootState } from "@/redux/store";
 
 interface BudgetProps {
     budgets: BudgetType;
 }
+export const description = "A donut chart with text"
+
+const chartConfig = {
+    total: {
+        label: "total",
+    },
+    depense: {
+        label: "depense",
+    },
+    revenu: {
+        label: "revenu",
+    }
+} satisfies ChartConfig
 
 const BudgetCard =({budgets}:BudgetProps) => {
     const navigate = useNavigate();
@@ -34,59 +65,117 @@ const BudgetCard =({budgets}:BudgetProps) => {
     const tolalIncome = incomeAmount.reduce(
         (accumulator:number, currentValue:number) => accumulator + currentValue,0
     )
-    const percentage = (tolalExpenses / budgets.montant_initial)*100;
-    const netExpenses = tolalExpenses - tolalIncome;
-    const percentageNet = (netExpenses / budgets.montant_initial) * 100;
 
-
+    const chartData = [
+        { budget: "depense", total: tolalExpenses, fill: `${budgets.themes}` },
+        { budget: "revenu", total: tolalIncome, fill: "#e5e5e5" },
+    ]
     return (
-        <div className="flex flex-col gap-8 rounded-[12px] bg-white px-5 py-6">
-            <header className="flex items-center justify-between">
+        <Card>
+            <CardHeader>
                 <div className="flex items-center">
-                <span
-                    className="mr-4 h-4 w-4 rounded-full"
-                    style={{ backgroundColor: `${budgets.themes}` }}
-                />
-                <h3 className="text-preset-2">{budgets.nom_budget}</h3>
-                </div>
-                <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
-                    <PopoverTrigger>
-                        <IconDots className='h-5 w-5 size-8 cursor-pointer'/>
-                    </PopoverTrigger>
-                    <PopoverContent asChild>
-                        <div className="w-[140px] p-4 flex flex-col gap-4">
-                            <EditBudgetModal 
-                                id_budget={budgets.id_budget} 
-                                setIsPopoverOpen={setIsPopoverOpen}
-                            />
-                            <DeleteBudgetModal    
-                                id_budget={budgets.id_budget} 
-                                setIsPopoverOpen={setIsPopoverOpen}
-                            />                            
-                        </div>
-                    </PopoverContent>
-                </Popover>
-            </header>
-            <section className="flex h-full flex-col justify-center gap-4">
-                <div className="flex items-center justify-between">
-                    <h4 className="text-preset-4 text-muted-foreground">Montant Actuelle</h4>
-                    <p className="text-preset-1">{budgets.montant_actuel}</p>
-                </div>
-                {/* <div className="flex flex-col gap-2">
-                    <Progress
-                        className="h-2 mt-3"
-                        value={percentageNet}
-                        themes={`${budgets.themes}`}
+                    <span
+                        className="mr-4 h-4 w-4 rounded-full"
+                        style={{ backgroundColor: `${budgets.themes}` }}
                     />
-                    <div className="flex justify-between">
-                        <p className="text-preset-5 text-muted-foreground">
-                            {percentageNet.toFixed(2)}%
+                    <CardTitle>{budgets.nom_budget}</CardTitle>
+                </div>
+                <CardDescription></CardDescription>
+                <CardAction>
+                    <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+                        <PopoverTrigger>
+                            <IconDots className='h-5 w-5 size-8 cursor-pointer'/>
+                        </PopoverTrigger>
+                        <PopoverContent asChild>
+                            <div className="w-[140px] p-4 flex flex-col gap-4">
+                                <EditBudgetModal 
+                                    id_budget={budgets.id_budget} 
+                                    setIsPopoverOpen={setIsPopoverOpen}
+                                />
+                                <DeleteBudgetModal    
+                                    id_budget={budgets.id_budget} 
+                                    setIsPopoverOpen={setIsPopoverOpen}
+                                />                            
+                            </div>
+                        </PopoverContent>
+                    </Popover>
+                </CardAction>
+            </CardHeader>
+            <CardContent>
+                <ChartContainer
+                    config={chartConfig}
+                    className="mx-auto aspect-square max-h-[250px]"
+                >
+                    <PieChart>
+                        <Pie
+                            data={chartData}
+                            dataKey="total"
+                            nameKey="budget"
+                            innerRadius={60}
+                            strokeWidth={5}
+                        >
+                            <Label
+                                content={({ viewBox }) => {
+                                if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                                    return (
+                                    <text
+                                        x={viewBox.cx}
+                                        y={viewBox.cy}
+                                        textAnchor="middle"
+                                        dominantBaseline="middle"
+                                    >
+                                        <tspan
+                                            x={viewBox.cx}
+                                            y={(viewBox.cy || 0) - 30}
+                                            className="text-sm fill-muted-foreground "
+                                        >
+                                            reste : 
+                                        </tspan>
+                                        <tspan
+                                            x={viewBox.cx}
+                                            y={viewBox.cy}
+                                            className="fill-foreground text-3xl font-bold"
+                                        >
+                                            {budgets.montant_actuel.toLocaleString()}
+                                        </tspan>
+                                        
+                                    </text>
+                                    )
+                                }
+                                }}
+                            />
+                        </Pie>
+                        
+                    </PieChart>
+                </ChartContainer>
+            </CardContent>
+            <CardFooter className="text-sm">
+                <div className="flex flex-col gap-4">
+                    <div className="flex gap-2 items-center">
+                        <span
+                            className="h-2 w-2 shrink-0 rounded-[2px]"
+                            style={{ backgroundColor: budgets.themes }}
+                        />
+    
+                        <p className="text-preset-5">Dépenses : </p>
+                        <p className="text-preset-4 font-bold">
+                            {tolalExpenses.toFixed(2)}
                         </p>
-                        <p className="text-preset-5 text-muted-foreground">{`${tolalExpenses} sur ${budgets.montant_initial}`}</p>
                     </div>
-                </div> */}
-            </section>
-        </div>
+                    <div className="flex gap-2 items-center">
+                        <span
+                            className="h-2 w-2 shrink-0 rounded-[2px] bg-neutral-300"
+                        />
+    
+                        <p className="text-preset-5">Revenu : </p>
+                        <p className="text-preset-4 font-bold">
+                            {tolalIncome.toFixed(2)}
+                        </p>
+                    </div>
+                    
+                </div>
+            </CardFooter>
+        </Card>
     )
 }
 

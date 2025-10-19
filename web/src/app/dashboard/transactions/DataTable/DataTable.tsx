@@ -25,15 +25,10 @@ import {
     PopoverTrigger,
 } from '@/components/ui/popover'
 import {
-    Sheet,
-    SheetClose,
-    SheetContent,
-    SheetDescription,
-    SheetFooter,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger,
-  } from "@/components/ui/sheet"
+    InputGroup,
+    InputGroupAddon,
+    InputGroupInput,
+} from "@/components/ui/input-group"
 import EditTransaction from "../../../../components/Modals/Transactions/EditTransactions";
 import DeleteTransactions from "../../../../components/Modals/Transactions/DeleteTransactions";
 import {
@@ -44,7 +39,6 @@ import {
 } from "@/components/ui/accordion"
 import { Input } from "../../../../components/ui/input"
 import PaginationTable from "./PaginationTable";
-import Filter from "./Filter";
 import * as XLSX from 'xlsx';
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
@@ -55,7 +49,7 @@ import { format } from "date-fns";
 import { TransactionChart } from "../TransactionChart";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import FilterMobile from "./FilterMobile";
+import Filter from "./Filter";
 
 interface DataTableProps<TData extends TransactionsType, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -133,7 +127,7 @@ export function DataTable<TData extends TransactionsType, TValue>({
         if (Array.isArray(data) && data.length > 0) {
             content = (
                 <Table>
-                    <TableHeader>
+                    <TableHeader className="bg-primary" >
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => {
@@ -188,18 +182,23 @@ export function DataTable<TData extends TransactionsType, TValue>({
     }
     
     return (
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col">
             <div className="flex flex-col gap-4 lg:flex-row md:flex-row lg:items-center md:items-center 
-                lg:justify-between md:justify-between"
+                lg:justify-between md:justify-between pb-12"
             >
-                <Input
-                    placeholder="Cherchez une transaction"
-                    value={(table.getColumn('libelle')?.getFilterValue() as string) ?? ''}
-                    onChange={(event) =>
-                    table.getColumn('libelle')?.setFilterValue(event.target.value)
-                    }
-                    className="w-full sm:max-w-sm h-10 bg-white"
-                />
+                <InputGroup className="bg-white w-full sm:max-w-sm h-10">
+                    <InputGroupInput 
+                        className="ms-2"
+                        placeholder="Cherchez une transaction"
+                        value={(table.getColumn('libelle')?.getFilterValue() as string) ?? ''}
+                        onChange={(event) =>
+                            table.getColumn('libelle')?.setFilterValue(event.target.value)
+                        }
+                    />
+                    <InputGroupAddon>
+                        <IconSearch />
+                    </InputGroupAddon>
+                </InputGroup>
                 <div className="flex gap-4">
                     <Button size="lg" variant="secondary" onClick={exportToExcel}>
                         <IconDownload/> Exporter
@@ -207,31 +206,26 @@ export function DataTable<TData extends TransactionsType, TValue>({
                     <AddTransaction/>   
                 </div>
             </div>
-            <div className="rounded-xl bg-white px-4 lg:px-7 py-2 lg:py-6">
-                <div className="flex items-center mb-6">    
-                    <div className="hidden lg:block md:block md:flex lg:flex md:gap-5 lg:gap-5">
-                        <Filter 
-                            setSorting={setSorting}
-                            columnFilters={columnFilters}
-                            setColumnFilters={setColumnFilters}
-                        />
-                    </div>  
-                    <div className="block lg:hidden md:hidden grid gap-4 grid-cols-2 ">
-                        <FilterMobile
-                            setSorting={setSorting}
-                            columnFilters={columnFilters}
-                            setColumnFilters={setColumnFilters}
-                        />
-                    </div>  
+            
+            <div className="flex items-center pb-4">    
+                <div className="grid gap-4 grid-cols-2 lg:flex md:flex  ">
+                    <Filter
+                        setSorting={setSorting}
+                        columnFilters={columnFilters}
+                        setColumnFilters={setColumnFilters}
+                    />
                 </div>
-                
+            </div>
+
+            <div className="rounded-lg border border-input bg-white overflow-hidden ">
+               
                 {/* Desktop */}
                 <div className="hidden lg:block">
                     {content}
                 </div>
 
                 {/* Mobile / Tablet List */}
-                <div className="lg:hidden divide-y divide-input">
+                <div className="lg:hidden divide-y divide-input px-4 py-2">
                     {table.getPaginationRowModel().rows.map((row)=> {
                         const tr = row.original as TransactionsType;
                         const popoverKey = row.id; // unique et stable pour la ligne
@@ -292,8 +286,8 @@ export function DataTable<TData extends TransactionsType, TValue>({
                         );
                     })}
                 </div>
-                <PaginationTable table={table} />
             </div>  
+            <PaginationTable table={table} />
             {/* <Accordion type="single" collapsible>
                 <AccordionItem value="item-1" >
                     <AccordionTrigger className="bg-stone-200 text-primary shadow-xs hover:bg-stone-300 cursor-pointer mb-5">

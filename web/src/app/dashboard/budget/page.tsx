@@ -6,6 +6,12 @@ import { AddBudgetModal} from "@/components";
 import BudgetCard from "./BudgetCard";
 import { searchBudget } from "@/redux/budgetSlice";
 import { Input } from "@/components/ui/input";
+import {
+    InputGroup,
+    InputGroupAddon,
+    InputGroupInput,
+} from "@/components/ui/input-group"
+import { IconSearch } from "@tabler/icons-react";
 
 const BudgetPage =()=>{
     const dispatch = useDispatch();
@@ -43,14 +49,19 @@ const BudgetPage =()=>{
     }
     return(
         <main className="flex flex-col gap-8">
-            <div className="flex gap-4 items-center justify-between">
-                <Input
-                    className="w-full sm:max-w-sm bg-white h-10"
-                    placeholder="rechercher un budget"
-                    value={searchText}
-                    onChange={searchBudgets}
-                    aria-label="rechercher un budget"
-                />      
+            <div className="flex gap-4 items-center justify-between">   
+                <InputGroup className="bg-white w-full sm:max-w-sm h-10">
+                    <InputGroupInput 
+                        className="ms-2"
+                        placeholder="rechercher un budget"
+                        value={searchText}
+                        onChange={searchBudgets}
+                        aria-label="rechercher un budget"
+                    />
+                    <InputGroupAddon>
+                        <IconSearch />
+                    </InputGroupAddon>
+                </InputGroup>
                 <AddBudgetModal/>   
             </div>
             {content}

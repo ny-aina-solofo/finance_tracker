@@ -19,15 +19,13 @@ export const columns: ColumnDef<TransactionsType>[] = [
     {
         accessorKey: "libelle",
         header: () => (
-            <h6 className="text-preset-5 ml-2 font-normal text-muted-foreground">
-                Motif
-            </h6>
+            <h6 className="ml-2 font-semibold text-white">Motif</h6>
         ),
         cell: ({ row }) => {
             const libelle = row.getValue("libelle") as string;     
             return (
               <div className="flex items-center">
-                <p className="text-preset-4 ml-2 font-bold capitalize">
+                <p className="ml-2 font-semibold">
                   {libelle}
                 </p>
               </div>
@@ -37,28 +35,26 @@ export const columns: ColumnDef<TransactionsType>[] = [
     {
         accessorKey: "nom_budget",
         header: () => (
-            <h6 className="text-preset-5 font-normal text-muted-foreground">Bugdet</h6>
+            <h6 className="font-semibold text-white">Bugdet</h6>
           ),
         cell: ({ row }) => {
             const nom_budget = row.original.nom_budget as string ;
             return (
-                <p className="text-preset-5 font-normal text-muted-foreground">{nom_budget}</p>
+                <p className="text-muted-foreground">{nom_budget}</p>
             );
         },
     },
     {
         accessorKey: "date_creation",
         header: () => (
-            <h6 className="text-preset-5 font-normal text-muted-foreground">
-              Date
-            </h6>
+            <h6 className="font-semibold text-white">Date</h6>
         ),
         cell: ({ row }) => {
             const date_creation = new Date(row.original.date_creation);
             let formattedDate = date_creation ? format(date_creation, 'yyyy-MM-dd') : undefined;
             
             return (
-                <p className="text-preset-5 font-normal text-muted-foreground">
+                <p className="text-muted-foreground">
                    {formattedDate}
                 </p>
             );
@@ -85,9 +81,7 @@ export const columns: ColumnDef<TransactionsType>[] = [
     {
         accessorKey: "montant",
         header: () => (
-            <h6 className="text-preset-5 text-right font-normal text-muted-foreground">
-              Montant
-            </h6>
+            <h6 className="text-right font-semibold text-white">Montant</h6>
         ),
         cell: ({ row }) => {
             const montant = row.getValue("montant") as number;

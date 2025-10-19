@@ -18,7 +18,7 @@ const buttonVariants = cva(
           "bg-stone-200 text-primary shadow-xs hover:bg-stone-300",
         ghost:
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
-        link: "text-primary underline-offset-4 hover:underline",
+        link: " hover:underline",
       },
        size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
@@ -48,8 +48,6 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         {...props}
       >
-        {loading && <Loader2 className="animate-spin w-4 h-4 mr-2" />}
-
         {children}
       </button>
     );
