@@ -1,0 +1,97 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import transactionService from './transaction.service';
+import http from '../http_common_budget';
+import { Mocked } from 'vitest'; // Importez Mocked
+
+vi.mock('../http_common_budget', () => {
+    return {
+        default: {
+            get: vi.fn(),
+            post: vi.fn(),
+            delete: vi.fn(),
+            put: vi.fn()
+        },
+    };
+});
+  
+const mockedHttp = http as Mocked<typeof http>;
+
+describe("http service test", () => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+        sessionStorage.clear();
+    });
+
+    it("get transaction", async () => {
+        const transactions= [
+            {
+                id_transaction:7,libelle:"Intérêts Bancaires",montant:10,date_creation:"2024-06-29T21:00:00.000Z"
+                ,date_modification:"2024-06-30T06:00:00.000Z",id_budget:5,type_transaction:"revenu"
+            },
+            {
+                id_transaction:12,libelle:"Livre",montant:20,date_creation:"2024-06-14T21:00:00.000Z",
+                date_modification:"2024-06-15T11:00:00.000Z",id_budget:5,type_transaction:"depense"
+            }
+        ]        
+        const mockUser = { token: "fake-jwt-token-for-test" };
+        sessionStorage.setItem("utilisateur connecté", JSON.stringify(mockUser));
+
+        mockedHttp.get.mockResolvedValue(transactions);
+        const data = await transactionService.getTransaction();
+        expect(mockedHttp.get).toHaveBeenCalledWith('/get-transaction',
+            { headers: { Authorization: `Bearer ${mockUser.token}`}}
+        );
+        expect(data).toEqual(transactions);
+    });
+
+    it("insert transaction", async () => {
+        const libelle:string = 'test';
+        const montant:number = 333;
+        const date_creation:string | undefined = '2024-03-15';
+        const id_budget:number = 2;
+        const type_transaction:string = 'revenu'
+        const mockUser = { token: "fake-jwt-token-for-test" };
+        sessionStorage.setItem("utilisateur connecté", JSON.stringify(mockUser));
+
+        mockedHttp.post.mockResolvedValue({ data: { success: true } });
+        await transactionService.addTransaction(libelle,montant,date_creation,id_budget,type_transaction);
+        expect(mockedHttp.post).toHaveBeenCalledWith('/add-transaction', { 
+            libelle:libelle, montant:montant, date_creation:date_creation, id_budget:id_budget,
+            type_transaction:type_transaction 
+        },{ headers: { Authorization: `Bearer ${mockUser.token}`}});
+    });
+
+    it("delete transaction", async () => {
+        const id_transaction:number = 44;
+        const type_transaction:string = 'revenu';
+        const mockUser = { token: "fake-jwt-token-for-test" };
+        sessionStorage.setItem("utilisateur connecté", JSON.stringify(mockUser));
+        const authHeaders = { headers: { Authorization: `Bearer ${mockUser.token}`}};
+
+        mockedHttp.delete.mockResolvedValue({ data: { success: true } });
+        await transactionService.deleteTransaction(id_transaction,type_transaction);
+        expect(mockedHttp.delete).toHaveBeenCalledWith(`/delete-transaction/${id_transaction}`,{
+            ...authHeaders,
+            params: {
+                type_transaction: type_transaction
+            }
+        });
+    });
+
+    it("update transaction", async () => {
+        const id_transaction:number = 44
+        const libelle:string = 'test';
+        const date_creation:string | undefined = '2024-03-15';
+        const type_transaction:string = 'revenu'
+        const mockUser = { token: "fake-jwt-token-for-test" };
+        sessionStorage.setItem("utilisateur connecté", JSON.stringify(mockUser));
+
+        mockedHttp.put.mockResolvedValue({ data: { success: true } });
+        await transactionService.updateTransaction(
+            id_transaction,libelle,date_creation,type_transaction
+        );
+        expect(mockedHttp.put).toHaveBeenCalledWith(`/update-transaction/${id_transaction}`,{
+            libelle:libelle, date_creation:date_creation,type_transaction:type_transaction 
+        },{ headers: { Authorization: `Bearer ${mockUser.token}`}});
+    });
+});
