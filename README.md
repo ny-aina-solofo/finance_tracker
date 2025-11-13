@@ -19,7 +19,7 @@ Access the demo here.
 
 | Email | Password |
 | --- | --- |
-|     |     |
+| finance@tracker.mg    | test2000     |
 
 ## Features
 

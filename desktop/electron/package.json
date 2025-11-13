@@ -1,7 +1,7 @@
 {
-  "name": "todolist",
-  "version": "1.0.0",
-  "description": "todolist",
+  "name": "finance_tracker",
+  "version": "0.1.0",
+  "description": "finance_tracker",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -27,7 +27,9 @@
     "electron": "^38.4.0"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "electron-squirrel-startup": "^1.0.1",
+    "jsonwebtoken": "^9.0.2",
     "sequelize": "^6.37.7",
     "sqlite3": "^5.1.7"
   }

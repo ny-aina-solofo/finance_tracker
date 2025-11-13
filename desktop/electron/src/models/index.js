@@ -6,7 +6,7 @@ const path = require('node:path');
 // const dbPath = path.resolve(__dirname, '../db/todolist.db');
 // const userDataPath = app.getPath('userData');
 // const dbPath = path.join(userDataPath, 'todolist.db');
-const initialDbPath = path.join(__dirname, '../db/todolist.db');
+const initialDbPath = path.join(__dirname, '../db/finance.db');
 /*
 if (!fs.existsSync(dbPath)) {
   // Le fichier n'existe pas dans le répertoire de données, copiez la version initiale
@@ -46,7 +46,11 @@ const db = {} ;
 db.Sequelize = Sequelize ; 
 db.sequelize = sequelize ; 
 
-db.todolist = require('./todolist_model')(sequelize,Sequelize);
+// db.budget = require('./budget_model')(sequelize,Sequelize);
+// db.depense = require('./depense_model')(sequelize,Sequelize);
+// db.revenu = require('./revenu_model')(sequelize,Sequelize);
+db.transactions =  require('./transaction_model')(sequelize,Sequelize);
+db.user = require('./user.model')(sequelize,Sequelize);
 
 module.exports = {db,sequelize} ; 
     

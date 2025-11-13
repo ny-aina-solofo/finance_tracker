@@ -13,7 +13,7 @@ const TransactionSlice = createSlice({
     name: "Transactions",
     initialState,
     reducers: {
-        setTransactions:(state, action: PayloadAction<{data:any[]}>)=>{
+        setTransactions:(state, action: PayloadAction<{data:any}>)=>{
             const {data} = action.payload;
             state.status = "received";
             state.transactions = data;
@@ -71,14 +71,14 @@ const TransactionSlice = createSlice({
         }, 
 
     },
-    extraReducers: (builder) => {
-        builder.addCase(deleteBudget, (state, action) => {
-            const id_budget = action.payload;
-            state.transactions = state.transactions.filter(
-                (t: TransactionsType) => t.id_budget !== id_budget
-            );
-        });
-    }
+    // extraReducers: (builder) => {
+    //     builder.addCase(deleteBudget, (state, action) => {
+    //         const id_budget = action.payload;
+    //         state.transactions = state.transactions.filter(
+    //             (t: TransactionsType) => t.id_budget !== id_budget
+    //         );
+    //     });
+    // }
 });
 
 export const {

@@ -26,10 +26,10 @@ const router = createBrowserRouter([
                 index:true ,
                 element: <Dashboard />,
             },
-            {
-                path: "budget", 
-                element: <BudgetPage />,
-            },
+            // {
+            //     path: "budget", 
+            //     element: <BudgetPage />,
+            // },
             {
                 path: "transactions",
                 element: <TransactionPage />,

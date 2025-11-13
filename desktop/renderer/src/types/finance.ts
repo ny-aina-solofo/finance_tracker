@@ -12,11 +12,10 @@ export type TransactionsType = {
     id_transaction: number;
     libelle: string;
     montant: number;
+    type_transaction:string;
     date_creation: string;
     date_modification: string;
-    id_budget:number;
-    nom_budget: string;
-    type_transaction:string;
+    id_utilisateur:string;
 }
 
 export type Status = "idle" | "loading" | "received" | "rejected";

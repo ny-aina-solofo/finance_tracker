@@ -35,11 +35,10 @@ export default function DashboardLayout() {
     const users = userService.getCurrentUser()
     
     useEffect(() => {
-        dispatch(fetchBudgets() as any);
-        
+        // dispatch(fetchBudgets() as any);
         transactionService.getTransaction().then(response => {
             dispatch(setLoadingStatus({}));
-            const data = response?.data || [];
+            const data = response || [];
             dispatch(setTransactions({data:data}));
         }).catch(error => {
             dispatch(setErrorStatus({error}))

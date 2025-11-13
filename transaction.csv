@@ -1,0 +1,21 @@
+id_transaction,libelle,montant,type_transaction,date_creation,date_modification,id_utilisateur
+1,Achat supermarché,42000,depense,2025-10-01,2025-10-01,1
+2,Salaire mensuel,1200000,revenu,2025-10-05,2025-10-05,1
+3,Abonnement internet,120000,depense,2025-10-10,2025-10-10,1
+4,Recharge mobile,10000,depense,2025-10-15,2025-10-15,1
+5,Vente vieux téléphone,250000,revenu,2025-10-18,2025-10-18,1
+6,Achat vêtements,95000,depense,2025-10-20,2025-10-20,1
+7,Facture électricité,89000,depense,2025-10-25,2025-10-25,1
+8,Consultation médicale,60000,depense,2025-10-28,2025-10-28,1
+9,Prime de performance,300000,revenu,2025-10-30,2025-10-30,1
+10,Sortie restaurant,75000,depense,2025-11-02,2025-11-02,1
+11,Loyer appartement,450000,depense,2025-11-03,2025-11-03,1
+12,Freelance web design,400000,revenu,2025-11-05,2025-11-05,1
+13,Transport quotidien,25000,depense,2025-11-06,2025-11-06,1
+14,Don à une association,30000,depense,2025-11-07,2025-11-07,1
+15,Remboursement ami,70000,revenu,2025-11-08,2025-11-08,1
+16,Achats Amazon,135000,depense,2025-11-09,2025-11-09,1
+17,Vente d’un meuble,180000,revenu,2025-11-10,2025-11-10,1
+18,Essence voiture,65000,depense,2025-11-11,2025-11-11,1
+19,Abonnement Netflix,20000,depense,2025-11-11,2025-11-11,1
+20,Investissement crypto,500000,revenu,2025-11-12,2025-11-12,1

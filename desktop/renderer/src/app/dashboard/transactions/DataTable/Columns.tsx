@@ -32,18 +32,18 @@ export const columns: ColumnDef<TransactionsType>[] = [
             );
         },
     },
-    {
-        accessorKey: "nom_budget",
-        header: () => (
-            <h6 className="font-semibold text-white">Bugdet</h6>
-          ),
-        cell: ({ row }) => {
-            const nom_budget = row.original.nom_budget as string ;
-            return (
-                <p className="text-muted-foreground">{nom_budget}</p>
-            );
-        },
-    },
+    // {
+    //     accessorKey: "nom_budget",
+    //     header: () => (
+    //         <h6 className="font-semibold text-white">Bugdet</h6>
+    //       ),
+    //     cell: ({ row }) => {
+    //         const nom_budget = row.original.nom_budget as string ;
+    //         return (
+    //             <p className="text-muted-foreground">{nom_budget}</p>
+    //         );
+    //     },
+    // },
     {
         accessorKey: "date_creation",
         header: () => (

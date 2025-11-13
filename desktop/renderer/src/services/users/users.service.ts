@@ -1,24 +1,21 @@
-import http from '../http_common_user';
-
 class UserService {
-    signUp(nom:string,password_user:string,email:string){
-        return http.post('/signup',{nom,password_user,email});
+    async signUp(nom:string,password_user:string,email:string){
+        const response = await window.electronAPI.signUp(nom, password_user, email);
+        return response
     }
 
-    signIn(email:string,password_user:string){
-        return http.post('/signin',{email,password_user}).then(response =>{
-            if (response.data && response.data.token) {
-                sessionStorage.setItem('utilisateur connecté', JSON.stringify(response.data));
-                // Après la connexion, nous configurons l'instance Axios
-                // pour envoyer le token dans l'en-tête de chaque requête.
-                this.setAuthHeader(response.data.token);
-                return response;
-            }
-        });
+    async signIn(email:string,password_user:string){
+        const response = await window.electronAPI.signIn(email, password_user);
+        // console.log("SIGNIN RESPONSE:", response);
+        if (response && response.userData && response.userData.token) {
+            sessionStorage.setItem('utilisateur connecté', JSON.stringify(response.userData));
+            return response.userData;
+        } else {
+            throw new Error("Erreur de connexion : réponse invalide du serveur");
+        }        
     }
     logout(){
         sessionStorage.removeItem('utilisateur connecté');
-        this.removeAuthHeader();
     }
     isAuthenticated(){
         return sessionStorage.getItem('utilisateur connecté') !== null;
@@ -30,24 +27,13 @@ class UserService {
         }
         return null;
     };
-    
-    // méthode pour configurer l'en-tête d'autorisation
-    setAuthHeader(token: string) {
-        // Assume que 'http' est une instance Axios
-        http.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    }
-
-    //  méthode pour retirer l'en-tête
-    removeAuthHeader() {
-        delete http.defaults.headers.common['Authorization'];
-    }
 
     // méthode pour initialiser l'en-tête d'autorisation au chargement de l'app
     // C'est important pour que l'utilisateur reste connecté après un rafraîchissement
     initializeAuth() {
         const user = this.getCurrentUser();
         if (user && user.token) {
-            this.setAuthHeader(user.token);
+            return user
         }
     }
     
